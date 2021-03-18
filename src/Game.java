@@ -27,6 +27,10 @@ public class Game {
      */
     private List<Robot> robots;
 
+    public void addSettler(Settler s){
+        settlers.add(s);
+    }
+
     /**
      * @param r
      */

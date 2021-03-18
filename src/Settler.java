@@ -22,6 +22,14 @@ public class Settler extends Traveller {
      */
     private Teleport[] teleportgates;
 
+    public void addTeleport(Teleport t){
+
+    }
+
+    public void addMineral(Mineral m){
+
+    }
+
     /**
      * 
      */

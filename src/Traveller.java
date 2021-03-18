@@ -22,6 +22,10 @@ public abstract class Traveller {
      */
     protected Game game;
 
+    public void setGame(Game game){
+        this.game = game;
+    }
+
     /**
      * @param number
      */

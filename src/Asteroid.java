@@ -12,6 +12,10 @@ public class Asteroid implements INeighbour {
     public Asteroid() {
     }
 
+    public Asteroid(Mineral c){
+        core = c;
+    }
+
     /**
      * 
      */
