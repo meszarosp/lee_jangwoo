@@ -401,7 +401,7 @@ public class Skeleton {
 
     /**
      * A program belépési pontja, kiírja a menüpontokat és bekéri a felhaszálótól a választott menüpontot a menu()
-     * föggvénnyel, amihez meghívja a megfelelő inicializáló függvnyt.
+     * függvénnyel, amihez meghívja a megfelelő inicializáló függvényt.
      * Ezt addig ismétli, amíg a felhasználó ki nem lép a programból.
      * @param args parancssori argumentumok
      */
