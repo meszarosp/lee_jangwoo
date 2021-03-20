@@ -2,7 +2,10 @@
 import java.util.*;
 
 /**
- * 
+ * Absztrakt osztály. Felelõssége nyilvántartani a jelenlegi aszteroidáját, 
+ * és egy Game objektumot. Biztosítania kell virtuális függvényeket a tõle 
+ * öröklõ osztályoknak. Mozognia kell tudni aszteroidáról aszteroidára, 
+ * akár köztes teleportkapuval, akár anélkül. Tudnia kell aszteroidát fúrni.
  */
 public abstract class Traveller {
 
@@ -23,21 +26,30 @@ public abstract class Traveller {
     protected Game game;
 
     public void setGame(Game game){
+    	Skeleton.startMethod(this, "setGame", game);
         this.game = game;
+        Skeleton.endMethod(this, null);
     }
 
     /**
-     * @param number
+     * átmegy az aszteroidájáról egy másikra, vagy egy teleportkapuba
+     * @param number hányadik szomszédjára megy az utazó az aszteroidának
      */
     public void move(int number) {
-        // TODO implement here
+    	Skeleton.startMethod(this, "move", number);
+        INeighbour b = asteroid.getNeighbourAt(number);
+        asteroid.removeTraveller(this);
+        b.placeTraveller(this);
+        Skeleton.endMethod(this, null);
     }
 
     /**
-     * 
+     * megfúrja az aszteroidát
      */
     public void drill() {
-        // TODO implement here
+    	Skeleton.startMethod(this, "drill", null);
+    	asteroid.onDrill();
+    	Skeleton.endMethod(this, null);
     }
 
     /**
@@ -50,19 +62,22 @@ public abstract class Traveller {
      */
     public abstract void die();
 
-    /**
-     * @param a
+    /**  beállítja az utazó aszteroidáját
+     * @param a az az aszteroida amin az utazó áll
      */
     public void setAsteroid(Asteroid a) {
-        // TODO implement here
+    	Skeleton.startMethod(this, "setAsteroid", a);
+    	asteroid = a;
+    	Skeleton.endMethod(this, null);
     }
 
-    /**
-     * @return
+    /**	 visszaadja az aszteroidát, amin az utazó áll
+     * @return az az aszteroida amin az utazó áll
      */
     public Asteroid getAsteroid() {
-        // TODO implement here
-        return null;
+    	Skeleton.startMethod(this, "getAsteroid", null);
+        Skeleton.endMethod(this, asteroid);
+        return asteroid;
     }
 
 }
