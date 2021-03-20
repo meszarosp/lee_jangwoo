@@ -16,6 +16,8 @@ public abstract class Mineral {
      * @param a az az aszteroida, amelynek ez a nyersanyag a magja.
      */
     public void exposedToSun(Asteroid a) {
+    	Skeleton.startMethod(this, "exposedToSun", null);
+    	Skeleton.endMethod(this, null);
     }
 
 }

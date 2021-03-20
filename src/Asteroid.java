@@ -18,6 +18,8 @@ public class Asteroid implements INeighbour {
      * Default constructor
      */
     public Asteroid() {
+    	neighbours = new ArrayList<INeighbour>();
+    	travellers = new ArrayList<Traveller>();
     }
 
     /**
@@ -26,6 +28,8 @@ public class Asteroid implements INeighbour {
      */
     public Asteroid(Mineral c){
         core = c;
+        neighbours = new ArrayList<INeighbour>();
+    	travellers = new ArrayList<Traveller>();
     }
 
     /**
@@ -66,24 +70,31 @@ public class Asteroid implements INeighbour {
      * meghívja a core exposedToSun metódusát, magát adva paraméterként.
      */
     public void onDrill() {
+        Skeleton.startMethod(this, "onDrill", null);
+        shell = Skeleton.intQuestion("How thick is the shell before reduce by one?(int)");
         if (shell > 0)
         	shell--;
-        if (shell == 0 && closeToSun)
+        if (shell == 0 && Skeleton.yesnoQuestion("Is the asteroid close to sun?(yes/no)") && !Skeleton.yesnoQuestion("Is the asteroiod hollow?(yes/no)"))
         	core.exposedToSun(this);
+        Skeleton.endMethod(this, null);
+
     }
 
     /**
      * ha a shell 0, a nyersanyag, amely van, vagy nincs az aszteroida magjában "kibányászódik".
      * Ha volt nyersanyag, akkor visszaadja visszatérési értékként a core-t, amennyiben nem is volt,
      *  vagy a shell nem 0, akkor null-al tér vissza. Ha volt benne nyersanyag, akkor azt null-ra állítja.
-     * @return
+     * @return core ha van és hozzáférhető, különben null
      */
     public Mineral onMine() {
-        if (shell == 0) {
+    	Skeleton.startMethod(this, "onMine", null);
+        if (Skeleton.intQuestion("How thick is the shell?(int)") == 0) {
         	Mineral tmp = core;
         	core = null;
+        	Skeleton.endMethod(this, tmp);
         	return tmp;
         }
+        Skeleton.endMethod(this, null);
         return null;
     }
 
@@ -92,9 +103,11 @@ public class Asteroid implements INeighbour {
      * a Traveller die metódusát. Egyébként csak visszatér.
      */
     public void solarWind() {
-        if (core != null || shell != 0)
+    	Skeleton.startMethod(this, "solarWind", null);
+        if (!Skeleton.yesnoQuestion("Is the asteroiod hollow?(yes/no)") || Skeleton.intQuestion("How thick is the shell?(int)") != 0)
         	for (Traveller t : travellers)
         		t.die();
+        Skeleton.endMethod(this, null);
     }
 
     /**
@@ -103,11 +116,13 @@ public class Asteroid implements INeighbour {
      * Ezután a sun-nak meghívja a removeAsteroid metódusát.
      */
     public void radioactiveBlast() {
+    	Skeleton.startMethod(this, "radioactiveBlast", null);
     	for (Traveller t : travellers)
     		t.hitByBlast();
     	for (INeighbour n : neighbours)
     		n.removeNeighbour(this);
     	sun.removeAsteroid(this);
+    	Skeleton.endMethod(this, null);
     }
 
     /**
@@ -115,10 +130,12 @@ public class Asteroid implements INeighbour {
      *  az exposedToSun metódusát önmagát adva paraméterként.
      */
     public void setCloseToSun() {
-        closeToSun = !closeToSun;
-        if (closeToSun && shell == 0)
-        	if (core != null)
+    	Skeleton.startMethod(this, "setCloseToSun", null);
+        //closeToSun = !closeToSun;
+        if (Skeleton.yesnoQuestion("Is the asteroid close to sun?(yes/no)") && Skeleton.intQuestion("How thick is the shell?(int)") == 0)
+        	if (!Skeleton.yesnoQuestion("Is the asteroiod hollow?(yes/no)"))
         		core.exposedToSun(this);
+        Skeleton.endMethod(this, null);
     }
 
     /**
@@ -129,10 +146,13 @@ public class Asteroid implements INeighbour {
      * @return bool a nyersanyag viszzatevésének sikerességéről
      */
     public boolean putMineralBack(Mineral m) {
-        if (core == null && shell == 0) {
+    	Skeleton.startMethod(this, "putMineralBack", m);
+        if (Skeleton.yesnoQuestion("Is the asteroiod hollow?(yes/no)") && Skeleton.intQuestion("How thick is the shell?(int)") == 0) {
         	core = m;
+        	Skeleton.endMethod(this, true);
         	return true;
         }
+        Skeleton.endMethod(this, false);
         return false;
     }
 
@@ -140,7 +160,9 @@ public class Asteroid implements INeighbour {
      * A függvényt meghívva az aszteroida magja null értéket vesz fel.
      */
     public void removeMineral() {
+    	Skeleton.startMethod(this, "removeMineral", null);
         core = null;
+        Skeleton.endMethod(this, null);
     }
 
     
@@ -150,8 +172,12 @@ public class Asteroid implements INeighbour {
      * @param i a lekérdezni kívánt szomszéd sorszáma a neighbours listában.
      */
     public INeighbour getNeighbourAt(int i) {
-        if (i <= neighbours.size())
+    	Skeleton.startMethod(this, "getNeighbourAt", i);
+        if ( 0 <= i && i < neighbours.size()) {
+        	Skeleton.endMethod(this, neighbours.get(i));
         	return neighbours.get(i);
+        }
+        Skeleton.endMethod(this, null);
         return null;
     }
 
@@ -160,15 +186,18 @@ public class Asteroid implements INeighbour {
      * @param traveller az eltávolítani kívánt traveller
      */
     public void removeTraveller(Traveller traveller) {
+    	Skeleton.startMethod(this, "removeTraveller", traveller);
         travellers.remove(traveller);
+        Skeleton.endMethod(this, null);
     }
 
-    /**
-     * @return
+    /**Visszaadja az aszteroida magját (core)
+     * @return Mineral az aszteroida magja (core)
      */
     public Mineral getCore() {
-        // TODO implement here
-        return null;
+    	Skeleton.startMethod(this, "getCore", null);
+    	Skeleton.endMethod(this, core);
+        return core;
     }
 
     /**
@@ -177,7 +206,10 @@ public class Asteroid implements INeighbour {
      * @param traveller az elhelyezni kívánt utazó
      */
     public void placeTraveller(Traveller traveller){
+    	Skeleton.startMethod(this, "placeTraveller", traveller);
     	travellers.add(traveller);
+    	traveller.setAsteroid(this);
+    	Skeleton.endMethod(this, null);
     }
 
     /**
@@ -185,7 +217,9 @@ public class Asteroid implements INeighbour {
      * @param neighbour az eltávolítani kívánt szomszéd
      */
     public void removeNeighbour(INeighbour neighbour) {
+    	Skeleton.startMethod(this, "removeNeighbour", neighbour);
     	neighbours.remove(neighbour);
+    	Skeleton.endMethod(this, null);
     }
 
     /**
@@ -193,7 +227,9 @@ public class Asteroid implements INeighbour {
      * @param neighbour a hozzáadni kívánt szomszéd
      */
     public void addNeighbour(INeighbour neighbour){
+    	Skeleton.startMethod(this, "addNeighbour", neighbour);
     	neighbours.add(neighbour);
+    	Skeleton.endMethod(this, null);
     }
 
 }
