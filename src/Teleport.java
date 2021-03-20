@@ -36,7 +36,7 @@ public class Teleport implements INeighbour {
 
     /**
      * Beállítja a kapu párját a paraméterül kapott teleportkapura.
-     * @param a teleportkapu párja
+     * @param t teleportkapu párja
      */
     public void setPair(Teleport t) {
     	Skeleton.startMethod(this,  "setPair", t);

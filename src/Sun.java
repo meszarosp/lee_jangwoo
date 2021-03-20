@@ -37,7 +37,7 @@ public class Sun {
 
     /**
      * kiveszi a paraméterként kapott aszteroidát az asteroids listából
-     * @param az eltávolítandó aszteroida
+     * @param a az eltávolítandó aszteroida
      */
     public void removeAsteroid(Asteroid a) {
     	Skeleton.startMethod(this, "removeAsteroid", a);
@@ -47,7 +47,7 @@ public class Sun {
 
     /**
      * A saját asteroids listáját felülírja a paraméterül kapott asteroids listával
-     * @param aszteroidákból álló lista, amit beállít a saját asteroids listájának
+     * @param asteroids aszteroidákból álló lista, amit beállít a saját asteroids listájának
      */
     public void addAsteroids(List<Asteroid> asteroids) {
     	Skeleton.startMethod(this, "addAsteroids", asteroids);

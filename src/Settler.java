@@ -2,7 +2,14 @@
 import java.util.*;
 
 /**
- * 
+ * A telepes a játékos által irányított entitás,
+ * követnie kell az utasításait. Felelõssége nyilvántartani
+ * a jelenlegi pozícióját, nyersanyagait.
+ * Képes bányászni, ezzel eltenni a kibányászott nyersanyagot,
+ * új dolgokat építeni, például teleportkaput és robotot,
+ * valamint teleportkaput elhelyezni. Ha napvihar vagy robbanás éri,
+ * felelõssége értesíteni a Game-et és a saját aszteroidáját,
+ * hogy vegyék ki a nyilvántartásból, aztán meghalni.
  */
 public class Settler extends Traveller {
 
@@ -13,77 +20,114 @@ public class Settler extends Traveller {
     }
 
     /**
-     * 
+     * A telepesnél található nyersanyagok listája
      */
     private List<Mineral> minerals;
 
     /**
-     * 
+     * A telepesnél található teleportkapuk listája
      */
     private Teleport[] teleportgates;
 
+    /**
+     * A telepes listájához hozzááad egy teleportkaput
+     * @param t Az új teleportkapu
+     */
     public void addTeleport(Teleport t){
-
-    }
-
-    public void addMineral(Mineral m){
-
     }
 
     /**
-     * 
+     * A telepes listájához hozzáad egy egy nyersanyagot
+     * @param m Az új nyersanyag
+     */
+    public void addMineral(Mineral m){
+    }
+
+    /**
+     * A telepest radioaktív robbanás éri, amitõl meghal
      */
     public void hitByBlast() {
-        // TODO implement here
+        Skeleton.startMethod(this, "hitByBlast", null);
+        die();
+        Skeleton.endMethod(this, null);
     }
 
     /**
-     * 
+     * A telepes az aktuális aszteroidáján bányaszni próbál
      */
     public void mine() {
-        // TODO implement here
+        Skeleton.startMethod(this, "mine", null);
+        asteroid.onMine();
+        // El kell rakni a nyersanyagot? (Hely check?)
+        Skeleton.endMethod(this, null);
     }
 
     /**
-     * 
+     * A telepes a nála lévõ nyersanyagokból egy robotot készít
      */
     public void craftRobot() {
-        // TODO implement here
+        Skeleton.startMethod(this, "craftRobot", null);
+        if (Skeleton.yesnoQuestion("Do I have the needed minerals? (yes/no)")) {
+            Robot r = new Robot();
+            asteroid.placeTraveller(r);
+            game.addRobot(r);
+        }
+        Skeleton.endMethod(this, null);
     }
 
     /**
-     * 
+     * A telepes a nála lévõ nyersanyagokból teleportkaput készít
      */
     public void craftTeleport() {
-        // TODO implement here
+        Skeleton.startMethod(this, "craftTeleport", null);
+        // TODO ezt szekvenciára + kérdés a doksiba
+        if (Skeleton.yesnoQuestion("Is there space in my inventory for teleports? (yes/no)")) {
+            if (Skeleton.yesnoQuestion("Do I have the needed minerals? (yes/no)")) {
+                Teleport t1 = new Teleport();
+                Teleport t2 = new Teleport();
+                t1.setPair(t2);
+                t2.setPair(t1);
+            }
+        }
+        Skeleton.endMethod(this, null);
     }
 
     /**
-     * @param t
+     * A telepes lehelyez egy nála lévõ teleportkaput
+     * @param t A lehelyezendõ kapu
      */
     public void placeTeleport(Teleport t) {
-        // TODO implement here
+        Skeleton.startMethod(this, "placeTeleport", t);
+        t.addNeighbour(asteroid);
+        Skeleton.endMethod(this, null);
     }
 
     /**
-     * 
+     * A telepes meghal
      */
     public void die() {
-        // TODO implement here
+        Skeleton.startMethod(this, "die", null);
+        asteroid.removeTraveller(this);
+        game.removeSettler(this);
+        Skeleton.endMethod(this, null);
     }
 
     /**
-     * @param m
+     * A telepes egy nála lévõ aszteroidát elhelyez
+     * az éppen aktuális aszteroida magjában
+     * @param m A visszahelyezendõ nyersanyag
      */
     public void putMineralBack(Mineral m) {
-        // TODO implement here
+        Skeleton.startMethod(this, "putMineralBack", m);
+        asteroid.putMineralBack(m);
+        Skeleton.endMethod(this, null);
     }
 
     /**
-     * @return
+     * A telepesnél lévõ nyersanyagokat kérdezi le
+     * @return A nyersanyagok
      */
     public Mineral getMinerals() {
-        // TODO implement here
         return null;
     }
 
