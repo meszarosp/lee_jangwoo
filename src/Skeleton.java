@@ -249,11 +249,17 @@ public class Skeleton {
     }
 
     private static void sunMakesAcion(){
-        //TODO
+
     }
 
     private static void settlerMines(){
-        //TODO
+        Iron core = new Iron();
+        names.put(core, "core");
+        Asteroid asteroid = new Asteroid();
+        names.put(asteroid, "asteroid");
+        Settler s = new Settler();
+        names.put(s, "s");
+        asteroid.placeTraveller(s);
     }
 
     /**
@@ -361,9 +367,11 @@ public class Skeleton {
     }
 
     /**
-     *
+     * Kiíratja a menüt és bekékéri a felhasználótól, hogy melyik menüpontot akarja elérni,
+     * ezután meghívja a megfelelő inicializáló függvényt.
      */
     private static void menu(){
+        names.clear();
         printMenu();
         Scanner sc = new Scanner(System.in);
         int option = 99;
