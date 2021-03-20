@@ -20,13 +20,16 @@ public class Robot extends Traveller {
     public void hitByBlast() {
     	Skeleton.startMethod(this, "hitByBlast", null);
         Asteroid currAst = asteroid;
-        if(Skeleton.yesnoQuestion("Is there a neighbour I can go to?(yes/no)")) {
+        /*if(Skeleton.yesnoQuestion("Is there a neighbour I can go to?(yes/no)")) {
         	int i = Skeleton.intQuestion("Which is the index of the neighbour I can go to?(int)");
         	asteroid.getNeighbourAt(i).placeTraveller(this);
         	while(currAst.equals(asteroid)) {		//ha még rendesen le nem tett teleportot mondott a felhasználó
         		i = Skeleton.intQuestion("Tell me a valid index of a good neighbour!(int)");
         		asteroid.getNeighbourAt(i).placeTraveller(this);
-        	}
+        	}*/
+        INeighbour neighbour = asteroid.getNeighbourAt(0);
+        if(neighbour != null){
+            neighbour.placeTraveller(this);
         } else {
         	die();
         }
