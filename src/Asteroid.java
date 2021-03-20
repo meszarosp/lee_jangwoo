@@ -73,6 +73,7 @@ public class Asteroid implements INeighbour {
         if (shell == 0 && Skeleton.yesnoQuestion("Is the asteroid close to sun?(yes/no)") && !Skeleton.yesnoQuestion("Is the asteroiod hollow?(yes/no)"))
         	core.exposedToSun(this);
         Skeleton.endMethod(this, null);
+
     }
 
     /**
