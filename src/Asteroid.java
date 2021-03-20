@@ -43,7 +43,7 @@ public class Asteroid implements INeighbour {
      * Az aszteroida szomszédainak listája, ezen keresztül tudja értesíteni őket felrobbanásakor.
      * Valamint létezése lehetővé teszi, hogy az utazó lekérje egy szomszédját.
      */
-    private List<INeighbour> neighbours;
+    private List<INeighbour> neighbours = new ArrayList<INeighbour>();
 
     /**
      * Az aszteroida magjában lévő nyersanyag, ez lehet üres is, ekkor üreges az aszteroida.
@@ -53,7 +53,7 @@ public class Asteroid implements INeighbour {
     /**
      * Az aszteroidán lévő utazók listája. Ezen keresztül értesíti őket az azteroida, ha napszél éri, vagy felrobban.
      */
-    private List<Traveller> travellers;
+    private List<Traveller> travellers = new ArrayList<Traveller>();
 
     /**
      * Mielőtt az aszteroida felrobban értesíti a napot, hogy fel fog robbanni.
@@ -66,10 +66,13 @@ public class Asteroid implements INeighbour {
      * meghívja a core exposedToSun metódusát, magát adva paraméterként.
      */
     public void onDrill() {
+        Skeleton.startMethod(this, "onDrill", null);
+        shell = Skeleton.intQuestion("How thick is the shell?(int)");
         if (shell > 0)
         	shell--;
-        if (shell == 0 && closeToSun)
+        if (shell == 0 && Skeleton.yesnoQuestion("Is the asteroid close to sun?(yes/no)") && !Skeleton.yesnoQuestion("Is the asteroiod hollow?(yes/no)"))
         	core.exposedToSun(this);
+        Skeleton.endMethod(this, null);
     }
 
     /**
@@ -150,7 +153,7 @@ public class Asteroid implements INeighbour {
      * @param i a lekérdezni kívánt szomszéd sorszáma a neighbours listában.
      */
     public INeighbour getNeighbourAt(int i) {
-        if (i <= neighbours.size())
+        if (i < neighbours.size())
         	return neighbours.get(i);
         return null;
     }
@@ -178,6 +181,7 @@ public class Asteroid implements INeighbour {
      */
     public void placeTraveller(Traveller traveller){
     	travellers.add(traveller);
+    	traveller.setAsteroid(this);
     }
 
     /**

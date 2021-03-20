@@ -1,6 +1,4 @@
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Skeleton {
     /**
@@ -248,10 +246,17 @@ public class Skeleton {
         r.drill();
     }
 
+    /**
+     * Inicializáló metódus a Sun makes action menüponthoz.
+     */
     private static void sunMakesAcion(){
-
+        Sun sun = new Sun();
+        names.put(sun, "sun");
+        sun.makeAction();
     }
-
+    /**
+     * Inicializáló metódus a Settler mines menüponthoz.
+     */
     private static void settlerMines(){
         Iron core = new Iron();
         names.put(core, "core");
@@ -301,7 +306,9 @@ public class Skeleton {
      * @return a beírt egész szám
      */
     public static int intQuestion(String message){
-        System.out.println(message);
+        for(int i = 0; i < padding; i++)
+            System.out.print("\t");
+        System.out.print(message + " ");
         Scanner sc = new Scanner(System.in);
         boolean again = true;
         int out = 0;
@@ -324,7 +331,9 @@ public class Skeleton {
      * @return true, ha yes volt a választ, false, ha no volt a válasz
      */
     public static boolean yesnoQuestion(String message){
-        System.out.println(message);
+        for(int i = 0; i < padding; i++)
+            System.out.print("\t");
+        System.out.print(message + " ");
         Scanner sc = new Scanner(System.in);
         while(true){
             String s = sc.next();
@@ -335,13 +344,122 @@ public class Skeleton {
             }
         }
     }
+
+    /**
+     * Metódus, amellyel a nap lekérdezheti a makeAction metódusában, hogy az almenü melyik menüpontját
+     * kell végrehajtani. A választott opció alapján a megfelelő inicializáló függvényt meghívja. Addig kéri be a
+     * felhasználótól a számokat, amíg nem 1,2,3 számok közül való számot választ.
+     * @param sun A nap, amelyik kérdez
+     * @return a felhasználó által választott menüpont száma
+     */
+    public static int sunQuestion(Sun sun){
+        System.out.println("1:\tSun makes solar wind");
+        System.out.println("2:\tRadioactive asteroid gets close to sun");
+        System.out.println("3:\tIce asteroid gets close to sun");
+        Scanner sc = new Scanner(System.in);
+        boolean isNumber = false;
+        int in = 0;
+        while (!isNumber  || (in < 1 || in > 3)) {
+            String s = sc.next();
+            try {
+                in = Integer.parseInt(s);
+                isNumber= true;
+            } catch (Exception ignored) {
+                isNumber = false;
+            }
+        }
+        if (in == 1){
+            sunMakesSolarWind(sun);
+        }else if (in == 2){
+            radioactiveAsteroidGetsCloseToSun(sun);
+        }else {
+            iceAsteroidGetsCloseToSun(sun);
+        }
+        return in;
+    }
+
+    /**
+     * A sun makes solar wind almenüponthoz tartozó inicializáló metódus.
+     * @param sun A nap, amelyiknek oda kell adni az aszteoridákat
+     */
+    private static void sunMakesSolarWind(Sun sun){
+        Asteroid a = new Asteroid();
+        names.put(a, "a");
+        Game game = new Game();
+        names.put(game, "game");
+        Settler s = new Settler();
+        names.put(s, "s");
+        Robot r = new Robot();
+        names.put(r, "r");
+        List<Asteroid> asteroids = new ArrayList<Asteroid>();
+        asteroids.add(a);
+        sun.addAsteroids(asteroids);
+        a.placeTraveller(s);
+        a.placeTraveller(r);
+        game.addRobot(r);
+        game.addSettler(s);
+        r.setGame(game);
+        s.setGame(game);
+    }
+    /**
+     * A radioactive asteroid gets close to sun almenüponthoz tartozó inicializáló metódus.
+     * @param sun A nap, amelyiknek oda kell adni az aszteoridákat
+     */
+    private static void radioactiveAsteroidGetsCloseToSun(Sun sun){
+        Uranium core = new Uranium();
+        names.put(core, "core");
+        Asteroid a = new Asteroid(core);
+        names.put(a, "a");
+        Asteroid neighbour = new Asteroid();
+        names.put(neighbour, "neighbour");
+        Settler s = new Settler();
+        names.put(s, "s");
+        Robot r = new Robot();
+        names.put(r, "r");
+        Game game = new Game();
+        names.put(game, "game");
+        game.addSettler(s);
+        game.addRobot(r);
+        a.placeTraveller(s);
+        a.placeTraveller(r);
+        a.addNeighbour(neighbour);
+        neighbour.addNeighbour(a);
+        Teleport t = new Teleport();
+        names.put(t, "t");
+        Teleport pair = new Teleport();
+        names.put(pair, "pair");
+        t.setPair(pair);
+        t.setPair(t);
+        t.addNeighbour(a);
+        a.addNeighbour(t);
+        r.setGame(game);
+        s.setGame(game);
+        List<Asteroid> asteroids = new ArrayList<Asteroid>();
+        asteroids.add(a);
+        sun.addAsteroids(asteroids);
+    }
+    /**
+     * Az ice asteroid gets close to sun almenüponthoz tartozó inicializáló metódus.
+     * @param sun A nap, amelyiknek oda kell adni az aszteoridákat
+     */
+    private static void iceAsteroidGetsCloseToSun(Sun sun){
+        Ice core = new Ice();
+        names.put(core, "core");
+        Asteroid a = new Asteroid();
+        names.put(a, "a");
+        List<Asteroid> asteroids = new ArrayList<Asteroid>();
+        sun.addAsteroids(asteroids);
+    }
+
     /**
      * Bekér a felhasználótól egy mineral fajtát, amelyet a felhasználó begépel.
      * Addig kéri be a választ, amíg nem kap helyes bemenetet a felhasználótól.
      * @return egy mineral objektum, amit a felhasználó kért.
      */
     public static Mineral mineralQuestion(){
-        System.out.println("Please choose a mineral! (coal/ice/uranium/iron)");
+        for(int i = 0; i < padding; i++)
+            System.out.print("\t");
+        System.out.print("Please choose a mineral! (coal/ice/uranium/iron) ");
         Mineral answer = null;
         Scanner sc = new Scanner(System.in);
         HashMap<String, Mineral> minerals = new HashMap<String, Mineral>();
