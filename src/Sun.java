@@ -1,4 +1,3 @@
-
 import java.util.*;
 
 /**
@@ -12,35 +11,57 @@ public class Sun {
     public Sun() {
     }
 
+    /**
+     * A játékban szerplõ összes aszteroidát tartalmazó lista.
+     */
     private List<Asteroid> asteroids;
 
     /**
-     * 
+     * Ha azt a választ kapja, hogy legyen npvihar, akkor minden aszteroidára meghívja a solarWind metódust. Ez után végigmegyünk az összes aszteroidán, megkérdezzük, hogy az legyen-e napközelben, ha azt a választ kapja, hogy igen, akkor meghívja rajta a setCloseToSun metódust
      */
     public void makeAction() {
-        // TODO implement here
+    	Skeleton.startMethod(this, "makeAction", null);
+        if(Skeleton.yesnoQuestion("Legyen napvihar?")) {
+        	for(Asteroid a : asteroids){
+        		a.solarWind();
+        	}
+        }
+        
+        for(Asteroid a : asteroids){
+        	if(Skeleton.yesnoQuestion("Legyünk napközelben?")) {
+        		a.setCloseToSun();
+        	}
+        }
+        Skeleton.endMethod(this,  null);
     }
 
     /**
-     * @param a
+     * kiveszi a paraméterként kapott aszteroidát az asteroids listából
+     * @param az eltávolítandó aszteroida
      */
     public void removeAsteroid(Asteroid a) {
-        // TODO implement here
+    	Skeleton.startMethod(this, "removeAsteroid", a);
+        asteroids.remove(a);
+        Skeleton.endMethod(this, null);
     }
 
     /**
-     * @param asteroids
+     * A saját asteroids listáját felülírja a paraméterül kapott asteroids listával
+     * @param aszteroidákból álló lista, amit beállít a saját asteroids listájának
      */
-    public void addAsteroids(Set<Asteroid> asteroids) {
-        // TODO implement here
+    public void addAsteroids(List<Asteroid> asteroids) {
+    	Skeleton.startMethod(this, "addAsteroids", asteroids);
+    	this.asteroids=asteroids;
+    	Skeleton.endMethod(this,  null);
     }
 
     /**
-     * @return
+     * Visszaadja az asteroids listát.
      */
     public List<Asteroid> getAsteroids() {
-        // TODO implement here
-        return null;
+        Skeleton.startMethod(this,  "getAsteroids", null);
+        Skeleton.endMethod(this, this.asteroids);
+        return this.asteroids;
     }
 
 }
