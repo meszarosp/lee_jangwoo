@@ -19,7 +19,7 @@ public abstract class RadioactiveMineral extends Mineral {
      * @param a a nyersanyag aszteroidája, amelyet felrobbantunk.
      */
     public void exposedToSun(Asteroid a) {
-    	Skeleton.startMethod(this, "exposedToSun", null);
+    	Skeleton.startMethod(this, "exposedToSun", a);
         a.radioactiveBlast();
         Skeleton.endMethod(this, null);
     }

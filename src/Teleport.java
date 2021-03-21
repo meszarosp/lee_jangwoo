@@ -2,7 +2,11 @@
 import java.util.*;
 
 /**
- * 
+ * Nyilvántartani a teleportkapu párját, valamint egy INeighbour interfészt megvalósító
+ * objektumot. Ez a szomszédja, mellyel az utazók áthaladását biztosítja a másik teleportkapun
+ * át. Ha a szomszéd aszteroidán robbanás történik, azaz megszûnik ez a szomszéd, akkor a rajta
+ * lévõ kapunak is meg kell szûnnie. Ha egy kapu megszûnik, a párjának is meg kell.
+ * Felelõssége nem átengedni utazókat, amennyiben a kapupárja még nincs letéve.
  */
 public class Teleport implements INeighbour {
 
@@ -28,7 +32,7 @@ public class Teleport implements INeighbour {
     public void perish() {
     	Skeleton.startMethod(this, "perish", null);
         pair = null;
-        if(Skeleton.yesnoQuestion("Le van már rakva a teleportkapu?")) {
+        if(!Skeleton.yesnoQuestion("Has the pair been blown up (perished)? (yes/no)")) {
         	neighbour.removeNeighbour(this);
         }
         Skeleton.endMethod(this,  null);
@@ -40,7 +44,7 @@ public class Teleport implements INeighbour {
      */
     public void setPair(Teleport t) {
     	Skeleton.startMethod(this,  "setPair", t);
-        pair = t;
+    	pair = t;
         Skeleton.endMethod(this,  null);
     }
 
@@ -51,7 +55,7 @@ public class Teleport implements INeighbour {
      */
     public boolean teleportTraveller(Traveller traveller) {
     	Skeleton.startMethod(this,  "teleportTraveller", traveller);
-      	if(Skeleton.yesnoQuestion("Le van már rakva a teleportkapu?")) {
+      	if(Skeleton.yesnoQuestion("Has the pair been placed? (yes/no)")) {
     		neighbour.placeTraveller(traveller);
     		Skeleton.endMethod(this, true);
     		return true;
@@ -79,7 +83,8 @@ public class Teleport implements INeighbour {
      */
     public void removeNeighbour(INeighbour neighbour){
     	Skeleton.startMethod(this, "removeNeighbour", neighbour);
-    	pair.perish();
+    	if (pair != null)
+    	    pair.perish();
     	Skeleton.endMethod(this,  null);
     }
 
@@ -90,7 +95,7 @@ public class Teleport implements INeighbour {
     public void addNeighbour(INeighbour neighbour){
     	Skeleton.startMethod(this,  "addNeighbour", neighbour);
     	if (!Skeleton.init) {
-            if (Skeleton.yesnoQuestion("Le van már rakva a kapu párja?")) {
+            if (!Skeleton.yesnoQuestion("Has the pair been blown up (perished)? (yes/no)")) {
                 neighbour.addNeighbour(this);
                 this.neighbour = neighbour;
             }

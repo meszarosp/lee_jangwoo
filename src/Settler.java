@@ -69,6 +69,9 @@ public class Settler extends Traveller {
         Skeleton.startMethod(this, "craftRobot", null);
         if (Skeleton.yesnoQuestion("Do I have the needed minerals? (yes/no)")) {
             Robot r = new Robot();
+            Skeleton.names.put(r, "r");
+            Skeleton.startMethod(r, "create", null);
+            Skeleton.endMethod(r, null);
             asteroid.placeTraveller(r);
             game.addRobot(r);
         }
@@ -80,11 +83,16 @@ public class Settler extends Traveller {
      */
     public void craftTeleport() {
         Skeleton.startMethod(this, "craftTeleport", null);
-        // TODO ezt szekvenciára + kérdés a doksiba
         if (Skeleton.yesnoQuestion("Is there space in my inventory for teleports? (yes/no)")) {
             if (Skeleton.yesnoQuestion("Do I have the needed minerals? (yes/no)")) {
                 Teleport t1 = new Teleport();
                 Teleport t2 = new Teleport();
+                Skeleton.names.put(t1, "t1");
+                Skeleton.startMethod(t1, "create", null);
+                Skeleton.endMethod(t1, null);
+                Skeleton.names.put(t2, "t2");
+                Skeleton.startMethod(t2, "create", null);
+                Skeleton.endMethod(t2, null);
                 t1.setPair(t2);
                 t2.setPair(t1);
             }

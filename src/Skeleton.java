@@ -1,5 +1,10 @@
 import java.util.*;
 
+
+/**
+ * Kezeli a felhasználóval való interakciókat és a menüt.
+ * Az egyes use-case-ekhez megcsinálja az inicializálást majd meghívja a megfelelő tesztelni kívánt metódust.
+ */
 public class Skeleton {
     /**
      * Annak a száma, hogy aktuálisan hány tabulátorral kell beljebb kezdeni a sort.
@@ -127,7 +132,7 @@ public class Skeleton {
         Settler settler = new Settler();
         names.put(settler, "settler");
         Teleport t = new Teleport();
-        names.put(t, "teleport");
+        names.put(t, "t");
         Teleport pair = new Teleport();
         names.put(pair, "pair");
         t.setPair(pair);
@@ -152,7 +157,7 @@ public class Skeleton {
        Robot robot = new Robot();
        names.put(robot, "robot");
        Teleport t = new Teleport();
-       names.put(t, "teleport");
+       names.put(t, "t");
        Teleport pair = new Teleport();
        names.put(pair, "pair");
        t.setPair(pair);
@@ -177,9 +182,9 @@ public class Skeleton {
         Coal core = new Coal();
         names.put(core, "core");
         Asteroid a = new Asteroid(core);
-        names.put(a, "a");
+        names.put(a, "asteroid");
         Settler s = new Settler();
-        names.put(s, "s");
+        names.put(s, "settler");
         a.placeTraveller(s);
         init = false;
         s.drill();
@@ -381,6 +386,7 @@ public class Skeleton {
      * @return a felhasználó által választott menüpont száma
      */
     public static int sunQuestion(Sun sun){
+        Skeleton.init = true;
         System.out.println("1:\tSun makes solar wind");
         System.out.println("2:\tRadioactive asteroid gets close to sun");
         System.out.println("3:\tIce asteroid gets close to sun");
@@ -403,6 +409,8 @@ public class Skeleton {
         }else {
             iceAsteroidGetsCloseToSun(sun);
         }
+
+        Skeleton.init = false;
         return in;
     }
 
@@ -457,7 +465,7 @@ public class Skeleton {
         Teleport pair = new Teleport();
         names.put(pair, "pair");
         t.setPair(pair);
-        t.setPair(t);
+        pair.setPair(t);
         t.addNeighbour(a);
         a.addNeighbour(t);
         r.setGame(game);
@@ -473,9 +481,10 @@ public class Skeleton {
     private static void iceAsteroidGetsCloseToSun(Sun sun){
         Ice core = new Ice();
         names.put(core, "core");
-        Asteroid a = new Asteroid();
+        Asteroid a = new Asteroid(core);
         names.put(a, "a");
         List<Asteroid> asteroids = new ArrayList<Asteroid>();
+        asteroids.add(a);
         init = false;
         sun.addAsteroids(asteroids);
     }

@@ -2,7 +2,11 @@
 import java.util.*;
 
 /**
- * 
+ * A telepesek, robotok és a nap nyilvántartója.
+ * A telepesek és a robotok listáját menedzseli. Ha
+ * új robot jön létre, fel kell vennie a nyilvántartásba.
+ * Felelõssége inicializálni a telepeseket, az
+ * aszteroidákat. A játék végét ellenõrzõ metódusokért is õ felel.
  */
 public class Game {
 
@@ -13,36 +17,45 @@ public class Game {
     }
 
     /**
-     * 
+     * A játékban lévõ nap.
      */
     private Sun sun;
 
     /**
-     * 
+     * A játékban lévõ telepesek.
      */
     private List<Settler> settlers = new ArrayList<Settler>();
 
     /**
-     * 
+     * A játékban lévõ robotok
      */
     private List<Robot> robots = new ArrayList<Robot>();
+
+    /**
+     * Hozzáad egy telepest a telepesek listájához.
+     * @param s A hozzáadni kívánt telepes.
+     */
 
     public void addSettler(Settler s){
         settlers.add(s);
     }
 
     /**
-     * @param r
+     * Kivesz egy robotot a robotok listájából.
+     * @param r A kivenni kívánt robot.
      */
     public void removeRobot(Robot r) {
-        // TODO implement here
+        Skeleton.startMethod(this, "removeRobot", r);
+        Skeleton.endMethod(this, null);
     }
 
     /**
-     * @param s
+     * Kivesz egy telepest a telepesek listájából.
+     * @param s A kivenni kívánt telepes.
      */
     public void removeSettler(Settler s) {
-        // TODO implement here
+        Skeleton.startMethod(this, "removeSettler", s);
+        Skeleton.endMethod(this, null);
     }
 
     /**
@@ -53,10 +66,12 @@ public class Game {
     }
 
     /**
-     * @param r
+     * Hozzáad egy robotot a robotok listájához.
+     * @param r A hozzáadni kívánt robot.
      */
     public void addRobot(Robot r) {
-        // TODO implement here
+        Skeleton.startMethod(this, "addRobot", r);
+        Skeleton.endMethod(this, null);
     }
 
     /**

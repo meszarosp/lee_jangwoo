@@ -20,7 +20,7 @@ public class Ice extends Mineral {
      * @param a a nyersanyag aszteroidája, amely magját eltávolítja.
      */
     public void exposedToSun(Asteroid a) {
-    	Skeleton.startMethod(this, "exposedToSun", null);
+    	Skeleton.startMethod(this, "exposedToSun", a);
         a.removeMineral();
         Skeleton.endMethod(this, null);
     }
