@@ -89,9 +89,14 @@ public class Teleport implements INeighbour {
      */
     public void addNeighbour(INeighbour neighbour){
     	Skeleton.startMethod(this,  "addNeighbour", neighbour);
-    	if(Skeleton.yesnoQuestion("Le van már rakva a kapu párja?")) {
-    		neighbour.addNeighbour(this);
-    	}
+    	if (!Skeleton.init) {
+            if (Skeleton.yesnoQuestion("Le van már rakva a kapu párja?")) {
+                neighbour.addNeighbour(this);
+                this.neighbour = neighbour;
+            }
+        }else{
+    	    this.neighbour = neighbour;
+        }
     	Skeleton.endMethod(this,  null);
     }
 

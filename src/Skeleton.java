@@ -5,15 +5,23 @@ public class Skeleton {
      * Annak a száma, hogy aktuálisan hány tabulátorral kell beljebb kezdeni a sort.
      */
     private static int padding = 0;
+
+    /**
+     * Igaz, ha még az inicializáló fázisban vagyunk, ilyenkor nem írja ki a meghívott metódusokat.
+     * Hamis, ha már a szekvenciadiagramon látható események történnek, ilyenkor naplózza a metódushívásokat
+     * a konzolra a felhasználónak.
+     */
+    public static boolean init = true;
+
     /**
      * Az objektumok és a kiírandó nevüknek az összerendelése.
      */
-    private static HashMap<Object, String> names = new HashMap<Object, String>();
+    public static HashMap<Object, String> names = new HashMap<Object, String>();
     /**
      * Az elérhető menüpontok.
      */
     private static String[] menuItems = {"Craft teleport", "Craft robot", "Place teleport",
-            "Settler moves", "Robot moves", "Put mineral back", "Settler mvoes through teleport",
+            "Settler moves", "Robot moves", "Put mineral back", "Settler moves through teleport",
             "Robot moves through teleport", "Settler drills asteroid", "Settler drills ice asteroid",
             "Settler drills radioactive asteroid", "Robot drills asteroid", "Robot drills ice asteroid",
             "Robot drills radioactive asteroid", "Sun makes action", "Settler mines"};
@@ -25,6 +33,7 @@ public class Skeleton {
     private static void craftTeleport(){
         Settler s = new Settler();
         names.put(s, "s");
+        init = false;
         s.craftTeleport();
     }
 
@@ -40,6 +49,7 @@ public class Skeleton {
         names.put(asteroid, "asteroid");
         asteroid.placeTraveller(s);
         s.setGame(game);
+        init = false;
         s.craftRobot();
     }
 
@@ -55,6 +65,7 @@ public class Skeleton {
         Teleport t = new Teleport();
         names.put(t, "teleport");
         settler.addTeleport(t);
+        init = false;
         settler.placeTeleport(t);
     }
 
@@ -71,6 +82,7 @@ public class Skeleton {
         asteroidA.addNeighbour(asteroidB);
         asteroidB.addNeighbour(asteroidA);
         asteroidA.placeTraveller(settler);
+        init = false;
         settler.move(0);
     }
 
@@ -87,6 +99,7 @@ public class Skeleton {
         asteroidA.addNeighbour(asteroidB);
         asteroidB.addNeighbour(asteroidA);
         asteroidA.placeTraveller(robot);
+        init = false;
         robot.move(0);
     }
 
@@ -103,6 +116,7 @@ public class Skeleton {
         names.put(m, "coal");
         asteroid.placeTraveller(settler);
         settler.addMineral(m);
+        init = false;
         settler.putMineralBack(m);
     }
 
@@ -127,6 +141,7 @@ public class Skeleton {
         asteroid.placeTraveller(settler);
         pair.addNeighbour(neighbour);
         t.addNeighbour(asteroid);
+        init = false;
         settler.move(0);
     }
 
@@ -151,6 +166,7 @@ public class Skeleton {
        asteroid.placeTraveller(robot);
        pair.addNeighbour(neighbour);
        t.addNeighbour(asteroid);
+       init = false;
        robot.move(0);
     }
 
@@ -165,6 +181,7 @@ public class Skeleton {
         Settler s = new Settler();
         names.put(s, "s");
         a.placeTraveller(s);
+        init = false;
         s.drill();
     }
 
@@ -179,6 +196,7 @@ public class Skeleton {
         Settler s = new Settler();
         names.put(s, "s");
         a.placeTraveller(s);
+        init = false;
         s.drill();
     }
 
@@ -197,6 +215,7 @@ public class Skeleton {
         a.placeTraveller(s);
         s.setGame(g);
         g.addSettler(s);
+        init = false;
         s.drill();
     }
 
@@ -211,6 +230,7 @@ public class Skeleton {
         Robot r = new Robot();
         names.put(r, "r");
         a.placeTraveller(r);
+        init = false;
         r.drill();
     }
 
@@ -225,6 +245,7 @@ public class Skeleton {
         Robot r = new Robot();
         names.put(r, "r");
         a.placeTraveller(r);
+        init = false;
         r.drill();
     }
 
@@ -243,6 +264,7 @@ public class Skeleton {
         a.placeTraveller(r);
         r.setGame(g);
         g.addRobot(r);
+        init = false;
         r.drill();
     }
 
@@ -258,13 +280,13 @@ public class Skeleton {
      * Inicializáló metódus a Settler mines menüponthoz.
      */
     private static void settlerMines(){
-        Iron core = new Iron();
-        names.put(core, "core");
         Asteroid asteroid = new Asteroid();
         names.put(asteroid, "asteroid");
         Settler s = new Settler();
         names.put(s, "s");
         asteroid.placeTraveller(s);
+        init = false;
+        s.mine();
     }
 
     /**
@@ -274,13 +296,16 @@ public class Skeleton {
      * @param argument Az átadott argumentum, null, ha nem volt átadott argumentum.
      */
     public static void startMethod(Object o, String methodName, Object argument){
-        for(int i = 0; i < padding; i++)
-            System.out.print("\t");
-        System.out.print("->" + names.getOrDefault(o, Integer.toString(o.hashCode())) + "." + methodName + "(");
-        if (argument != null)
-            System.out.print(names.getOrDefault(argument, Integer.toString(o.hashCode())));
-        System.out.println(")");
-        padding += 1;
+        if (!init) {
+            for (int i = 0; i < padding; i++)
+                System.out.print("\t");
+            System.out.print("->" + names.getOrDefault(o, Integer.toString(o.hashCode())) + "." + methodName + "(");
+            if (argument != null)
+                //System.out.print(names.getOrDefault(argument, Integer.toString(o.hashCode())));
+                System.out.print(names.getOrDefault(argument, argument.toString()));
+            System.out.println(")");
+            padding += 1;
+        }
     }
 
     /**
@@ -289,14 +314,17 @@ public class Skeleton {
      * @param returnvalue Az visszatérési érték, null, ha nincs visszatérési érték.
      */
     public static void endMethod(Object o, Object returnvalue){
-        padding -= 1;
-        for(int i = 0; i < padding; i++)
-            System.out.print("\t");
-        //System.out.print("<-" + names.getOrDefault(o, Integer.toString(o.hashCode())));
-        System.out.print("<-");
-        if (returnvalue != null)
-            System.out.print("return: " + names.getOrDefault(returnvalue, Integer.toString(returnvalue.hashCode())));
-        System.out.println();
+        if (!init) {
+            padding -= 1;
+            for (int i = 0; i < padding; i++)
+                System.out.print("\t");
+            //System.out.print("<-" + names.getOrDefault(o, Integer.toString(o.hashCode())));
+            System.out.print("<-");
+            if (returnvalue != null)
+                //System.out.print("return: " + names.getOrDefault(returnvalue, Integer.toString(returnvalue.hashCode())));
+                System.out.print(names.getOrDefault(returnvalue, returnvalue.toString()));
+            System.out.println();
+        }
     }
 
     /**
@@ -448,6 +476,7 @@ public class Skeleton {
         Asteroid a = new Asteroid();
         names.put(a, "a");
         List<Asteroid> asteroids = new ArrayList<Asteroid>();
+        init = false;
         sun.addAsteroids(asteroids);
     }
 
@@ -470,6 +499,7 @@ public class Skeleton {
         while (answer == null) {
             answer = minerals.getOrDefault(sc.next(), null);
         }
+        names.put(answer, "core");
         return answer;
     }
 
@@ -490,6 +520,7 @@ public class Skeleton {
      */
     private static void menu(){
         names.clear();
+        init = true;
         printMenu();
         Scanner sc = new Scanner(System.in);
         int option = 99;

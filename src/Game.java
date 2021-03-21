@@ -20,12 +20,12 @@ public class Game {
     /**
      * 
      */
-    private List<Settler> settlers;
+    private List<Settler> settlers = new ArrayList<Settler>();
 
     /**
      * 
      */
-    private List<Robot> robots;
+    private List<Robot> robots = new ArrayList<Robot>();
 
     public void addSettler(Settler s){
         settlers.add(s);

@@ -89,10 +89,14 @@ public class Asteroid implements INeighbour {
     public Mineral onMine() {
     	Skeleton.startMethod(this, "onMine", null);
         if (Skeleton.intQuestion("How thick is the shell?(int)") == 0) {
-        	Mineral tmp = core;
-        	core = null;
-        	Skeleton.endMethod(this, tmp);
-        	return tmp;
+            if (Skeleton.yesnoQuestion("Is the asteroid hollow?(yes/no)")){
+                Skeleton.endMethod(this, null);
+                return null;
+            }else{
+                core = Skeleton.mineralQuestion();
+                Skeleton.endMethod(this, core);
+                return core;
+            }
         }
         Skeleton.endMethod(this, null);
         return null;
@@ -117,11 +121,13 @@ public class Asteroid implements INeighbour {
      */
     public void radioactiveBlast() {
     	Skeleton.startMethod(this, "radioactiveBlast", null);
-    	for (Traveller t : travellers)
-    		t.hitByBlast();
-    	for (INeighbour n : neighbours)
-    		n.removeNeighbour(this);
-    	sun.removeAsteroid(this);
+    	//for (Traveller t : travellers)
+    		//t.hitByBlast();
+    	//for (INeighbour n : neighbours)
+    		//n.removeNeighbour(this);
+        travellers.get(0).hitByBlast();
+        //neighbours.get(0).removeNeighbour(this);
+    	//sun.removeAsteroid(this);
     	Skeleton.endMethod(this, null);
     }
 
