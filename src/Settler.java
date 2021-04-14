@@ -40,11 +40,9 @@ public class Settler extends Traveller {
      * A telepes listájához hozzáad egy egy nyersanyagot
      * @param m Az új nyersanyag
      */
-    public boolean addMineral(Mineral m){
-        if (minerals.size() >= 10)
-            return false;
-        minerals.add(m);
-        return true;
+    public void addMineral(Mineral m){
+        if (minerals.size() < 10)
+            minerals.add(m);
     }
 
     /**

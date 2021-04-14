@@ -274,22 +274,17 @@ public class Skeleton {
     private static class addmineralCommand implements Command{
 
         public void execute(String[] args) {
-            if (args.length < 2) {
-                output.println("all details must be specified");
+            if (!settlerCommandCheck(args))
                 return;
-            }
-            if (activeSettler == null){
-                output.println();
-            }
             Mineral mineral = parseMineral(args[1]);
-            if (!game.getSettlers().contains(settler) || mineral == null){
-                output.println("couldn’t complete request\n" +
-                        "    selected ID not available\n");
-                return;
-            }
-            if (settler.addMineral(mineral)){
-
-            }
+            if (mineral == null)
+                output.println("all details must be specified");
+            int n = activeSettler.getMinerals().size();
+            activeSettler.addMineral(mineral);
+            if (n == activeSettler.getMinerals().size())
+                output.println("settler " + IDs.get(activeSettler) + " received one unit of " + args[1]);
+            else
+                output.println("settler inventory too full");
         }
     }
     /**
@@ -446,6 +441,23 @@ public class Skeleton {
                         "    selected ID not available\n");
             }
         }
+    }
+
+    private static boolean settlerCommandCheck(String[] args){
+        if (args.length < 2){
+            output.println("all details must be specified");
+            return false;
+        }
+        if (activeSettler == null){
+            output.println("couldn’t complete request\n" +
+                    "    no active settler selected\n");
+            return false;
+        }
+        if (game.getSettlers().contains((Settler)IDs.getOrDefault(args[1], null))){
+            output.println("active settler died");
+            return false;
+        }
+        return true;
     }
 
     private static HashMap<String, Command> commands;
