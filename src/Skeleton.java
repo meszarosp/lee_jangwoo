@@ -12,8 +12,9 @@ public class Skeleton {
     private static PrintWriter output = new PrintWriter(System.out);
     private static File inputfile = null;
     private static File outputfile = null;
-    public static boolean random = false;
-    public static Game game = new Game();
+    private static boolean random = false;
+    private static Game game = new Game();
+    private static Settler activeSettler = null;
 
     /**
      * Az objektumok és a kiírandó nevüknek az összerendelése.
@@ -34,6 +35,19 @@ public class Skeleton {
     private static class loadCommand implements Command{
 
         public void execute(String[] args) {
+            if (args.length < 2) {
+                output.println("load unsuccessful");
+                return;
+            }
+            File file = new File(args[1]);
+            if (!file.exists()){
+                output.println("load unsuccessful")
+                return;
+            }
+            game = new Game();
+            activeSettler = null;
+            IDs.clear();
+
 
         }
     }
@@ -57,7 +71,7 @@ public class Skeleton {
          */
         public void execute(String[] args) {
             if (args.length < 2) {
-                output.println("load unsuccessful");
+                output.println("unsuccessful");
                 return;
             }
             File file = new File(args[1]);
@@ -65,11 +79,12 @@ public class Skeleton {
             try {
                 temp = new Scanner(file);
             } catch (FileNotFoundException e) {
-                output.println("load unsuccessful");
+                output.println("unsuccessful");
                 return;
             }
             input.close();
             input = temp;
+            output.println("input set to " + args[1]);
         }
     }
     /**
@@ -83,7 +98,7 @@ public class Skeleton {
          */
         public void execute(String[] args) {
             if (args.length < 2) {
-                output.println("load unsuccessful");
+                output.println("unsuccessful");
                 return;
             }
             File file = new File(args[1]);
@@ -91,11 +106,12 @@ public class Skeleton {
             try {
                 temp = new PrintWriter(new FileWriter(file));
             } catch (Exception e) {
-                output.println("load unsuccessful");
+                output.println("unsuccessful");
                 return;
             }
             output.close();
             output = temp;
+            output.println("output set to " + args[1]);
         }
     }
     /**
@@ -133,7 +149,7 @@ public class Skeleton {
             int n = game.getSettlers().size();
             Sun sun = game.getSun();
             List<Asteroid> asteroids = sun.getAsteroids();
-            if (asteroid == null || asteroids.contains(asteroid)){
+            if (asteroid == null || !asteroids.contains(asteroid)){
                 output.println("couldn’t complete request\n" +
                         "    selected ID not available\n");
             }else{
@@ -253,12 +269,27 @@ public class Skeleton {
         }
     }
     /**
-     * A addmineral parancshoz tartozó osztály.
+     * Az addmineral parancshoz tartozó osztály.
      */
     private static class addmineralCommand implements Command{
 
         public void execute(String[] args) {
+            if (args.length < 2) {
+                output.println("all details must be specified");
+                return;
+            }
+            if (activeSettler == null){
+                output.println();
+            }
+            Mineral mineral = parseMineral(args[1]);
+            if (!game.getSettlers().contains(settler) || mineral == null){
+                output.println("couldn’t complete request\n" +
+                        "    selected ID not available\n");
+                return;
+            }
+            if (settler.addMineral(mineral)){
 
+            }
         }
     }
     /**
@@ -310,18 +341,30 @@ public class Skeleton {
      * A checkwin parancshoz tartozó osztály.
      */
     private static class checkwinCommand implements Command{
-
+        /**
+         * Értesíti a felhasználót arról, hogy megnyerte-e a játékot.
+         * @param args a paraméterek tömbje
+         */
         public void execute(String[] args) {
-
+            if (game.checkWin())
+                output.println("game won");
+            else
+                output.println("win conditions not met");
         }
     }
     /**
      * A chechlose parancshoz tartozó osztály.
      */
     private static class chechloseCommand implements Command{
-
+        /**
+         * Értesíti a felhasználót arról, hogy elvesztette-e a játékot.
+         * @param args a paraméterek tömbje
+         */
         public void execute(String[] args) {
-
+            if (game.checkLose())
+                output.println("game lost");
+            else
+                output.println("losing conditions not met");
         }
     }
     /**
@@ -337,9 +380,32 @@ public class Skeleton {
      * A setclosetosun parancshoz tartozó osztály.
      */
     private static class setclosetosunCommand implements Command{
-
+        /**
+         * A paraméterként megkapott aszteroidának a closeToSun változóját állítja be a megadott értékre.
+         * Ha nincs elég argumentum, vagy nem létezik ilyen aszteroida, akkor hibát jelez.
+         * @param args a paraméterek tömbje
+         */
         public void execute(String[] args) {
-
+            if (args.length < 3 || (!"0".equals(args[2]) && !"1".equals(args[2]))) {
+                output.println("all details must be specified");
+                return;
+            }
+            Asteroid asteroid = (Asteroid)IDs.getOrDefault(args[1], null);
+            Sun sun = game.getSun();
+            List<Asteroid> asteroids = sun.getAsteroids();
+            if (asteroid == null || !asteroids.contains(asteroid)){
+                output.println("couldn’t complete request\n" +
+                        "    selected ID not available\n");
+            }else{
+                boolean oldCloseToSun = asteroid.getCloseToSun();
+                boolean newCloseToSun = !"0".equals(args[2]) && ("1".equals(args[2]));
+                if (oldCloseToSun == newCloseToSun){
+                    output.println(args[1] + "already " + (oldCloseToSun ? "close to " : "far from ") + "sun, no change");
+                }else{
+                    asteroid.setCloseToSun();
+                    output.println(args[1] + "set " + (newCloseToSun ? "close to " : "far from ") + "sun");
+                }
+            }
         }
     }
     /**
@@ -367,7 +433,18 @@ public class Skeleton {
     private static class bamboozleteleportCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (args.length < 3 || (!"0".equals(args[2]) && !"1".equals(args[2]))) {
+                output.println("all details must be specified");
+                return;
+            }
+            Teleport teleport = (Teleport)IDs.getOrDefault(args[1], null);
+            if (game.getGates().contains(teleport)){
+                boolean bamboozled = !"0".equals(args[2]) && ("1".equals(args[2]));
+                output.println(args[1] + "teleportgate" + (bamboozled ? "" : "not") + "bamboozled");
+            }else{
+                output.print("couldn’t complete request\n" +
+                        "    selected ID not available\n");
+            }
         }
     }
 
@@ -389,6 +466,24 @@ public class Skeleton {
         commands.put("newgame", new newgameCommand()); commands.put("setclosetosun", new setclosetosunCommand());
         commands.put("giveup", new giveupCommand()); commands.put("ufoaction", new ufoactionCommand());
         commands.put("bamboozleteleport", new bamboozleteleportCommand());
+    }
+
+    private static Mineral parseMineral(String arg){
+        if ("iron".equals(arg))
+            return new Iron();
+        else if ("coal".equals(arg))
+            return new Coal();
+        else if ("ice".equals(arg))
+            return new Ice();
+        else if (arg.startsWith("uranium")){
+            try{
+                int exposedToSunCounter = Integer.parseInt(arg.subSequence(7, arg.length()-2));
+                return new Uranium(exposedToSunCounter);
+            }catch (Exception e) {
+                return null;
+            }
+        }else
+            return null;
     }
 
 
@@ -413,487 +508,6 @@ public class Skeleton {
             "Robot moves through teleport", "Settler drills asteroid", "Settler drills ice asteroid",
             "Settler drills radioactive asteroid", "Robot drills asteroid", "Robot drills ice asteroid",
             "Robot drills radioactive asteroid", "Sun makes action", "Settler mines"};
-
-    /**
-     * A Craft teleport menüponthoz tartozó inicializáló függvény.
-     * Készít egy telepest, elhelyezi a names szótárban majd meghívja rajta a craftTeleport metódust.
-     */
-    private static void craftTeleport(){
-        Settler s = new Settler();
-        names.put(s, "s");
-        init = false;
-        s.craftTeleport();
-    }
-
-    /**
-     * A Craft robot menüponthoz tartozó inicializáló függvény.
-     */
-    private static void craftRobot(){
-        Game game = new Game();
-        names.put(game, "game");
-        Settler s = new Settler();
-        names.put(s, "s");
-        Asteroid asteroid = new Asteroid();
-        names.put(asteroid, "asteroid");
-        asteroid.placeTraveller(s);
-        s.setGame(game);
-        init = false;
-        s.craftRobot();
-    }
-
-    /**
-     * A Place teleport menüponthoz tartozó inicializáló függvény.
-     */
-    private static void placeTeleport(){
-        Settler settler = new Settler();
-        names.put(settler, "settler");
-        Asteroid asteroid = new Asteroid();
-        names.put(asteroid, "asteroid");
-        asteroid.placeTraveller(settler);
-        Teleport t = new Teleport();
-        names.put(t, "teleport");
-        settler.addTeleport(t);
-        init = false;
-        settler.placeTeleport(t);
-    }
-
-    /**
-     * A Settler moves menüponthoz tartozó inicializáló függvény.
-     */
-    private static void settlerMoves(){
-        Asteroid asteroidA = new Asteroid();
-        names.put(asteroidA, "asteroidA");
-        Settler settler = new Settler();
-        names.put(settler, "settler");
-        Asteroid asteroidB = new Asteroid();
-        names.put(asteroidB, "asteroidB");
-        asteroidA.addNeighbour(asteroidB);
-        asteroidB.addNeighbour(asteroidA);
-        asteroidA.placeTraveller(settler);
-        init = false;
-        settler.move(0);
-    }
-
-    /**
-     * A Robot moves menüponthoz tartozó inicializáló függvény.
-     */
-    private static void robotMoves(){
-        Asteroid asteroidA = new Asteroid();
-        names.put(asteroidA, "asteroidA");
-        Robot robot = new Robot();
-        names.put(robot, "robot");
-        Asteroid asteroidB = new Asteroid();
-        names.put(asteroidB, "asteroidB");
-        asteroidA.addNeighbour(asteroidB);
-        asteroidB.addNeighbour(asteroidA);
-        asteroidA.placeTraveller(robot);
-        init = false;
-        robot.move(0);
-    }
-
-    /**
-     * A Put mineral back menüponthoz tartozó inicializáló függvény.
-     */
-    private static void putMineralBack(){
-        Settler settler = new Settler();
-        names.put(settler, "settler");
-        Asteroid asteroid = new Asteroid();
-        names.put(asteroid, "asteroid");
-        //Mineral m = mineralQuestion();
-        Coal m = new Coal();
-        names.put(m, "coal");
-        asteroid.placeTraveller(settler);
-        settler.addMineral(m);
-        init = false;
-        settler.putMineralBack(m);
-    }
-
-    /**
-     * A Settler moves through teleport menüponthoz tartozó inicializáló függvény.
-     */
-    private static void settlerMovesThroughTeleport(){
-        Settler settler = new Settler();
-        names.put(settler, "settler");
-        Teleport t = new Teleport();
-        names.put(t, "t");
-        Teleport pair = new Teleport();
-        names.put(pair, "pair");
-        t.setPair(pair);
-        pair.setPair(t);
-        Asteroid asteroid = new Asteroid();
-        names.put(asteroid, "asteroid");
-        asteroid.addNeighbour(t);
-        Asteroid neighbour = new Asteroid();
-        names.put(neighbour, "neighbour");
-        neighbour.addNeighbour(pair);
-        asteroid.placeTraveller(settler);
-        pair.addNeighbour(neighbour);
-        t.addNeighbour(asteroid);
-        init = false;
-        settler.move(0);
-    }
-
-   /**
-     * A Robot moves through teleport menüponthoz tartozó inicializáló függvény.
-     */
-   private static void robotMovesThroughTeleport(){
-       Robot robot = new Robot();
-       names.put(robot, "robot");
-       Teleport t = new Teleport();
-       names.put(t, "t");
-       Teleport pair = new Teleport();
-       names.put(pair, "pair");
-       t.setPair(pair);
-       pair.setPair(t);
-       Asteroid asteroid = new Asteroid();
-       names.put(asteroid, "asteroid");
-       asteroid.addNeighbour(t);
-       Asteroid neighbour = new Asteroid();
-       names.put(neighbour, "neighbour");
-       neighbour.addNeighbour(pair);
-       asteroid.placeTraveller(robot);
-       pair.addNeighbour(neighbour);
-       t.addNeighbour(asteroid);
-       init = false;
-       robot.move(0);
-    }
-
-    /**
-     * A Settler drills asteroid menüponthoz tartozó inicializáló függvény.
-     */
-    private static void settlerDrillsAsteroid(){
-        Coal core = new Coal();
-        names.put(core, "core");
-        Asteroid a = new Asteroid(core);
-        names.put(a, "asteroid");
-        Settler s = new Settler();
-        names.put(s, "settler");
-        a.placeTraveller(s);
-        init = false;
-        s.drill();
-    }
-
-    /**
-     * A Settler ice drills asteroid menüponthoz tartozó inicializáló függvény.
-     */
-    private static void settlerDrillsIceAsteroid(){
-        Ice core = new Ice();
-        names.put(core, "core");
-        Asteroid a = new Asteroid(core);
-        names.put(a, "a");
-        Settler s = new Settler();
-        names.put(s, "s");
-        a.placeTraveller(s);
-        init = false;
-        s.drill();
-    }
-
-    /**
-     * A Settler radioactive asteroid menüponthoz tartozó inicializáló függvény.
-     */
-    private static void settlerDrillsRadioactiveAsteroid(){
-        Uranium core = new Uranium();
-        names.put(core, "core");
-        Asteroid a = new Asteroid(core);
-        names.put(a, "a");
-        Settler s = new Settler();
-        names.put(s, "s");
-        Game g = new Game();
-        names.put(g, "g");
-        a.placeTraveller(s);
-        s.setGame(g);
-        g.addSettler(s);
-        init = false;
-        s.drill();
-    }
-
-    /**
-     * A Robot drills asteroid menüponthoz tartozó inicializáló függvény.
-     */
-    private static void robotDrillsAsteroid(){
-        Coal core = new Coal();
-        names.put(core, "core");
-        Asteroid a = new Asteroid(core);
-        names.put(a, "a");
-        Robot r = new Robot();
-        names.put(r, "r");
-        a.placeTraveller(r);
-        init = false;
-        r.drill();
-    }
-
-    /**
-     * A Robot drills ice asteroid menüponthoz tartozó inicializáló függvény.
-     */
-    private static void robotDrillsIceAsteroid(){
-        Ice core = new Ice();
-        names.put(core, "core");
-        Asteroid a = new Asteroid(core);
-        names.put(a, "a");
-        Robot r = new Robot();
-        names.put(r, "r");
-        a.placeTraveller(r);
-        init = false;
-        r.drill();
-    }
-
-    /**
-     * A Robot drills radioctive asteroid menüponthoz tartozó inicializáló függvény.
-     */
-    private static void robotDrillsRadioactiveAsteroid(){
-        Uranium core = new Uranium();
-        names.put(core, "core");
-        Asteroid a = new Asteroid(core);
-        names.put(a, "a");
-        Robot r = new Robot();
-        names.put(r, "r");
-        Game g = new Game();
-        names.put(g, "g");
-        a.placeTraveller(r);
-        r.setGame(g);
-        g.addRobot(r);
-        init = false;
-        r.drill();
-    }
-
-    /**
-     * Inicializáló metódus a Sun makes action menüponthoz.
-     */
-    private static void sunMakesAcion(){
-        Sun sun = new Sun();
-        names.put(sun, "sun");
-        sun.makeAction();
-    }
-    /**
-     * Inicializáló metódus a Settler mines menüponthoz.
-     */
-    private static void settlerMines(){
-        Asteroid asteroid = new Asteroid();
-        names.put(asteroid, "asteroid");
-        Settler s = new Settler();
-        names.put(s, "s");
-        asteroid.placeTraveller(s);
-        init = false;
-        s.mine();
-    }
-
-    /**
-     * Egy metódus elején kell meghívni, hogy naplózza az metódus meghívását.
-     * @param o Az objektum, amin meghívták a megtódust.
-     * @param methodName A metódus neve.
-     * @param argument Az átadott argumentum, null, ha nem volt átadott argumentum.
-     */
-    public static void startMethod(Object o, String methodName, Object argument){
-        if (!init) {
-            for (int i = 0; i < padding; i++)
-                System.out.print("\t");
-            System.out.print("->" + names.getOrDefault(o, Integer.toString(o.hashCode())) + "." + methodName + "(");
-            if (argument != null)
-                //System.out.print(names.getOrDefault(argument, Integer.toString(o.hashCode())));
-                System.out.print(names.getOrDefault(argument, argument.toString()));
-            System.out.println(")");
-            padding += 1;
-        }
-    }
-
-    /**
-     * Egy metódus végén kell meghívni, hogy naplózza a metódus visszatérését.
-     * @param o Az objektum, amin meghívták a metódust.
-     * @param returnvalue Az visszatérési érték, null, ha nincs visszatérési érték.
-     */
-    public static void endMethod(Object o, Object returnvalue){
-        if (!init) {
-            padding -= 1;
-            for (int i = 0; i < padding; i++)
-                System.out.print("\t");
-            //System.out.print("<-" + names.getOrDefault(o, Integer.toString(o.hashCode())));
-            System.out.print("<-");
-            if (returnvalue != null)
-                //System.out.print("return: " + names.getOrDefault(returnvalue, Integer.toString(returnvalue.hashCode())));
-                System.out.print(names.getOrDefault(returnvalue, returnvalue.toString()));
-            System.out.println();
-        }
-    }
-
-    /**
-     * Kiírja a paraméterként átadott kérdést, majd bekér a felhasználótól egy egész számot.
-     * Addig kéri be a választ, amíg nem kap helyes bemenetet a felhasználótól.
-     * @param message A kiírni kívánt üzenet/kérdés.
-     * @return a beírt egész szám
-     */
-    public static int intQuestion(String message){
-        for(int i = 0; i < padding; i++)
-            System.out.print("\t");
-        System.out.print(message + " ");
-        Scanner sc = new Scanner(System.in);
-        boolean again = true;
-        int out = 0;
-        while (again) {
-            String s = sc.next();
-            try {
-                again = false;
-                out = Integer.parseInt(s);
-            } catch (Exception e) {
-                again = true;
-            }
-        }
-        return out;
-    }
-
-    /**
-     * Kiírja a paraméterként átadott kérdést, majd bekér a felhasználótól egy yes/no választ.
-     * Addig kéri be a választ, amíg nem kap helyes bemenetet a felhasználótól.
-     * @param message A kiírni kívánt üzenet/kérdés.
-     * @return true, ha yes volt a választ, false, ha no volt a válasz
-     */
-    public static boolean yesnoQuestion(String message){
-        for(int i = 0; i < padding; i++)
-            System.out.print("\t");
-        System.out.print(message + " ");
-        Scanner sc = new Scanner(System.in);
-        while(true){
-            String s = sc.next();
-            if ("yes".equals(s)){
-                return true;
-            }else if("no".equals(s)){
-                return false;
-            }
-        }
-    }
-
-    /**
-     * Metódus, amellyel a nap lekérdezheti a makeAction metódusában, hogy az almenü melyik menüpontját
-     * kell végrehajtani. A választott opció alapján a megfelelő inicializáló függvényt meghívja. Addig kéri be a
-     * felhasználótól a számokat, amíg nem 1,2,3 számok közül való számot választ.
-     * @param sun A nap, amelyik kérdez
-     * @return a felhasználó által választott menüpont száma
-     */
-    public static int sunQuestion(Sun sun){
-        Skeleton.init = true;
-        System.out.println("1:\tSun makes solar wind");
-        System.out.println("2:\tRadioactive asteroid gets close to sun");
-        System.out.println("3:\tIce asteroid gets close to sun");
-        Scanner sc = new Scanner(System.in);
-        boolean isNumber = false;
-        int in = 0;
-        while (!isNumber  || (in < 1 || in > 3)) {
-            String s = sc.next();
-            try {
-                in = Integer.parseInt(s);
-                isNumber= true;
-            } catch (Exception ignored) {
-                isNumber = false;
-            }
-        }
-        if (in == 1){
-            sunMakesSolarWind(sun);
-        }else if (in == 2){
-            radioactiveAsteroidGetsCloseToSun(sun);
-        }else {
-            iceAsteroidGetsCloseToSun(sun);
-        }
-
-        Skeleton.init = false;
-        return in;
-    }
-
-    /**
-     * A sun makes solar wind almenüponthoz tartozó inicializáló metódus.
-     * @param sun A nap, amelyiknek oda kell adni az aszteoridákat
-     */
-    private static void sunMakesSolarWind(Sun sun){
-        Asteroid a = new Asteroid();
-        names.put(a, "a");
-        Game game = new Game();
-        names.put(game, "game");
-        Settler s = new Settler();
-        names.put(s, "s");
-        Robot r = new Robot();
-        names.put(r, "r");
-        List<Asteroid> asteroids = new ArrayList<Asteroid>();
-        asteroids.add(a);
-        sun.addAsteroids(asteroids);
-        a.placeTraveller(s);
-        a.placeTraveller(r);
-        game.addRobot(r);
-        game.addSettler(s);
-        r.setGame(game);
-        s.setGame(game);
-    }
-    /**
-     * A radioactive asteroid gets close to sun almenüponthoz tartozó inicializáló metódus.
-     * @param sun A nap, amelyiknek oda kell adni az aszteoridákat
-     */
-    private static void radioactiveAsteroidGetsCloseToSun(Sun sun){
-        Uranium core = new Uranium();
-        names.put(core, "core");
-        Asteroid a = new Asteroid(core);
-        names.put(a, "a");
-        Asteroid neighbour = new Asteroid();
-        names.put(neighbour, "neighbour");
-        Settler s = new Settler();
-        names.put(s, "s");
-        Robot r = new Robot();
-        names.put(r, "r");
-        Game game = new Game();
-        names.put(game, "game");
-        game.addSettler(s);
-        game.addRobot(r);
-        a.placeTraveller(s);
-        a.placeTraveller(r);
-        a.addNeighbour(neighbour);
-        neighbour.addNeighbour(a);
-        Teleport t = new Teleport();
-        names.put(t, "t");
-        Teleport pair = new Teleport();
-        names.put(pair, "pair");
-        t.setPair(pair);
-        pair.setPair(t);
-        t.addNeighbour(a);
-        a.addNeighbour(t);
-        r.setGame(game);
-        s.setGame(game);
-        List<Asteroid> asteroids = new ArrayList<Asteroid>();
-        asteroids.add(a);
-        sun.addAsteroids(asteroids);
-    }
-    /**
-     * Az ice asteroid gets close to sun almenüponthoz tartozó inicializáló metódus.
-     * @param sun A nap, amelyiknek oda kell adni az aszteoridákat
-     */
-    private static void iceAsteroidGetsCloseToSun(Sun sun){
-        Ice core = new Ice();
-        names.put(core, "core");
-        Asteroid a = new Asteroid(core);
-        names.put(a, "a");
-        List<Asteroid> asteroids = new ArrayList<Asteroid>();
-        asteroids.add(a);
-        init = false;
-        sun.addAsteroids(asteroids);
-    }
-
-    /**
-     * Bekér a felhasználótól egy mineral fajtát, amelyet a felhasználó begépel.
-     * Addig kéri be a választ, amíg nem kap helyes bemenetet a felhasználótól.
-     * @return egy mineral objektum, amit a felhasználó kért.
-     */
-    public static Mineral mineralQuestion(){
-        for(int i = 0; i < padding; i++)
-            System.out.print("\t");
-        System.out.print("Please choose a mineral! (coal/ice/uranium/iron) ");
-        Mineral answer = null;
-        Scanner sc = new Scanner(System.in);
-        HashMap<String, Mineral> minerals = new HashMap<String, Mineral>();
-        minerals.put("coal", new Coal());
-        minerals.put("ice", new Ice());
-        minerals.put("iron", new Iron());
-        minerals.put("uranium", new Uranium());
-        while (answer == null) {
-            answer = minerals.getOrDefault(sc.next(), null);
-        }
-        names.put(answer, "core");
-        return answer;
-    }
 
     /**
      * Kiírja az elérhető menüpontokat.

@@ -46,11 +46,12 @@ public abstract class Traveller {
     /**
      * megfúrja az aszteroidát
      */
-    public void drill() {
+    //Ez megy a leszármazottakba
+    /*public void drill() {
     	Skeleton.startMethod(this, "drill", null);
     	asteroid.onDrill();
     	Skeleton.endMethod(this, null);
-    }
+    }*/
 
     /**
      * 

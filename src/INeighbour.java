@@ -22,6 +22,9 @@ public interface INeighbour {
     /**
      * @param neighbour
      */
-    void addNeighbour(INeighbour neighbour);
+    //void addNeighbour(INeighbour neighbour);
 
+    void solarWind(int i);
+
+    boolean moveTeleport(Teleport t);
 }

@@ -147,6 +147,14 @@ public class Asteroid implements INeighbour {
     }
 
     /**
+     * Visszaadja az aszteorida closeToSun változóját.
+     * @return a closeToSun tag értéke.
+     */
+    public boolean getCloseToSun() {
+        return closeToSun;
+    }
+
+    /**
      * Megpróbálja betenni a core-ba a paraméterül kapott Mineral-t. Ez akkor sikerül, ha a core üres,
      * és az aszteroidának ki van fúrva a kérge. Ha sikerül, akkor true-val tér vissza, egyébként false-al,
      * nem módosítja a core-ban lévő Mineral-t.
@@ -228,6 +236,16 @@ public class Asteroid implements INeighbour {
     	Skeleton.startMethod(this, "removeNeighbour", neighbour);
     	neighbours.remove(neighbour);
     	Skeleton.endMethod(this, null);
+    }
+
+    @Override
+    public void solarWind(int i) {
+
+    }
+
+    @Override
+    public boolean moveTeleport(Teleport t) {
+        return false;
     }
 
     /**

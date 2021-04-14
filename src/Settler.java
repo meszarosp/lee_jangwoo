@@ -40,7 +40,11 @@ public class Settler extends Traveller {
      * A telepes listájához hozzáad egy egy nyersanyagot
      * @param m Az új nyersanyag
      */
-    public void addMineral(Mineral m){
+    public boolean addMineral(Mineral m){
+        if (minerals.size() >= 10)
+            return false;
+        minerals.add(m);
+        return true;
     }
 
     /**
@@ -106,7 +110,8 @@ public class Settler extends Traveller {
      */
     public void placeTeleport(Teleport t) {
         Skeleton.startMethod(this, "placeTeleport", t);
-        t.addNeighbour(asteroid);
+        //t.addNeighbour(asteroid);
+        t.setNeighbour(asteroid);
         Skeleton.endMethod(this, null);
     }
 
@@ -135,8 +140,8 @@ public class Settler extends Traveller {
      * A telepesnél lévõ nyersanyagokat kérdezi le
      * @return A nyersanyagok
      */
-    public Mineral getMinerals() {
-        return null;
+    public List<Mineral> getMinerals() {
+        return minerals;
     }
 
 }

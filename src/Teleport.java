@@ -24,7 +24,13 @@ public class Teleport implements INeighbour {
     /**
      * Az aszteroida, amin a teleortkapu van.
      */
-    private INeighbour neighbour;
+    private Asteroid neighbour;
+
+    private boolean bamboozled;
+
+    public void setBamboozled(boolean bamboozled) {
+        this.bamboozled = bamboozled;
+    }
 
     /**
      * A teleport párját null-ra állítja, és ha a neighbour nem null (azaz már le van rakva a teleportkapu), akkor a neighbour removeNeighbour metódusát meghívja
@@ -88,11 +94,19 @@ public class Teleport implements INeighbour {
     	Skeleton.endMethod(this,  null);
     }
 
+    public void solarWind(int i) {
+
+    }
+
+    public boolean moveTeleport(Teleport t) {
+        return false;
+    }
+
     /**
      *Abban az esetben, ha a pair nem null (azaz már le van rakva a kapu párja), a paraméterül kapott neighbour-nek meghívja az addNeighbour metódusát, aminek saját magát adja paraméterül.
      * @param neighbour
      */
-    public void addNeighbour(INeighbour neighbour){
+    public void setNeighbour(Asteroid a){
     	Skeleton.startMethod(this,  "addNeighbour", neighbour);
     	if (!Skeleton.init) {
             if (!Skeleton.yesnoQuestion("Has the pair been blown up (perished)? (yes/no)")) {

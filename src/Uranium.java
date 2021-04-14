@@ -8,6 +8,12 @@ import java.util.*;
  */
 public class Uranium extends RadioactiveMineral {
 
+    private int exposedToSunCounter = 0;
+
+    public Uranium(int exposedToSunCounter) {
+        this.exposedToSunCounter = exposedToSunCounter;
+    }
+
     /**
      * Default constructor
      */

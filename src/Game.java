@@ -36,6 +36,10 @@ public class Game {
      * @param s A hozzáadni kívánt telepes.
      */
 
+
+
+    private List<Teleport> gates = new ArrayList<Teleport>();
+
     public void addSettler(Settler s){
         settlers.add(s);
     }
@@ -100,5 +104,17 @@ public class Game {
 
     public Sun getSun() {
         return sun;
+    }
+
+    public void addTeleport(Teleport t){
+        gates.add(t);
+    }
+
+    public void removeTeleport(Teleport t){
+        gates.remove(t);
+    }
+
+    public List<Teleport> getGates(){
+        return gates;
     }
 }
