@@ -90,4 +90,15 @@ public class Game {
         return false;
     }
 
+    public List<Settler> getSettlers() {
+        return settlers;
+    }
+
+    public List<Robot> getRobots() {
+        return robots;
+    }
+
+    public Sun getSun() {
+        return sun;
+    }
 }

@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 
 
@@ -6,6 +7,391 @@ import java.util.*;
  * Az egyes use-case-ekhez megcsinálja az inicializálást majd meghívja a megfelelő tesztelni kívánt metódust.
  */
 public class Skeleton {
+
+    private static Scanner input = new Scanner(System.in);
+    private static PrintWriter output = new PrintWriter(System.out);
+    private static File inputfile = null;
+    private static File outputfile = null;
+    public static boolean random = false;
+    public static Game game = new Game();
+
+    /**
+     * Az objektumok és a kiírandó nevüknek az összerendelése.
+     */
+    public static HashMap<Object, String> names = new HashMap<Object, String>();
+    public static HashMap<String, Object> IDs = new HashMap<String, Object>();
+
+    /**
+     * Interfész, amely a parancsok számára készült. A parancsok ezt implementálják.
+     */
+    private interface Command{
+        public void execute(String[] args);
+    }
+
+    /**
+     * A load parancshoz tartozó osztály.
+     */
+    private static class loadCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A save parancshoz tartozó osztály.
+     */
+    private static class saveCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A input parancshoz tartozó osztály.
+     */
+    private static class inputCommand implements Command{
+        /**
+         * A paraméterként megadott fájlra állítja a bemenetet.
+         * Ha nincs elég argumentum, akkor hibát jelez.
+         * @param args a parancs argumentumainak tömbje
+         */
+        public void execute(String[] args) {
+            if (args.length < 2) {
+                output.println("load unsuccessful");
+                return;
+            }
+            File file = new File(args[1]);
+            Scanner temp;
+            try {
+                temp = new Scanner(file);
+            } catch (FileNotFoundException e) {
+                output.println("load unsuccessful");
+                return;
+            }
+            input.close();
+            input = temp;
+        }
+    }
+    /**
+     * A output parancshoz tartozó osztály.
+     */
+    private static class outputCommand implements Command{
+        /**
+         * A paraméterként megadott fájlra irányítja a kimenetet.
+         * Ha nincs elég argumentum, akkor hibát jelez.
+         * @param args a parancs argumentumainak tömbje
+         */
+        public void execute(String[] args) {
+            if (args.length < 2) {
+                output.println("load unsuccessful");
+                return;
+            }
+            File file = new File(args[1]);
+            PrintWriter temp;
+            try {
+                temp = new PrintWriter(new FileWriter(file));
+            } catch (Exception e) {
+                output.println("load unsuccessful");
+                return;
+            }
+            output.close();
+            output = temp;
+        }
+    }
+    /**
+     * A setrandom parancshoz tartozó osztály.
+     */
+    private static class setrandomCommand implements Command{
+        /**
+         * Beállítja a random értékét a felhasználó által megadott értékre.
+         * Ha nincs elég argumentum, akkor hibaüzenetet ad és visszatér
+         * @param args a parancs argumentumainak tömbje
+         */
+        public void execute(String[] args) {
+            if (args.length < 2) {
+                output.println("all details must be specified");
+                return;
+            }
+            if ("0".equals(args[1]))
+                random = false;
+            else if ("1".equals(args[0]))
+                random = true;
+            output.println("random events " + (random ? "on" : "off"));
+        }
+    }
+    /**
+     * A addsettler parancshoz tartozó osztály.
+     */
+    private static class addsettlerCommand implements Command{
+
+        public void execute(String[] args) {
+            if (args.length < 2) {
+                output.println("all details must be specified");
+                return;
+            }
+            Object asteroid = IDs.getOrDefault(args[1], null);
+            int n = game.getSettlers().size();
+            Sun sun = game.getSun();
+            List<Asteroid> asteroids = sun.getAsteroids();
+            if (asteroid == null || asteroids.contains(asteroid)){
+                output.println("couldn’t complete request\n" +
+                        "    selected ID not available\n");
+            }else{
+                Settler s = new Settler();
+                IDs.put("s" + (n+1), 2);
+                ((Asteroid) asteroid).placeTraveller(s);
+                output.println("settler s" + (n+1) + "added to asteroid: " + args[1]);
+            }
+        }
+    }
+    /**
+     * A addasteroid parancshoz tartozó osztály.
+     */
+    private static class addasteroidCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A addrobot parancshoz tartozó osztály.
+     */
+    private static class addrobotCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A addufo parancshoz tartozó osztály.
+     */
+    private static class addufoCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A connectasteroid parancshoz tartozó osztály.
+     */
+    private static class connectasteroidCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A selectsettler parancshoz tartozó osztály.
+     */
+    private static class selectsettlerCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A move parancshoz tartozó osztály.
+     */
+    private static class moveCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A drill parancshoz tartozó osztály.
+     */
+    private static class drillCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A mine parancshoz tartozó osztály.
+     */
+    private static class mineCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A putmineralback parancshoz tartozó osztály.
+     */
+    private static class putmineralbackCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A craftrobot parancshoz tartozó osztály.
+     */
+    private static class craftrobotCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A craftteleport parancshoz tartozó osztály.
+     */
+    private static class craftteleportCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A placeteleport parancshoz tartozó osztály.
+     */
+    private static class placeteleportCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A addmineral parancshoz tartozó osztály.
+     */
+    private static class addmineralCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A addteleportpair parancshoz tartozó osztály.
+     */
+    private static class addteleportpairCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A nextturn parancshoz tartozó osztály.
+     */
+    private static class nextturnCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A robotaction parancshoz tartozó osztály.
+     */
+    private static class robotactionCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A sunaction parancshoz tartozó osztály.
+     */
+    private static class sunactionCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A solarwind parancshoz tartozó osztály.
+     */
+    private static class solarwindCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A checkwin parancshoz tartozó osztály.
+     */
+    private static class checkwinCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A chechlose parancshoz tartozó osztály.
+     */
+    private static class chechloseCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A newgame parancshoz tartozó osztály.
+     */
+    private static class newgameCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A setclosetosun parancshoz tartozó osztály.
+     */
+    private static class setclosetosunCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A giveup parancshoz tartozó osztály.
+     */
+    private static class giveupCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+    /**
+     * A ufoaction parancshoz tartozó osztály.
+     */
+    private static class ufoactionCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+
+    /**
+     * A bammboozleteleport parancshoz tartozó osztály.
+     */
+    private static class bamboozleteleportCommand implements Command{
+
+        public void execute(String[] args) {
+
+        }
+    }
+
+    private static HashMap<String, Command> commands;
+    public static void initializeCommands(){
+        commands = new HashMap<>();
+        commands.put("load", new loadCommand()); commands.put("save", new saveCommand()); commands.put("input", new inputCommand());
+        commands.put("output", new outputCommand()); commands.put("setrandom", new setrandomCommand());
+        commands.put("addsettler", new addsettlerCommand()); commands.put("addasteroid", new addasteroidCommand());
+        commands.put("addrobot", new addrobotCommand()); commands.put("addufo", new addufoCommand());
+        commands.put("connectasteroid", new connectasteroidCommand()); commands.put("selectsettler", new selectsettlerCommand());
+        commands.put("move", new moveCommand()); commands.put("drill", new drillCommand()); commands.put("mine", new mineCommand());
+        commands.put("putmineralback", new putmineralbackCommand()); commands.put("craftrobot", new craftrobotCommand());
+        commands.put("craftteleport", new craftteleportCommand()); commands.put("placeteleport", new placeteleportCommand());
+        commands.put("addmineral", new addmineralCommand()); commands.put("addteleportpair", new addteleportpairCommand());
+        commands.put("nextturn", new nextturnCommand()); commands.put("robotaction", new robotactionCommand());
+        commands.put("sunaction", new sunactionCommand()); commands.put("solarwind", new solarwindCommand());
+        commands.put("checkwin", new checkwinCommand()); commands.put("chechlose", new chechloseCommand());
+        commands.put("newgame", new newgameCommand()); commands.put("setclosetosun", new setclosetosunCommand());
+        commands.put("giveup", new giveupCommand()); commands.put("ufoaction", new ufoactionCommand());
+        commands.put("bamboozleteleport", new bamboozleteleportCommand());
+    }
+
+
     /**
      * Annak a száma, hogy aktuálisan hány tabulátorral kell beljebb kezdeni a sort.
      */
@@ -18,10 +404,7 @@ public class Skeleton {
      */
     public static boolean init = true;
 
-    /**
-     * Az objektumok és a kiírandó nevüknek az összerendelése.
-     */
-    public static HashMap<Object, String> names = new HashMap<Object, String>();
+
     /**
      * Az elérhető menüpontok.
      */
@@ -572,9 +955,9 @@ public class Skeleton {
      * @param args parancssori argumentumok
      */
     public static void main(String[] args){
-        while (true){
+        /*hile (true){
             menu();
-        }
+        }*/
        // mineralQuestion();
         //int a = intQuestion("Help");
 
