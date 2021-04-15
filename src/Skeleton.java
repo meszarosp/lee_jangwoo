@@ -155,6 +155,7 @@ public class Skeleton {
     /**
      * A save parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class saveCommand implements Command{
 
         public void execute(String[] args) {
@@ -258,13 +259,14 @@ public class Skeleton {
                 Settler s = new Settler();
                 IDs.put("s" + (n+1), s);
                 ((Asteroid) asteroid).placeTraveller(s);
-                output.println("settler s" + (n+1) + "added to asteroid: " + args[1]);
+                output.println("settler s" + (n+1) + " added to asteroid: " + args[1]);
             }
         }
     }
     /**
      * A addasteroid parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class addasteroidCommand implements Command{
 
         public void execute(String[] args) {
@@ -274,6 +276,7 @@ public class Skeleton {
     /**
      * A addrobot parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class addrobotCommand implements Command{
 
         public void execute(String[] args) {
@@ -283,6 +286,7 @@ public class Skeleton {
     /**
      * A addufo parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class addufoCommand implements Command{
 
         public void execute(String[] args) {
@@ -310,6 +314,7 @@ public class Skeleton {
     /**
      * A move parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class moveCommand implements Command{
 
         public void execute(String[] args) {
@@ -319,6 +324,7 @@ public class Skeleton {
     /**
      * A drill parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class drillCommand implements Command{
 
         public void execute(String[] args) {
@@ -328,6 +334,7 @@ public class Skeleton {
     /**
      * A mine parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class mineCommand implements Command{
 
         public void execute(String[] args) {
@@ -337,6 +344,7 @@ public class Skeleton {
     /**
      * A putmineralback parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class putmineralbackCommand implements Command{
 
         public void execute(String[] args) {
@@ -346,6 +354,7 @@ public class Skeleton {
     /**
      * A craftrobot parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class craftrobotCommand implements Command{
 
         public void execute(String[] args) {
@@ -355,6 +364,7 @@ public class Skeleton {
     /**
      * A craftteleport parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class craftteleportCommand implements Command{
 
         public void execute(String[] args) {
@@ -364,6 +374,7 @@ public class Skeleton {
     /**
      * A placeteleport parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class placeteleportCommand implements Command{
 
         public void execute(String[] args) {
@@ -401,6 +412,7 @@ public class Skeleton {
     /**
      * A nextturn parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class nextturnCommand implements Command{
 
         public void execute(String[] args) {
@@ -410,6 +422,7 @@ public class Skeleton {
     /**
      * A robotaction parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class robotactionCommand implements Command{
 
         public void execute(String[] args) {
@@ -419,6 +432,7 @@ public class Skeleton {
     /**
      * A sunaction parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class sunactionCommand implements Command{
 
         public void execute(String[] args) {
@@ -428,6 +442,7 @@ public class Skeleton {
     /**
      * A solarwind parancshoz tartozó osztály.
      */
+    // TODO Annának
     private static class solarwindCommand implements Command{
 
         public void execute(String[] args) {
@@ -452,7 +467,7 @@ public class Skeleton {
     /**
      * A chechlose parancshoz tartozó osztály.
      */
-    private static class chechloseCommand implements Command{
+    private static class checkloseCommand implements Command{
         /**
          * Értesíti a felhasználót arról, hogy elvesztette-e a játékot.
          * @param args a paraméterek tömbje
