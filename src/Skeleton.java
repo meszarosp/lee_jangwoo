@@ -299,7 +299,7 @@ public class Skeleton {
             game.getSun().addAsteroid(asteroid);
             int n = maxIDs.get("asteroid");
             maxIDs.replace("asteroid", n+1);
-            IDs.put("a" + (n+1), asteroid);
+            addID("a" + (n+1), asteroid);
             output.println("asteroid a" + (n+1) + " added");
             output.println("shell: " + shell);
             output.println("closetosun: " + (cts? "yes" : "no"));
@@ -326,7 +326,7 @@ public class Skeleton {
                 Robot r = new Robot((Asteroid) asteroid);
                 int n = maxIDs.get("robot");
                 maxIDs.replace("robot", n+1);
-                IDs.put("r" + (n+1), r);
+                addID("r" + (n+1), r);
                 ((Asteroid) asteroid).placeTraveller(r);
                 output.println("robot r" + (n+1) + " added to asteroid: " + args[1]);
             }
@@ -352,7 +352,7 @@ public class Skeleton {
                 UFO ufo = new UFO((Asteroid) asteroid);
                 int n = maxIDs.get("ufo");
                 maxIDs.replace("ufo", n+1);
-                IDs.put("r" + (n+1), ufo);
+                addID("r" + (n+1), ufo);
                 ((Asteroid) asteroid).placeTraveller(ufo);
                 output.println("ufo u" + (n+1) + " added to asteroid: " + args[1]);
             }
@@ -406,9 +406,24 @@ public class Skeleton {
     private static class moveCommand implements Command{
 
         public void execute(String[] args) {
-            if (!settlerCommandCheck(args, 2))
+            if (!settlerCommandCheck(args, 1)) {
                 return;
+            }
+            if (args.length < 2) {
+                for (int i = 0; i < activeSettler.getAsteroid().getNeighbourCount(); i++) {
+                    INeighbour n = activeSettler.getAsteroid().getNeighbourAt(i);
+                    String id = reverseIDs.get(n);
+                    String type = "";
+                    if (id.charAt(0) == 'a')
+                        type = "asteroid";
+                    if (id.charAt(0) == 't')
+                        type = "teleportgate";
+                    output.println(n + ": " + type);
+                }
+                return;
+            }
             activeSettler.move(Integer.parseInt(args[1]));
+            // TODO adjunk vissza boolt?
         }
     }
     /**
@@ -420,6 +435,7 @@ public class Skeleton {
             if (!settlerCommandCheck(args, 1))
                 return;
             activeSettler.drill();
+            // TODO adjunk vissza boolt?
         }
     }
     /**
@@ -492,7 +508,7 @@ public class Skeleton {
             int n = activeSettler.getMinerals().size();
             activeSettler.addMineral(mineral);
             if (n == activeSettler.getMinerals().size())
-                output.println("settler " + IDs.get(activeSettler) + " received one unit of " + args[1]);
+                output.println("settler " + reverseIDs.get(activeSettler) + " received one unit of " + args[1]);
             else
                 output.println("settler inventory too full");
         }
@@ -528,7 +544,7 @@ public class Skeleton {
             maxIDs.replace("teleport", id+2);
             game.addTeleport(t1);
             game.addTeleport(t2);
-            output.println("connected teleportgates " + ("t" + (id+1)) +" " + ("t" + (id+2)) " placed by " + args[1] + " " + args[2]);
+            output.println("connected teleportgates " + ("t" + (id+1)) +" " + ("t" + (id+2)) + " placed by " + args[1] + " " + args[2]);
         }
     }
     /**
@@ -554,21 +570,35 @@ public class Skeleton {
     /**
      * A sunaction parancshoz tartozó osztály.
      */
-    // TODO Annának
     private static class sunactionCommand implements Command{
 
         public void execute(String[] args) {
-
+            game.getSun().makeAction();
+            // TODO honnan a rákból tudjuk hogy mi történt?
         }
     }
     /**
      * A solarwind parancshoz tartozó osztály.
      */
-    // TODO Annának
     private static class solarwindCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (args.length < 3) {
+                output.println("all details must be specified");
+                return;
+            }
+            Asteroid a = (Asteroid) IDs.getOrDefault(args[1], null);
+            if (a == null){
+                output.println("couldn’t complete request\n" +
+                        "    selected ID not available\n");
+                return;
+            }
+            int r = Integer.parseInt(args[2]);
+            a.solarWind(r);
+            output.println("solarwind created with asteroid " + args[1] + "in the middle");
+            output.println("and a " + r + " radius");
+            output.println("events caused:");
+            // TODO honnan a rákból tudjuk hogy mi történt?
         }
     }
     /**

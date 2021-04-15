@@ -206,6 +206,10 @@ public class Asteroid implements INeighbour {
         return null;
     }
 
+    public int getNeighbourCount() {
+        return neighbours.size();
+    }
+
     /**
      * Kiveszi a kapott utazót a travellers listából.
      * @param traveller az eltávolítani kívánt traveller
