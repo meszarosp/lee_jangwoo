@@ -29,6 +29,10 @@ public class Settler extends Traveller {
      */
     private Teleport[] teleportgates;
 
+    public Settler(Asteroid a) {
+        super(a);
+    }
+
     /**
      * A telepes listájához hozzááad egy teleportkaput
      * @param t Az új teleportkapu

@@ -14,6 +14,10 @@ public class Robot extends Traveller {
     public Robot() {
     }
 
+    public Robot(Asteroid a) {
+        super(a);
+    }
+
     /**
      * 
      */

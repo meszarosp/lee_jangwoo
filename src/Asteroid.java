@@ -22,6 +22,15 @@ public class Asteroid implements INeighbour {
     	travellers = new ArrayList<Traveller>();
     }
 
+    public Asteroid(int shell, boolean closeToSun, Mineral core, Sun sun) {
+        neighbours = new ArrayList<INeighbour>();
+        travellers = new ArrayList<Traveller>();
+        this.shell = shell;
+        this.closeToSun = closeToSun;
+        this.core = core;
+        this.sun = sun;
+    }
+
     /**
      * Constructor, mely a paraméterben kapott nyersanyagot az aszteroida magjába helyezi.
      * @param c a leendő mag (nyersanyag típus)
@@ -253,6 +262,7 @@ public class Asteroid implements INeighbour {
      * @param neighbour a hozzáadni kívánt szomszéd
      */
     public void addNeighbour(INeighbour neighbour){
+        //Nézze meg, hogy ha már benne van a szomszédok között, akkor ne adja hozzá még egyszer
     	Skeleton.startMethod(this, "addNeighbour", neighbour);
     	neighbours.add(neighbour);
     	Skeleton.endMethod(this, null);

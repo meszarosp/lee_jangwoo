@@ -15,6 +15,10 @@ public abstract class Traveller {
     public Traveller() {
     }
 
+    public Traveller(Asteroid asteroid) {
+        this.asteroid = asteroid;
+    }
+
     /**
      * 
      */

@@ -10,11 +10,10 @@ public class Skeleton {
 
     private static Scanner input = new Scanner(System.in);
     private static PrintWriter output = new PrintWriter(System.out);
-    private static File inputfile = null;
-    private static File outputfile = null;
     private static boolean random = false;
     private static Game game = new Game();
     private static Settler activeSettler = null;
+    private static HashMap<String, Integer> maxIDs = new HashMap<String, Integer>();
 
     /**
      * Az objektumok és a kiírandó nevüknek az összerendelése.
@@ -41,14 +40,116 @@ public class Skeleton {
             }
             File file = new File(args[1]);
             if (!file.exists()){
-                output.println("load unsuccessful")
+                output.println("load unsuccessful");
                 return;
             }
             game = new Game();
+            Sun sun = new Sun();
+            game.setSun(sun);
             activeSettler = null;
             IDs.clear();
+            try {
+                readAsteroidsTeleports(sun);
+                readTravellers();
+            }catch (Exception e){
+                output.println("load unsuccessful");
+                return;
+            }
+        }
 
+        private void readTravellers() throws Exception{
+            String[] pieces = input.next().split(" ");
+            int nSettlers = Integer.parseInt(pieces[1]);
+            int nRobots = Integer.parseInt(pieces[3]);
+            int nUFOs = Integer.parseInt(pieces[5]);
+            for (int i = 0; i < nSettlers; i++){
+                pieces = input.next().split(" ");
+                Asteroid a = (Asteroid)IDs.getOrDefault(pieces[1], null);
+                if (a == null)
+                    throw new Exception();
+                Settler s = new Settler(a);
+                IDs.put(pieces[0].substring(0, pieces[0].length()-2), s);
+                game.addSettler(s);
+                int k = Integer.parseInt(pieces[2]);
+                for (int j = 0; j < k; j++){
+                    Mineral m = parseMineral(pieces[3+j]);
+                    if (m == null)
+                        throw new Exception();
+                    s.addMineral(m);
+                }
+                int t = Integer.parseInt(pieces[3+k]);
+                for (int j = 0; j < k; j++){
+                    Teleport teleport = (Teleport)IDs.getOrDefault(pieces[3+k+1+j], null);
+                    if (teleport == null)
+                        throw new Exception();
+                    s.addTeleport(teleport);
+                }
+            }
+            for (int i = 0; i < nRobots; i++){
+                pieces = input.next().split(" ");
+                Asteroid a = (Asteroid)IDs.getOrDefault(pieces[1], null);
+                if (a == null)
+                    throw new Exception();
+                Robot r = new Robot(a);
+                IDs.put(pieces[0].substring(0, pieces[0].length()-2), r);
+                game.addRobot(r);
+            }
+            for (int i = 0; i < nUFOs; i++){
+                pieces = input.next().split(" ");
+                Asteroid a = (Asteroid)IDs.getOrDefault(pieces[1], null);
+                if (a == null)
+                    throw new Exception();
+                UFO ufo = new UFO(a);
+                IDs.put(pieces[0].substring(0, pieces[0].length()-2), ufo);
+                game.addUFO(ufo);
+            }
+        }
 
+        private void readAsteroidsTeleports(Sun sun) throws Exception {
+            String[] pieces = input.next().split(" ");
+            int nAsteroids=Integer.parseInt(pieces[1]);
+            int nTeleports=Integer.parseInt(pieces[3]);
+            ArrayList<String[]> lines = new ArrayList<>();
+            List<Asteroid> asteroids = new ArrayList<Asteroid>();
+            for (int i = 0; i < nAsteroids; i++){
+                pieces = input.next().split(" ");
+                lines.add(pieces);
+                Mineral m = parseMineral(pieces[pieces.length-1]);
+                boolean closeToSun = !"0".equals(pieces[pieces.length-2]) && "1".equals(pieces[pieces.length-2]);
+                int shell = Integer.parseInt(pieces[pieces.length-3]);
+                Asteroid a = new Asteroid(shell, closeToSun, m, sun);
+                asteroids.add(a);
+                IDs.put(pieces[0].substring(0, pieces[0].length()-2), a);
+            }
+            sun.addAsteroids(asteroids);
+            for (int i = 0; i < nTeleports; i++){
+                pieces = input.next().split(" ");
+                lines.add(pieces);
+                Teleport t = new Teleport();
+                game.addTeleport(t);
+                IDs.put(pieces[0].substring(0, pieces[0].length()-2), t);
+            }
+            for (int i = 0; i < nAsteroids; i++){
+                pieces = lines.get(i);
+                int k = Integer.parseInt(pieces[1]);
+                for (int j = 0; j < k; j++){
+                    Asteroid a = (Asteroid) IDs.getOrDefault(pieces[0].substring(0, pieces[0].length()-2), null);
+                    INeighbour neighbour = (INeighbour)IDs.getOrDefault(pieces[2+j], null);
+                    a.addNeighbour(neighbour);
+                }
+            }
+            for (int i = nAsteroids; i < nAsteroids+nTeleports; i++){
+                pieces = lines.get(i);
+                Teleport t = (Teleport)IDs.getOrDefault(pieces[0].substring(0, pieces[0].length()-2), null);
+                if (!"0".equals(pieces[1])) {
+                    Asteroid a = (Asteroid) IDs.getOrDefault(pieces[1], null);
+                    Teleport t2 = (Teleport) IDs.getOrDefault(pieces[2], null);
+                    if (a == null || t2 == null)
+                        throw new Exception();
+                    t.setNeighbour(a);
+                    t.setPair(t2);
+                }
+            }
         }
     }
     /**
@@ -146,7 +247,8 @@ public class Skeleton {
                 return;
             }
             Object asteroid = IDs.getOrDefault(args[1], null);
-            int n = game.getSettlers().size();
+            int n = maxIDs.get("settler");
+            maxIDs.replace("settler", n+1);
             Sun sun = game.getSun();
             List<Asteroid> asteroids = sun.getAsteroids();
             if (asteroid == null || !asteroids.contains(asteroid)){
@@ -154,7 +256,7 @@ public class Skeleton {
                         "    selected ID not available\n");
             }else{
                 Settler s = new Settler();
-                IDs.put("s" + (n+1), 2);
+                IDs.put("s" + (n+1), s);
                 ((Asteroid) asteroid).placeTraveller(s);
                 output.println("settler s" + (n+1) + "added to asteroid: " + args[1]);
             }

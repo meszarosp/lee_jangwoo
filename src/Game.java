@@ -106,6 +106,10 @@ public class Game {
         return sun;
     }
 
+    public void setSun(Sun sun) {
+        this.sun = sun;
+    }
+
     public void addTeleport(Teleport t){
         gates.add(t);
     }
@@ -116,5 +120,8 @@ public class Game {
 
     public List<Teleport> getGates(){
         return gates;
+    }
+
+    public void addUFO(UFO ufo) {
     }
 }

@@ -16,6 +16,10 @@ public class Teleport implements INeighbour {
     public Teleport() {
     }
 
+    public Teleport(boolean bamboozled) {
+        this.bamboozled = bamboozled;
+    }
+
     /**
      * A teleportkapu párja.
      */
