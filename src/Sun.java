@@ -64,6 +64,15 @@ public class Sun {
     }
 
     /**
+     *
+     * @param asteroid
+     */
+    // TODO Ezt ledokumentálni
+    public void addAsteroid(Asteroid asteroid) {
+        this.asteroids.add(asteroid);
+    }
+
+    /**
      * Visszaadja az asteroids listát.
      */
     public List<Asteroid> getAsteroids() {

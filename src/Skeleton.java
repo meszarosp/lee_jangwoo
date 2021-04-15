@@ -248,15 +248,15 @@ public class Skeleton {
                 return;
             }
             Object asteroid = IDs.getOrDefault(args[1], null);
-            int n = maxIDs.get("settler");
-            maxIDs.replace("settler", n+1);
             Sun sun = game.getSun();
             List<Asteroid> asteroids = sun.getAsteroids();
-            if (asteroid == null || !asteroids.contains(asteroid)){
+            if (asteroid == null || !asteroids.contains((Asteroid) asteroid)){
                 output.println("couldn’t complete request\n" +
                         "    selected ID not available\n");
             }else{
-                Settler s = new Settler();
+                Settler s = new Settler((Asteroid) asteroid);
+                int n = maxIDs.get("settler");
+                maxIDs.replace("settler", n+1);
                 IDs.put("s" + (n+1), s);
                 ((Asteroid) asteroid).placeTraveller(s);
                 output.println("settler s" + (n+1) + " added to asteroid: " + args[1]);
@@ -266,31 +266,79 @@ public class Skeleton {
     /**
      * A addasteroid parancshoz tartozó osztály.
      */
-    // TODO Annának
     private static class addasteroidCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (args.length < 4) {
+                output.println("all details must be specified");
+                return;
+            }
+            int shell = Integer.parseInt(args[1]);
+            boolean cts = false;
+            if (args[2].equals("1"))
+                cts = true;
+            Mineral m = parseMineral(args[3]);
+            Asteroid asteroid = new Asteroid(shell, cts, m, game.getSun());
+            game.getSun().addAsteroid(asteroid);
+            int n = maxIDs.get("asteroid");
+            maxIDs.replace("asteroid", n+1);
+            IDs.put("a" + (n+1), asteroid);
+            output.println("asteroid a" + (n+1) + " added");
+            output.println("shell: " + shell);
+            output.println("closetosun: " + (cts? "yes" : "no"));
+            output.println("core: " + args[3]);
         }
     }
     /**
      * A addrobot parancshoz tartozó osztály.
      */
-    // TODO Annának
     private static class addrobotCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (args.length < 2) {
+                output.println("all details must be specified");
+                return;
+            }
+            Object asteroid = IDs.getOrDefault(args[1], null);
+            Sun sun = game.getSun();
+            List<Asteroid> asteroids = sun.getAsteroids();
+            if (asteroid == null || !asteroids.contains((Asteroid) asteroid)){
+                output.println("couldn’t complete request\n" +
+                        "    selected ID not available\n");
+            }else{
+                Robot r = new Robot((Asteroid) asteroid);
+                int n = maxIDs.get("robot");
+                maxIDs.replace("robot", n+1);
+                IDs.put("r" + (n+1), r);
+                ((Asteroid) asteroid).placeTraveller(r);
+                output.println("robot r" + (n+1) + " added to asteroid: " + args[1]);
+            }
         }
     }
     /**
      * A addufo parancshoz tartozó osztály.
      */
-    // TODO Annának
     private static class addufoCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (args.length < 2) {
+                output.println("all details must be specified");
+                return;
+            }
+            Object asteroid = IDs.getOrDefault(args[1], null);
+            Sun sun = game.getSun();
+            List<Asteroid> asteroids = sun.getAsteroids();
+            if (asteroid == null || !asteroids.contains((Asteroid) asteroid)){
+                output.println("couldn’t complete request\n" +
+                        "    selected ID not available\n");
+            }else{
+                UFO ufo = new UFO((Asteroid) asteroid);
+                int n = maxIDs.get("ufo");
+                maxIDs.replace("ufo", n+1);
+                IDs.put("r" + (n+1), ufo);
+                ((Asteroid) asteroid).placeTraveller(ufo);
+                output.println("ufo u" + (n+1) + " added to asteroid: " + args[1]);
+            }
         }
     }
     /**
@@ -314,71 +362,79 @@ public class Skeleton {
     /**
      * A move parancshoz tartozó osztály.
      */
-    // TODO Annának
     private static class moveCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (!settlerCommandCheck(args, 2))
+                return;
+            activeSettler.move(Integer.parseInt(args[1]));
         }
     }
     /**
      * A drill parancshoz tartozó osztály.
      */
-    // TODO Annának
+
     private static class drillCommand implements Command{
-
         public void execute(String[] args) {
-
+            if (!settlerCommandCheck(args, 1))
+                return;
+            activeSettler.drill();
         }
     }
     /**
      * A mine parancshoz tartozó osztály.
      */
-    // TODO Annának
     private static class mineCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (!settlerCommandCheck(args, 1))
+                return;
+            activeSettler.mine();
         }
     }
     /**
      * A putmineralback parancshoz tartozó osztály.
      */
-    // TODO Annának
     private static class putmineralbackCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (!settlerCommandCheck(args, 2))
+                return;
+            activeSettler.putMineralBack(parseMineral(args[1]));
         }
     }
     /**
      * A craftrobot parancshoz tartozó osztály.
      */
-    // TODO Annának
     private static class craftrobotCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (!settlerCommandCheck(args, 1))
+                return;
+            activeSettler.craftRobot();
         }
     }
     /**
      * A craftteleport parancshoz tartozó osztály.
      */
-    // TODO Annának
     private static class craftteleportCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (!settlerCommandCheck(args, 1))
+                return;
+            activeSettler.craftTeleport();
         }
     }
     /**
      * A placeteleport parancshoz tartozó osztály.
      */
-    // TODO Annának
+    // TODO teleportot kitalálni
     private static class placeteleportCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (!settlerCommandCheck(args, 2))
+                return;
+            activeSettler.placeTeleport();
         }
     }
     /**
@@ -387,7 +443,7 @@ public class Skeleton {
     private static class addmineralCommand implements Command{
 
         public void execute(String[] args) {
-            if (!settlerCommandCheck(args))
+            if (!settlerCommandCheck(args, 2))
                 return;
             Mineral mineral = parseMineral(args[1]);
             if (mineral == null)
@@ -560,8 +616,8 @@ public class Skeleton {
         }
     }
 
-    private static boolean settlerCommandCheck(String[] args){
-        if (args.length < 2){
+    private static boolean settlerCommandCheck(String[] args, int argscnt){
+        if (args.length < argscnt){
             output.println("all details must be specified");
             return false;
         }
