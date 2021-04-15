@@ -10,4 +10,12 @@ public class UFO extends Traveller{
     public void die() {
         //TODO
     }
+
+    public void makeAction(){
+
+    }
+
+    public void mine(){
+
+    }
 }

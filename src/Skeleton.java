@@ -32,6 +32,11 @@ public class Skeleton {
         reverseIDs.remove(o);
     }
 
+    private static void resetIDs(){
+        IDs.clear();
+        reverseIDs.clear();
+    }
+
     /**
      * Interfész, amely a parancsok számára készült. A parancsok ezt implementálják.
      */
@@ -59,6 +64,7 @@ public class Skeleton {
             game.setSun(sun);
             activeSettler = null;
             IDs.clear();
+            reverseIDs.clear();
             try {
                 readAsteroidsTeleports(sun);
                 readTravellers();
@@ -79,7 +85,7 @@ public class Skeleton {
                 if (a == null)
                     throw new Exception();
                 Settler s = new Settler(a);
-                IDs.put(pieces[0].substring(0, pieces[0].length()-2), s);
+                addID(pieces[0].substring(0, pieces[0].length()-2), s);
                 game.addSettler(s);
                 int k = Integer.parseInt(pieces[2]);
                 for (int j = 0; j < k; j++){
@@ -102,7 +108,7 @@ public class Skeleton {
                 if (a == null)
                     throw new Exception();
                 Robot r = new Robot(a);
-                IDs.put(pieces[0].substring(0, pieces[0].length()-2), r);
+                addID(pieces[0].substring(0, pieces[0].length()-2), r);
                 game.addRobot(r);
             }
             for (int i = 0; i < nUFOs; i++){
@@ -111,7 +117,7 @@ public class Skeleton {
                 if (a == null)
                     throw new Exception();
                 UFO ufo = new UFO(a);
-                IDs.put(pieces[0].substring(0, pieces[0].length()-2), ufo);
+                addID(pieces[0].substring(0, pieces[0].length()-2), ufo);
                 game.addUFO(ufo);
             }
         }
@@ -130,7 +136,7 @@ public class Skeleton {
                 int shell = Integer.parseInt(pieces[pieces.length-3]);
                 Asteroid a = new Asteroid(shell, closeToSun, m, sun);
                 asteroids.add(a);
-                IDs.put(pieces[0].substring(0, pieces[0].length()-2), a);
+                addID(pieces[0].substring(0, pieces[0].length()-2), a);
             }
             sun.addAsteroids(asteroids);
             for (int i = 0; i < nTeleports; i++){
@@ -138,7 +144,7 @@ public class Skeleton {
                 lines.add(pieces);
                 Teleport t = new Teleport();
                 game.addTeleport(t);
-                IDs.put(pieces[0].substring(0, pieces[0].length()-2), t);
+                addID(pieces[0].substring(0, pieces[0].length()-2), t);
             }
             for (int i = 0; i < nAsteroids; i++){
                 pieces = lines.get(i);
@@ -268,7 +274,7 @@ public class Skeleton {
                 Settler s = new Settler((Asteroid) asteroid);
                 int n = maxIDs.get("settler");
                 maxIDs.replace("settler", n+1);
-                IDs.put("s" + (n+1), s);
+                addID("s" + (n+1), s);
                 ((Asteroid) asteroid).placeTraveller(s);
                 output.println("settler s" + (n+1) + " added to asteroid: " + args[1]);
             }
@@ -380,7 +386,18 @@ public class Skeleton {
     private static class selectsettlerCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (args.length < 2){
+                output.println("all details must be specified");
+                return;
+            }
+            Settler settler = (Settler)IDs.getOrDefault(args[1], null);
+            if (settler == null){
+                output.println("couldn’t complete request\n" +
+                        "    selected ID not available\n");
+                return;
+            }
+            activeSettler = settler;
+            output.println("settler " + args[1] + " is now active");
         }
     }
     /**
@@ -506,8 +523,8 @@ public class Skeleton {
             a1.addNeighbour(t1);
             a2.addNeighbour(t2);
             int id = maxIDs.get("teleport");
-            IDs.put("t" + (id+1), t1);
-            IDs.put("t" + (id+2), t2);
+            addID("t" + (id+1), t1);
+            addID("t" + (id+2), t2);
             maxIDs.replace("teleport", id+2);
             game.addTeleport(t1);
             game.addTeleport(t2);
@@ -587,9 +604,25 @@ public class Skeleton {
     /**
      * A newgame parancshoz tartozó osztály.
      */
+    //TODO Peti?
     private static class newgameCommand implements Command{
 
         public void execute(String[] args) {
+            if (args.length < 3) {
+                output.println("all details must be specified");
+                return;
+            }
+            int nSettler, nAsteroid;
+            try {
+                nSettler = Integer.parseInt(args[1]);
+                nAsteroid = Integer.parseInt(args[2]);
+
+            }catch (Exception e){
+                output.println("all details must be specified");
+                return;
+            }
+            game.init(nSettler, nAsteroid);
+            resetIDs();
 
         }
     }
@@ -628,6 +661,7 @@ public class Skeleton {
     /**
      * A giveup parancshoz tartozó osztály.
      */
+    //TODO Peti
     private static class giveupCommand implements Command{
 
         public void execute(String[] args) {
@@ -637,10 +671,25 @@ public class Skeleton {
     /**
      * A ufoaction parancshoz tartozó osztály.
      */
+    //TODO Peti
     private static class ufoactionCommand implements Command{
 
         public void execute(String[] args) {
+            if (args.length < 2 || (args.length == 3 && !"mine".equals(args[2])) || (args.length == 4 && !"move".equals(args[2]))){
+                output.println("all details must be specified");
+                return;
+            }
+            if (args.length == 2){
+                UFO ufo = (UFO)IDs.getOrDefault(args[1], null);
+                if (ufo == null)
+                    output.print("couldn’t complete request\n" +
+                            "    selected ID not available\n");
+                else {
+                }
+            }
+            if (args.length == 3){
 
+            }
         }
     }
 
@@ -675,7 +724,7 @@ public class Skeleton {
                     "    no active settler selected\n");
             return false;
         }
-        if (game.getSettlers().contains((Settler)IDs.getOrDefault(args[1], null))){
+        if (!game.getSettlers().contains((Settler)IDs.getOrDefault(args[1], null))){
             output.println("active settler died");
             return false;
         }
@@ -711,7 +760,7 @@ public class Skeleton {
             return new Ice();
         else if (arg.startsWith("uranium")){
             try{
-                int exposedToSunCounter = Integer.parseInt(arg.subSequence(7, arg.length()-2));
+                int exposedToSunCounter = Integer.parseInt(arg.substring(7, arg.length()-2));
                 return new Uranium(exposedToSunCounter);
             }catch (Exception e) {
                 return null;

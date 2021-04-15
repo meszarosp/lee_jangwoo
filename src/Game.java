@@ -65,7 +65,7 @@ public class Game {
     /**
      * @param n
      */
-    public void init(int n) {
+    public void init(int nSettler, int nAsteroid) {
         // TODO implement here
     }
 
