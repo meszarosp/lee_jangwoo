@@ -20,6 +20,17 @@ public class Skeleton {
      */
     public static HashMap<Object, String> names = new HashMap<Object, String>();
     public static HashMap<String, Object> IDs = new HashMap<String, Object>();
+    public static HashMap<Object, String> reverseIDs = new HashMap<Object, String>();
+
+    private static void addID(String s, Object o){
+        IDs.put(s, o);
+        reverseIDs.put(o, s);
+    }
+
+    private static void removeID(String s, Object o){
+        IDs.remove(s);
+        reverseIDs.remove(o);
+    }
 
     /**
      * Interfész, amely a parancsok számára készült. A parancsok ezt implementálják.
@@ -347,7 +358,20 @@ public class Skeleton {
     private static class connectasteroidCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (args.length < 3) {
+                output.println("all details must be specified");
+                return;
+            }
+            Asteroid a1 = (Asteroid) IDs.getOrDefault(args[1], null);
+            Asteroid a2 = (Asteroid) IDs.getOrDefault(args[2], null);
+            if (a1 == null || a2 == null){
+                output.println("couldn’t complete request\n" +
+                        "    selected ID not available\n");
+                return;
+            }
+            a1.addNeighbour(a2);
+            a2.addNeighbour(a1);
+            output.println(args[1] + " and " + args[2] + " are neighbouring asteroids");
         }
     }
     /**
@@ -462,7 +486,32 @@ public class Skeleton {
     private static class addteleportpairCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (args.length < 3) {
+                output.println("all details must be specified");
+                return;
+            }
+            Asteroid a1 = (Asteroid) IDs.getOrDefault(args[1], null);
+            Asteroid a2 = (Asteroid) IDs.getOrDefault(args[2], null);
+            if (a1 == null || a2 == null){
+                output.println("couldn’t complete request\n" +
+                        "    selected ID not available\n");
+                return;
+            }
+            Teleport t1 = new Teleport(false);
+            Teleport t2 = new Teleport(false);
+            t1.setPair(t2);
+            t2.setPair(t1);
+            t1.setNeighbour(a1);
+            t2.setNeighbour(a2);
+            a1.addNeighbour(t1);
+            a2.addNeighbour(t2);
+            int id = maxIDs.get("teleport");
+            IDs.put("t" + (id+1), t1);
+            IDs.put("t" + (id+2), t2);
+            maxIDs.replace("teleport", id+2);
+            game.addTeleport(t1);
+            game.addTeleport(t2);
+            output.println("connected teleportgates " + ("t" + (id+1)) +" " + ("t" + (id+2)) " placed by " + args[1] + " " + args[2]);
         }
     }
     /**
@@ -647,7 +696,7 @@ public class Skeleton {
         commands.put("addmineral", new addmineralCommand()); commands.put("addteleportpair", new addteleportpairCommand());
         commands.put("nextturn", new nextturnCommand()); commands.put("robotaction", new robotactionCommand());
         commands.put("sunaction", new sunactionCommand()); commands.put("solarwind", new solarwindCommand());
-        commands.put("checkwin", new checkwinCommand()); commands.put("chechlose", new chechloseCommand());
+        commands.put("checkwin", new checkwinCommand()); commands.put("checklose", new checkloseCommand());
         commands.put("newgame", new newgameCommand()); commands.put("setclosetosun", new setclosetosunCommand());
         commands.put("giveup", new giveupCommand()); commands.put("ufoaction", new ufoactionCommand());
         commands.put("bamboozleteleport", new bamboozleteleportCommand());
