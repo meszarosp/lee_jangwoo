@@ -30,9 +30,7 @@ public abstract class Traveller {
     protected Game game;
 
     public void setGame(Game game){
-    	//Skeleton.startMethod(this, "setGame", game);
         this.game = game;
-        //Skeleton.endMethod(this, null);
     }
 
     /**
@@ -40,22 +38,10 @@ public abstract class Traveller {
      * @param number hányadik szomszédjára megy az utazó az aszteroidának
      */
     public void move(int number) {
-    	//Skeleton.startMethod(this, "move", number);
         INeighbour b = asteroid.getNeighbourAt(number);
         asteroid.removeTraveller(this);
         b.placeTraveller(this);
-        //Skeleton.endMethod(this, null);
     }
-
-    /**
-     * megfúrja az aszteroidát
-     */
-    //Ez megy a leszármazottakba
-    /*public void drill() {
-    	Skeleton.startMethod(this, "drill", null);
-    	asteroid.onDrill();
-    	Skeleton.endMethod(this, null);
-    }*/
 
     /**
      * 
@@ -71,17 +57,13 @@ public abstract class Traveller {
      * @param a az az aszteroida amin az utazó áll
      */
     public void setAsteroid(Asteroid a) {
-    	//Skeleton.startMethod(this, "setAsteroid", a);
     	asteroid = a;
-    	//Skeleton.endMethod(this, null);
     }
 
     /**	 visszaadja az aszteroidát, amin az utazó áll
      * @return az az aszteroida amin az utazó áll
      */
     public Asteroid getAsteroid() {
-    	//Skeleton.startMethod(this, "getAsteroid", null);
-        //Skeleton.endMethod(this, asteroid);
         return asteroid;
     }
 
