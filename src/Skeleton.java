@@ -424,8 +424,15 @@ public class Skeleton {
                 }
                 return;
             }
-            activeSettler.move(Integer.parseInt(args[1]));
-            // TODO adjunk vissza boolt?
+            int index = Integer.parseInt(args[1]);
+            if (activeSettler.move(index)) {
+                INeighbour n = activeSettler.getAsteroid().getNeighbourAt(i);
+                String id = reverseIDs.get(n);
+                output.println("move to " + id + " successful");
+            } else {
+                output.println("move unsuccessful");
+            };
+
         }
     }
     /**
@@ -436,8 +443,15 @@ public class Skeleton {
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
                 return;
-            activeSettler.drill();
-            // TODO adjunk vissza boolt?
+            if (activeSettler.drill()) {
+                Asteroid a = activeSettler.getAsteroid();
+                int shell = a.getShell();
+                output.println("drilling successful");
+                output.println("shell is now " + shell + " units thick");
+            } else {
+                output.println("drilling unsuccessful");
+                output.println("shell has already been drilled through");
+            }
         }
     }
     /**
@@ -448,7 +462,18 @@ public class Skeleton {
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
                 return;
-            activeSettler.mine();
+            Mineral m = activeSettler.getAsteroid().getCore();
+            if (activeSettler.mine()) {
+                output.println("mining successful");
+                output.println("one unit of " + m.toString() + " acquired");
+                output.println("asteroid is now empty");
+            } else {
+                output.println("mining unsuccessful");
+                if (activeSettler.getAsteroid().getShell() > 0)
+                    output.println("asteroid still has shell");
+                if (m == null)
+                    output.println("asteroid is already empty");
+            }
         }
     }
     /**
@@ -459,7 +484,20 @@ public class Skeleton {
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 2))
                 return;
-            activeSettler.putMineralBack(parseMineral(args[1]));
+            Mineral m = parseMineral(args[1]);
+            Mineral core = activeSettler.getAsteroid().getCore();
+            if (activeSettler.putMineralBack(m)) {
+                output.println(m.toString() + " is now in the asteroid");
+                // TODO ha felrobban
+            } else {
+                output.println("putting back mineral unsuccessful");
+                if (activeSettler.getAsteroid().getShell() > 0)
+                    output.println("asteroid still has shell");
+                else if (core != null)
+                    output.println("asteroid has other mineral");
+                else
+                    output.println("settler doesn't have specified mineral");
+            }
         }
     }
     /**
@@ -481,7 +519,11 @@ public class Skeleton {
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
                 return;
-            activeSettler.craftTeleport();
+            if (activeSettler.craftTeleport()) {
+                output.println("new robot successfully crafted");
+            } else {
+                output.println("new robot couldn't be crafted, insufficient materials");
+            }
         }
     }
     /**

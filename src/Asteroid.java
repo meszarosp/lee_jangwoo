@@ -147,6 +147,10 @@ public class Asteroid implements INeighbour {
         return null;
     }
 
+    public int getShell() {
+        return shell;
+    }
+
     /**
      * A megvalósított interfész függvénye, elhelyezi a traveller-t a listájában és meghívja
      * erre az utazóra a setAsteroid függvényét saját magát paraméterül adva.
