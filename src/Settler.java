@@ -27,7 +27,7 @@ public class Settler extends Traveller {
     /**
      * A telepesnél található teleportkapuk listája
      */
-    private Teleport[] teleportgates;
+    private List<Teleport> teleportgates;
 
     public Settler(Asteroid a) {
         super(a);
@@ -38,75 +38,152 @@ public class Settler extends Traveller {
      * @param t Az új teleportkapu
      */
     public void addTeleport(Teleport t){
+        teleportgates.add(t); 
     }
 
     /**
-     * A telepes listájához hozzáad egy egy nyersanyagot
+     * A telepes listájához hozzáad egy egy nyersanyagot.
+     * Ha volt hely igazzal, ha nem akkor hamissal tér viszza
      * @param m Az új nyersanyag
+     * @return a hozzáadás sikerességét jelzi
      */
-    public void addMineral(Mineral m){
-        if (minerals.size() < 10)
+    public boolean addMineral(Mineral m){
+        if (minerals.size() < 10){
             minerals.add(m);
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
     /**
      * A telepest radioaktív robbanás éri, amitõl meghal
      */
     public void hitByBlast() {
-        //Skeleton.startMethod(this, "hitByBlast", null);
         die();
-        //Skeleton.endMethod(this, null);
+    }
+
+    /**
+     * megfúrja az aszteroidát
+     */
+    public void drill() {
+    	asteroid.onDrill();
     }
 
     /**
      * A telepes az aktuális aszteroidáján bányaszni próbál
      */
-    public void mine() {
-        //Skeleton.startMethod(this, "mine", null);
-        asteroid.onMine();
-        // El kell rakni a nyersanyagot? (Hely check?)
-        //Skeleton.endMethod(this, null);
+    public boolean mine() {
+        Mineral temp = asteroid.onMine();
+        if(!addMineral(temp)){
+            putMineralBack(temp);
+            return false;
+        }
+        return true;
     }
 
     /**
      * A telepes a nála lévõ nyersanyagokból egy robotot készít
      */
     public void craftRobot() {
-        ///TODO Implement
-        /*Skeleton.startMethod(this, "craftRobot", null);
-        if (Skeleton.yesnoQuestion("Do I have the needed minerals? (yes/no)")) {
+        if (minerals.size()>=3)) {
+
+                //Kellõ nyersanyagok meglétének ellenõrzése, illetve kigyûjtése
+                List<minerals> temp;
+                int coalCount = 0;
+                int ironCount = 0;
+                int uraniumCount = 0;
+                int i;
+                while(ironCount<2 || iceCount<1 || uraniumCount<1){
+                    if(coalCount<1 && minerals[i].getClass() == Coal.class){
+                        temp.add(minerals[i]);
+                        ++coalCount;
+                    }
+                    if(ironCount<1 && minerals[i].getClass() == Iron.class){
+                        temp.add(minerals[i]);
+                        ++ironCount;
+                    }
+                    if(uraniumCount<1 && minerals[i].getClass() == Uranium.class){
+                        temp.add(minerals[i]);
+                        ++ironCount;
+                    }
+                    ++i;
+                    if(i>=minerals.size())
+                        break;
+                }
+
+                if(temp.size()==3){
+                    //Építéskor felhasznált nyersanyagok eltávolítása a minerals listából
+                    int j = 0;
+                    while(temp.size()!=0){
+                        if(minerals[j].getClass() == temp[0]){
+                            temp.remove(0);
+                            minerals.remove(j);
+                        }
+                        ++j;
+                    }
             Robot r = new Robot();
-            Skeleton.names.put(r, "r");
-            Skeleton.startMethod(r, "create", null);
-            Skeleton.endMethod(r, null);
             asteroid.placeTraveller(r);
             game.addRobot(r);
         }
-        Skeleton.endMethod(this, null);*/
     }
 
     /**
      * A telepes a nála lévõ nyersanyagokból teleportkaput készít
      */
     public void craftTeleport() {
-        ///TODO Implement
-        /*
-        Skeleton.startMethod(this, "craftTeleport", null);
-        if (Skeleton.yesnoQuestion("Is there space in my inventory for teleports? (yes/no)")) {
-            if (Skeleton.yesnoQuestion("Do I have the needed minerals? (yes/no)")) {
-                Teleport t1 = new Teleport();
-                Teleport t2 = new Teleport();
-                Skeleton.names.put(t1, "t1");
-                Skeleton.startMethod(t1, "create", null);
-                Skeleton.endMethod(t1, null);
-                Skeleton.names.put(t2, "t2");
-                Skeleton.startMethod(t2, "create", null);
-                Skeleton.endMethod(t2, null);
-                t1.setPair(t2);
-                t2.setPair(t1);
+        if (teleportgates.size() < 2) {
+
+            if (minerals.size()>=4)) {
+
+                //Kellõ nyersanyagok meglétének ellenõrzése, illetve kigyûjtése
+                List<minerals> temp;
+                int ironCount = 0;
+                int iceCount = 0;
+                int uraniumCount = 0;
+                int i;
+                while(ironCount<2 || iceCount<1 || uraniumCount<1){
+                    if(ironCount<2 && minerals[i].getClass() == Iron.class){
+                        temp.add(minerals[i]);
+                        ++ironCount;
+                    }
+                    if(iceCount<1 && minerals[i].getClass() == Ice.class){
+                        temp.add(minerals[i]);
+                        ++iceCount;
+                    }
+                    if(uraniumCount<1 && minerals[i].getClass() == Uranium.class){
+                        temp.add(minerals[i]);
+                        ++ironCount;
+                    }
+                    ++i;
+                    if(i>=minerals.size())
+                        break;
+                }
+
+                if(temp.size()==4){
+                    //Építéskor felhasznált nyersanyagok eltávolítása a minerals listából
+                    int j = 0;
+                    while(temp.size()!=0){
+                        if(minerals[j].getClass() == temp[0]){
+                            temp.remove(0);
+                            minerals.remove(j);
+                        }
+                        ++j;
+                    }
+
+                    Teleport t1 = new Teleport();
+                    Teleport t2 = new Teleport();
+                    Skeleton.names.put(t1, "t1");
+                    Skeleton.endMethod(t1, null);
+                    Skeleton.names.put(t2, "t2");
+                    t1.setPair(t2);
+                    t2.setPair(t1);
+                    teleportgates.add(t1);
+                    teleportgates.add(t2);
+                }
             }
         }
-        Skeleton.endMethod(this, null);*/
     }
 
     /**
@@ -114,31 +191,24 @@ public class Settler extends Traveller {
      * @param t A lehelyezendõ kapu
      */
     public void placeTeleport(Teleport t) {
-        //Skeleton.startMethod(this, "placeTeleport", t);
-        //t.addNeighbour(asteroid);
         t.setNeighbour(asteroid);
-        //Skeleton.endMethod(this, null);
     }
 
     /**
      * A telepes meghal
      */
     public void die() {
-        //Skeleton.startMethod(this, "die", null);
         asteroid.removeTraveller(this);
         game.removeSettler(this);
-        //Skeleton.endMethod(this, null);
     }
 
     /**
-     * A telepes egy nála lévõ aszteroidát elhelyez
+     * A telepes egy nála lévõ nyersanyagot elhelyez
      * az éppen aktuális aszteroida magjában
      * @param m A visszahelyezendõ nyersanyag
      */
     public void putMineralBack(Mineral m) {
-        //Skeleton.startMethod(this, "putMineralBack", m);
         asteroid.putMineralBack(m);
-        //Skeleton.endMethod(this, null);
     }
 
     /**
@@ -147,9 +217,6 @@ public class Settler extends Traveller {
      */
     public List<Mineral> getMinerals() {
         return minerals;
-    }
-    public void drill() {
-    	///TODO
     }
 
 }
