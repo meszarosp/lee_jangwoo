@@ -1,0 +1,2 @@
+loaded test.txt
+losing conditions not met

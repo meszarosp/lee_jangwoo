@@ -1,0 +1,8 @@
+addasteroid 1 1 uranium(0)
+addsettler a1
+selectsettler s1
+drill
+setclosetosun a1 0
+setclosetosun a1 1
+setclosetosun a1 0
+setclosetosun a1 1

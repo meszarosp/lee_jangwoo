@@ -1,0 +1,4 @@
+load test.txt
+u1 ufoaction move a1
+u1 ufoaction move a2
+u1 ufoaction mine

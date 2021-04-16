@@ -1,0 +1,12 @@
+load test.txt
+selectsettler s2
+addmineral coal
+addmineral coal
+addmineral coal
+addmineral coal
+addmineral coal
+addmineral coal
+addmineral coal
+addmineral coal
+addmineral coal
+mine

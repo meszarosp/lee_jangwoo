@@ -1,0 +1,2 @@
+load test.txt
+ufoaction u1 move a1

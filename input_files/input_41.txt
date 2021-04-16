@@ -1,0 +1,13 @@
+load test.txt
+selectsettler s1
+move 1
+addmineral uranium(0)
+addmineral uranium(0)
+addmineral iron
+addmineral iron
+addmineral coal
+addmineral coal
+selectsettler s2
+addmineral ice
+addmineral ice
+checkwin

@@ -1,0 +1,5 @@
+addasteroid 0 1 empty
+addsettler a1
+selectsettler s1
+addmineral uranium(2)
+putmineralback 1

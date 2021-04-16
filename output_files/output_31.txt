@@ -1,0 +1,10 @@
+loaded test.txt
+settler s2 is now active
+mining successful
+one unit of coal acquired
+asteroid is now empty
+solarwind created with asteroid a2 in the middle
+and a 2 radius
+events caused:
+s1 settler died
+u1 ufo died

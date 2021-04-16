@@ -1,0 +1,3 @@
+load test.txt
+selectsettler s2
+drill

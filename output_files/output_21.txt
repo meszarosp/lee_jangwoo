@@ -1,0 +1,9 @@
+asteroid a1 added
+shell: 0
+closetosun: yes
+core: empty
+settler s1 added to asteroid: a1
+settler s1 is now active
+settler s1 received one unit of uranium(2)
+the returned uranium caused an explosion
+s1 settler died

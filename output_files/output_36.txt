@@ -1,0 +1,6 @@
+loaded test.txt
+UFO u1 moved to a1
+UFO u1 moved to a2
+UFO u1 mined on a2
+it got one unit of coal
+asteroid is now empty

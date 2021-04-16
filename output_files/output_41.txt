@@ -1,0 +1,13 @@
+loaded test.txt
+settler s1 is now active
+settler s1 moved to a2
+settler s1 received one unit of uranium(0)
+settler s1 received one unit of uranium(0)
+settler s1 received one unit of iron
+settler s1 received one unit of iron
+settler s1 received one unit of coal
+settler s1 received one unit of coal
+settler s2 is now active
+settler s2 received one unit of ice
+settler s2 received one unit of ice
+game won

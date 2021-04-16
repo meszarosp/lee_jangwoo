@@ -1,0 +1,2 @@
+addasteroid 0 0 iron
+setclosetosun a1 1

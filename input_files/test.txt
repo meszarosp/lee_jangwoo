@@ -1,0 +1,12 @@
+A: 4 T: 2
+a1: 2 a2 a3 100 1 empty
+a2: 1 a1 0 0 coal
+a3: 2 a1 a4 1 0 uranium(1)
+a4: 2 a3 t2 20 0 iron
+t1: 0 t2 0
+t2: a4 t1 0
+S: 2 R: 1 U: 1
+s1: a1 3 uranium(0) coal iron 0
+s2: a2 1 ice 1 t1
+r1: a2
+u1: a3

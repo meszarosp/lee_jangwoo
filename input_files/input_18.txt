@@ -1,0 +1,5 @@
+addasteroid 0 0 empty
+addsettler a1
+selectsettler s1
+addmineral iron
+putmineralback 1

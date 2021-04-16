@@ -1,0 +1,3 @@
+loaded test.txt
+settler s1 is now active
+new pair of teleportgates couldn’t be crafted insufficient minerals

@@ -1,0 +1,3 @@
+loaded test.txt
+settler s2 is now active
+teleport t1 placed
