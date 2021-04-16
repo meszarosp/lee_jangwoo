@@ -32,14 +32,18 @@ public class Game {
     private List<Robot> robots = new ArrayList<Robot>();
 
     /**
-     * Hozzáad egy telepest a telepesek listájához.
-     * @param s A hozzáadni kívánt telepes.
+     * A játékban lévõ UFO-k
      */
+    private List<UFO> UFOs = new ArrayList<UFO>();
 
 
 
     private List<Teleport> gates = new ArrayList<Teleport>();
 
+    /**
+     * Hozzáad egy telepest a telepesek listájához.
+     * @param s A hozzáadni kívánt telepes.
+     */
     public void addSettler(Settler s){
         settlers.add(s);
     }
@@ -49,8 +53,9 @@ public class Game {
      * @param r A kivenni kívánt robot.
      */
     public void removeRobot(Robot r) {
-        Skeleton.startMethod(this, "removeRobot", r);
-        Skeleton.endMethod(this, null);
+        //Skeleton.startMethod(this, "removeRobot", r);
+        //Skeleton.endMethod(this, null);
+        robots.remove(r);
     }
 
     /**
@@ -58,8 +63,9 @@ public class Game {
      * @param s A kivenni kívánt telepes.
      */
     public void removeSettler(Settler s) {
-        Skeleton.startMethod(this, "removeSettler", s);
-        Skeleton.endMethod(this, null);
+        //Skeleton.startMethod(this, "removeSettler", s);
+        //Skeleton.endMethod(this, null);
+        settlers.remove(s);
     }
 
     /**
@@ -74,8 +80,9 @@ public class Game {
      * @param r A hozzáadni kívánt robot.
      */
     public void addRobot(Robot r) {
-        Skeleton.startMethod(this, "addRobot", r);
-        Skeleton.endMethod(this, null);
+        //Skeleton.startMethod(this, "addRobot", r);
+        //Skeleton.endMethod(this, null);
+        robots.add(r);
     }
 
     /**
@@ -123,5 +130,9 @@ public class Game {
     }
 
     public void addUFO(UFO ufo) {
+        UFOs.add(ufo);
+    }
+    public void removeUFO(UFO ufo) {
+    	UFOs.remove(ufo);
     }
 }

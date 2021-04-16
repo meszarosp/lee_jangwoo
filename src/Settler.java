@@ -53,26 +53,27 @@ public class Settler extends Traveller {
      * A telepest radioaktív robbanás éri, amitõl meghal
      */
     public void hitByBlast() {
-        Skeleton.startMethod(this, "hitByBlast", null);
+        //Skeleton.startMethod(this, "hitByBlast", null);
         die();
-        Skeleton.endMethod(this, null);
+        //Skeleton.endMethod(this, null);
     }
 
     /**
      * A telepes az aktuális aszteroidáján bányaszni próbál
      */
     public void mine() {
-        Skeleton.startMethod(this, "mine", null);
+        //Skeleton.startMethod(this, "mine", null);
         asteroid.onMine();
         // El kell rakni a nyersanyagot? (Hely check?)
-        Skeleton.endMethod(this, null);
+        //Skeleton.endMethod(this, null);
     }
 
     /**
      * A telepes a nála lévõ nyersanyagokból egy robotot készít
      */
     public void craftRobot() {
-        Skeleton.startMethod(this, "craftRobot", null);
+        ///TODO Implement
+        /*Skeleton.startMethod(this, "craftRobot", null);
         if (Skeleton.yesnoQuestion("Do I have the needed minerals? (yes/no)")) {
             Robot r = new Robot();
             Skeleton.names.put(r, "r");
@@ -81,13 +82,15 @@ public class Settler extends Traveller {
             asteroid.placeTraveller(r);
             game.addRobot(r);
         }
-        Skeleton.endMethod(this, null);
+        Skeleton.endMethod(this, null);*/
     }
 
     /**
      * A telepes a nála lévõ nyersanyagokból teleportkaput készít
      */
     public void craftTeleport() {
+        ///TODO Implement
+        /*
         Skeleton.startMethod(this, "craftTeleport", null);
         if (Skeleton.yesnoQuestion("Is there space in my inventory for teleports? (yes/no)")) {
             if (Skeleton.yesnoQuestion("Do I have the needed minerals? (yes/no)")) {
@@ -103,7 +106,7 @@ public class Settler extends Traveller {
                 t2.setPair(t1);
             }
         }
-        Skeleton.endMethod(this, null);
+        Skeleton.endMethod(this, null);*/
     }
 
     /**
@@ -111,20 +114,20 @@ public class Settler extends Traveller {
      * @param t A lehelyezendõ kapu
      */
     public void placeTeleport(Teleport t) {
-        Skeleton.startMethod(this, "placeTeleport", t);
+        //Skeleton.startMethod(this, "placeTeleport", t);
         //t.addNeighbour(asteroid);
         t.setNeighbour(asteroid);
-        Skeleton.endMethod(this, null);
+        //Skeleton.endMethod(this, null);
     }
 
     /**
      * A telepes meghal
      */
     public void die() {
-        Skeleton.startMethod(this, "die", null);
+        //Skeleton.startMethod(this, "die", null);
         asteroid.removeTraveller(this);
         game.removeSettler(this);
-        Skeleton.endMethod(this, null);
+        //Skeleton.endMethod(this, null);
     }
 
     /**
@@ -133,9 +136,9 @@ public class Settler extends Traveller {
      * @param m A visszahelyezendõ nyersanyag
      */
     public void putMineralBack(Mineral m) {
-        Skeleton.startMethod(this, "putMineralBack", m);
+        //Skeleton.startMethod(this, "putMineralBack", m);
         asteroid.putMineralBack(m);
-        Skeleton.endMethod(this, null);
+        //Skeleton.endMethod(this, null);
     }
 
     /**
@@ -144,6 +147,9 @@ public class Settler extends Traveller {
      */
     public List<Mineral> getMinerals() {
         return minerals;
+    }
+    public void drill() {
+    	///TODO
     }
 
 }

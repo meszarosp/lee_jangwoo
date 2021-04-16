@@ -22,7 +22,7 @@ public class Robot extends Traveller {
      * 
      */
     public void hitByBlast() {
-    	Skeleton.startMethod(this, "hitByBlast", null);
+    	//Skeleton.startMethod(this, "hitByBlast", null);
         Asteroid currAst = asteroid;
         /*if(Skeleton.yesnoQuestion("Is there a neighbour I can go to?(yes/no)")) {
         	int i = Skeleton.intQuestion("Which is the index of the neighbour I can go to?(int)");
@@ -37,7 +37,7 @@ public class Robot extends Traveller {
         } else {
         	die();
         }
-        Skeleton.endMethod(this, null);
+        //Skeleton.endMethod(this, null);
         /*while(currAst.equals(asteroid)) {
         	INeighbour neighbour = asteroid.getNeighbourAt(i);
         	if(neighbour==null) {
@@ -52,23 +52,23 @@ public class Robot extends Traveller {
      * robot meghal
      */
     public void die() {
-    	Skeleton.startMethod(this, "die", null);
+    	//Skeleton.startMethod(this, "die", null);
     	asteroid.removeTraveller(this);
         game.removeRobot(this);
-        Skeleton.endMethod(this, null);
+        //Skeleton.endMethod(this, null);
     }
 
     /**
      * itt vagy mozog, vagypedig fúr a robot
      */
     public void makeAction() {
-    	Skeleton.startMethod(this, "makeAction", null);
+    	/*Skeleton.startMethod(this, "makeAction", null);
     	if(Skeleton.yesnoQuestion("Should I drill?(yes/no)")) {
     		drill();
     	} else if (Skeleton.yesnoQuestion("Should I move?(yes/no)")) {
     		move(Skeleton.intQuestion("To which neighbour should I move?(int)"));
     	}
-    	Skeleton.endMethod(this, null);
+    	Skeleton.endMethod(this, null);*/
     }
 
 }

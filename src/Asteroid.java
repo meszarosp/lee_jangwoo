@@ -204,7 +204,7 @@ public class Asteroid implements INeighbour {
      * @param i napszél mélysége (hogy mekkora területet ér majd el)
      */
     @Override
-    void solarWind(int i) {
+    public void solarWind(int i) {
         if (core != null || shell != 0)
         	for (int j = 0; j < travellers.size(); j++)
         		travellers.get(j).die();
@@ -226,5 +226,8 @@ public class Asteroid implements INeighbour {
      */
     public Mineral getCore() {
         return core;
+    }
+    public boolean getCloseToSun(){
+    	return closeToSun;
     }
 }

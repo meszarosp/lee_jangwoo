@@ -6,7 +6,7 @@ import java.util.*;
  * ha meghívják a függvényét és a számlálója eléri a 3-at. Használható Robotok és
  * teleportkapuk építésére, valamint még bővíthető további funkciókkal vagy attribútumokkal.
  */
-public class Uranium extends RadioactiveMineral {
+public class Uranium extends Mineral {
 
 	/**
      * Az urán számlálója, ami 3-at elérve robban és az exposedToSun metódus hatására növekszik egyenként

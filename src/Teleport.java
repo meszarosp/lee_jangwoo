@@ -40,12 +40,12 @@ public class Teleport implements INeighbour {
      * A teleport párját null-ra állítja, és ha a neighbour nem null (azaz már le van rakva a teleportkapu), akkor a neighbour removeNeighbour metódusát meghívja
      */
     public void perish() {
-    	Skeleton.startMethod(this, "perish", null);
+    	//Skeleton.startMethod(this, "perish", null);
         pair = null;
-        if(!Skeleton.yesnoQuestion("Has the pair been blown up (perished)? (yes/no)")) {
+        /*if(!Skeleton.yesnoQuestion("Has the pair been blown up (perished)? (yes/no)")) {
         	neighbour.removeNeighbour(this);
         }
-        Skeleton.endMethod(this,  null);
+        Skeleton.endMethod(this,  null);*/
     }
 
     /**
@@ -53,9 +53,9 @@ public class Teleport implements INeighbour {
      * @param t teleportkapu párja
      */
     public void setPair(Teleport t) {
-    	Skeleton.startMethod(this,  "setPair", t);
+    	//Skeleton.startMethod(this,  "setPair", t);
     	pair = t;
-        Skeleton.endMethod(this,  null);
+        //Skeleton.endMethod(this,  null);
     }
 
     /**
@@ -64,13 +64,14 @@ public class Teleport implements INeighbour {
      * @return bool a traveller áthelyezésének sikerességérõl
      */
     public boolean teleportTraveller(Traveller traveller) {
-    	Skeleton.startMethod(this,  "teleportTraveller", traveller);
+    	/*Skeleton.startMethod(this,  "teleportTraveller", traveller);
       	if(Skeleton.yesnoQuestion("Has the pair been placed? (yes/no)")) {
     		neighbour.placeTraveller(traveller);
     		Skeleton.endMethod(this, true);
     		return true;
     	}
-      	Skeleton.endMethod(this, false);
+      	Skeleton.endMethod(this, false);*/
+          ///TODO
         return false;
     }
 
@@ -79,12 +80,12 @@ public class Teleport implements INeighbour {
      * @param traveller
      */
     public void placeTraveller(Traveller traveller){
-    	Skeleton.startMethod(this,  "placeTraveller", traveller);
+    	//Skeleton.startMethod(this,  "placeTraveller", traveller);
     	boolean b = pair.teleportTraveller(traveller);
     	if(!b) {
     		neighbour.placeTraveller(traveller);
     	}
-    	Skeleton.endMethod(this,  null);
+    	//Skeleton.endMethod(this,  null);
     }
 
     /**
@@ -92,10 +93,10 @@ public class Teleport implements INeighbour {
      * @param neighbour
      */
     public void removeNeighbour(INeighbour neighbour){
-    	Skeleton.startMethod(this, "removeNeighbour", neighbour);
+    	//Skeleton.startMethod(this, "removeNeighbour", neighbour);
     	if (pair != null)
     	    pair.perish();
-    	Skeleton.endMethod(this,  null);
+    	//Skeleton.endMethod(this,  null);
     }
 
     public void solarWind(int i) {
@@ -111,7 +112,7 @@ public class Teleport implements INeighbour {
      * @param neighbour
      */
     public void setNeighbour(Asteroid a){
-    	Skeleton.startMethod(this,  "addNeighbour", neighbour);
+    	/*Skeleton.startMethod(this,  "addNeighbour", neighbour);
     	if (!Skeleton.init) {
             if (!Skeleton.yesnoQuestion("Has the pair been blown up (perished)? (yes/no)")) {
                 neighbour.addNeighbour(this);
@@ -120,7 +121,8 @@ public class Teleport implements INeighbour {
         }else{
     	    this.neighbour = neighbour;
         }
-    	Skeleton.endMethod(this,  null);
+    	Skeleton.endMethod(this,  null);*/
+        ///TODO
     }
 
 }

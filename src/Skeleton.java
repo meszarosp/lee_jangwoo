@@ -491,7 +491,8 @@ public class Skeleton {
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 2))
                 return;
-            activeSettler.placeTeleport();
+            ///TODO megkérdezni a Petit
+            //activeSettler.placeTeleport();
         }
     }
     /**
@@ -855,7 +856,7 @@ public class Skeleton {
         }
 
         switch (option){
-            case 1: craftTeleport(); break;
+            /*case 1: craftTeleport(); break;
             case 2: craftRobot(); break;
             case 3: placeTeleport(); break;
             case 4: settlerMoves(); break;
@@ -871,7 +872,7 @@ public class Skeleton {
             case 14: robotDrillsRadioactiveAsteroid(); break;
             case 15: sunMakesAcion(); break;
             case 16: settlerMines(); break;
-            case 99: System.exit(0); break;
+            case 99: System.exit(0); break;*/
         }
     }
 
