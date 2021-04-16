@@ -10,6 +10,7 @@ public class Sun {
      * Default constructor
      */
     public Sun() {
+        asteroids = new ArrayList<Asteroid>();
     }
 
     /**
@@ -21,28 +22,27 @@ public class Sun {
      * Ha azt a választ kapja, hogy legyen npvihar, akkor minden aszteroidára meghívja a solarWind metódust. Ez után végigmegyünk az összes aszteroidán, megkérdezzük, hogy az legyen-e napközelben, ha azt a választ kapja, hogy igen, akkor meghívja rajta a setCloseToSun metódust
      */
     public void makeAction() {
-        //Skeleton.init = false;
-    	//Skeleton.startMethod(this, "makeAction", null);
-       /* int option = Skeleton.sunQuestion(this);
-        if (option == 1){
-            asteroids.get(0).solarWind();
-        } else if (option == 2 || option == 3) {
-            asteroids.get(0).setCloseToSun();
-        }*/
-    	/*if(Skeleton.yesnoQuestion("Legyen napvihar?")) {
-        	for(Asteroid a : asteroids){
-        		a.solarWind();
+        if(!Skeleton.getRandom()) {
+    		return;
+    	}
+    	Random rand = new Random();
+        for(Asteroid a : asteroids) {
+        	if(rand.nextInt() % 2 == 1) {
+        		SolarWind(a, rand.nextInt()%5+1);
+        	}
+        	if(rand.nextInt() % 2 == 1) {
+        		SetCloseToSun(a);
         	}
         }
-        for(Asteroid a : asteroids){
-        	if(Skeleton.yesnoQuestion("Legyünk napközelben?")) {
-        		a.setCloseToSun();
-        	}
-        }*/
-        //Skeleton.endMethod(this,  null);
-        //Skeleton.init = true;
-        
     }
+    
+    public void SolarWind(Asteroid a, int i) {
+    	a.solarWind(i);
+    }
+    public void SetCloseToSun(Asteroid a) {
+    	a.setCloseToSun();
+    }
+
 
     /**
      * kiveszi a paraméterként kapott aszteroidát az asteroids listából

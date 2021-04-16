@@ -36,7 +36,9 @@ public class Skeleton {
         IDs.clear();
         reverseIDs.clear();
     }
-
+    public static boolean getRandom() {
+    	return random;
+    }
     /**
      * Interfész, amely a parancsok számára készült. A parancsok ezt implementálják.
      */

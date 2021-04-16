@@ -53,8 +53,6 @@ public class Game {
      * @param r A kivenni kívánt robot.
      */
     public void removeRobot(Robot r) {
-        //Skeleton.startMethod(this, "removeRobot", r);
-        //Skeleton.endMethod(this, null);
         robots.remove(r);
     }
 
@@ -63,8 +61,6 @@ public class Game {
      * @param s A kivenni kívánt telepes.
      */
     public void removeSettler(Settler s) {
-        //Skeleton.startMethod(this, "removeSettler", s);
-        //Skeleton.endMethod(this, null);
         settlers.remove(s);
     }
 
@@ -80,8 +76,6 @@ public class Game {
      * @param r A hozzáadni kívánt robot.
      */
     public void addRobot(Robot r) {
-        //Skeleton.startMethod(this, "addRobot", r);
-        //Skeleton.endMethod(this, null);
         robots.add(r);
     }
 
