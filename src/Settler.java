@@ -67,8 +67,8 @@ public class Settler extends Traveller {
     /**
      * megfúrja az aszteroidát
      */
-    public void drill() {
-    	asteroid.onDrill();
+    public boolean drill() {
+    	return asteroid.onDrill();
     }
 
     /**
@@ -77,7 +77,7 @@ public class Settler extends Traveller {
     public boolean mine() {
         Mineral temp = asteroid.onMine();
         if(!addMineral(temp)){
-            putMineralBack(temp);
+            asteroid.putMineralBack(temp);
             return false;
         }
         return true;
@@ -87,103 +87,109 @@ public class Settler extends Traveller {
      * A telepes a nála lévõ nyersanyagokból egy robotot készít
      */
     public void craftRobot() {
-        if (minerals.size()>=3)) {
+        if (minerals.size()>=3) {
 
                 //Kellõ nyersanyagok meglétének ellenõrzése, illetve kigyûjtése
-                List<minerals> temp;
+                List<Mineral> temp = new ArrayList<Mineral>();
                 int coalCount = 0;
                 int ironCount = 0;
                 int uraniumCount = 0;
-                int i;
-                while(ironCount<2 || iceCount<1 || uraniumCount<1){
-                    if(coalCount<1 && minerals[i].getClass() == Coal.class){
-                        temp.add(minerals[i]);
+                int i = 0;
+                while(coalCount<1 || ironCount<1 || uraniumCount<1){
+                    if(coalCount<1 && minerals.get(i).getClass() == Coal.class){
+                        temp.add(minerals.get(i));
                         ++coalCount;
                     }
-                    if(ironCount<1 && minerals[i].getClass() == Iron.class){
-                        temp.add(minerals[i]);
+                    if(ironCount<1 && minerals.get(i).getClass() == Iron.class){
+                        temp.add(minerals.get(i));
                         ++ironCount;
                     }
-                    if(uraniumCount<1 && minerals[i].getClass() == Uranium.class){
-                        temp.add(minerals[i]);
-                        ++ironCount;
+                    if(uraniumCount<1 && minerals.get(i).getClass() == Uranium.class){
+                        temp.add(minerals.get(i));
+                        ++uraniumCount;
                     }
                     ++i;
                     if(i>=minerals.size())
                         break;
                 }
 
-                if(temp.size()==3){
+                if(temp.size()==3) {
                     //Építéskor felhasznált nyersanyagok eltávolítása a minerals listából
                     int j = 0;
-                    while(temp.size()!=0){
-                        if(minerals[j].getClass() == temp[0]){
+                    while (temp.size() != 0) {
+                        if (minerals.get(j).getClass() == temp.get(0).getClass()) {
                             temp.remove(0);
                             minerals.remove(j);
+                            /////
+                            j = 0;
+                            /////
                         }
                         ++j;
                     }
-            Robot r = new Robot();
-            asteroid.placeTraveller(r);
-            game.addRobot(r);
+                    Robot r = new Robot();
+                    asteroid.placeTraveller(r);
+                    game.addRobot(r);
+                }
         }
     }
 
     /**
      * A telepes a nála lévõ nyersanyagokból teleportkaput készít
      */
-    public void craftTeleport() {
+    public boolean craftTeleport() {
         if (teleportgates.size() < 2) {
 
-            if (minerals.size()>=4)) {
+            if (minerals.size()>=4) {
 
                 //Kellõ nyersanyagok meglétének ellenõrzése, illetve kigyûjtése
-                List<minerals> temp;
+                List<Mineral> temp = new ArrayList<Mineral>();
                 int ironCount = 0;
                 int iceCount = 0;
                 int uraniumCount = 0;
-                int i;
-                while(ironCount<2 || iceCount<1 || uraniumCount<1){
-                    if(ironCount<2 && minerals[i].getClass() == Iron.class){
-                        temp.add(minerals[i]);
+                int i = 0;
+                while (ironCount < 2 || iceCount < 1 || uraniumCount < 1) {
+                    if (ironCount < 2 && minerals.get(i).getClass() == Iron.class) {
+                        temp.add(minerals.get(i));
                         ++ironCount;
                     }
-                    if(iceCount<1 && minerals[i].getClass() == Ice.class){
-                        temp.add(minerals[i]);
+                    if (iceCount < 1 && minerals.get(i).getClass() == Ice.class) {
+                        temp.add(minerals.get(i));
                         ++iceCount;
                     }
-                    if(uraniumCount<1 && minerals[i].getClass() == Uranium.class){
-                        temp.add(minerals[i]);
-                        ++ironCount;
+                    if (uraniumCount < 1 && minerals.get(i).getClass() == Uranium.class) {
+                        temp.add(minerals.get(i));
+                        ++uraniumCount;
                     }
                     ++i;
-                    if(i>=minerals.size())
+                    if (i >= minerals.size())
                         break;
                 }
 
-                if(temp.size()==4){
+                if (temp.size() == 4) {
                     //Építéskor felhasznált nyersanyagok eltávolítása a minerals listából
                     int j = 0;
-                    while(temp.size()!=0){
-                        if(minerals[j].getClass() == temp[0]){
+                    while (temp.size() != 0) {
+                        if (minerals.get(j).getClass() == temp.get(0).getClass()) {
                             temp.remove(0);
                             minerals.remove(j);
-                        }
-                        ++j;
+                            //////
+                            j = 0;
+                            /////
+                        } else
+                            ++j;
                     }
 
                     Teleport t1 = new Teleport();
                     Teleport t2 = new Teleport();
-                    Skeleton.names.put(t1, "t1");
-                    Skeleton.endMethod(t1, null);
-                    Skeleton.names.put(t2, "t2");
                     t1.setPair(t2);
                     t2.setPair(t1);
                     teleportgates.add(t1);
                     teleportgates.add(t2);
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     /**
@@ -207,8 +213,8 @@ public class Settler extends Traveller {
      * az éppen aktuális aszteroida magjában
      * @param m A visszahelyezendõ nyersanyag
      */
-    public void putMineralBack(Mineral m) {
-        asteroid.putMineralBack(m);
+    public boolean putMineralBack(Mineral m) {
+        return asteroid.putMineralBack(m);
     }
 
     /**

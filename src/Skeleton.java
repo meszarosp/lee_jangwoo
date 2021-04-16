@@ -426,7 +426,7 @@ public class Skeleton {
             }
             int index = Integer.parseInt(args[1]);
             if (activeSettler.move(index)) {
-                INeighbour n = activeSettler.getAsteroid().getNeighbourAt(i);
+                INeighbour n = activeSettler.getAsteroid().getNeighbourAt(index);
                 String id = reverseIDs.get(n);
                 output.println("move to " + id + " successful");
             } else {
@@ -789,6 +789,16 @@ public class Skeleton {
         }
     }
 
+    /**
+     * Az exit parancshoz tartozó osztály.
+     */
+    private static class exitCommand implements Command{
+
+        public void execute(String[] args) {
+            System.exit(0);
+        }
+    }
+
     private static boolean settlerCommandCheck(String[] args, int argscnt){
         if (args.length < argscnt){
             output.println("all details must be specified");
@@ -824,6 +834,7 @@ public class Skeleton {
         commands.put("newgame", new newgameCommand()); commands.put("setclosetosun", new setclosetosunCommand());
         commands.put("giveup", new giveupCommand()); commands.put("ufoaction", new ufoactionCommand());
         commands.put("bamboozleteleport", new bamboozleteleportCommand());
+        commands.put("exit", new exitCommand());
     }
 
     private static Mineral parseMineral(String arg){
@@ -844,81 +855,20 @@ public class Skeleton {
             return null;
     }
 
-
-    /**
-     * Annak a száma, hogy aktuálisan hány tabulátorral kell beljebb kezdeni a sort.
-     */
-    private static int padding = 0;
-
-    /**
-     * Igaz, ha még az inicializáló fázisban vagyunk, ilyenkor nem írja ki a meghívott metódusokat.
-     * Hamis, ha már a szekvenciadiagramon látható események történnek, ilyenkor naplózza a metódushívásokat
-     * a konzolra a felhasználónak.
-     */
-    public static boolean init = true;
-
-
-    /**
-     * Az elérhető menüpontok.
-     */
-    private static String[] menuItems = {"Craft teleport", "Craft robot", "Place teleport",
-            "Settler moves", "Robot moves", "Put mineral back", "Settler moves through teleport",
-            "Robot moves through teleport", "Settler drills asteroid", "Settler drills ice asteroid",
-            "Settler drills radioactive asteroid", "Robot drills asteroid", "Robot drills ice asteroid",
-            "Robot drills radioactive asteroid", "Sun makes action", "Settler mines"};
-
-    /**
-     * Kiírja az elérhető menüpontokat.
-     */
-    private static void printMenu(){
-        System.out.println("Menu:");
-        for (int i = 0; i < menuItems.length; i++){
-            System.out.println(i+1 +"\t" + menuItems[i]);
+    private static void parseCommand(){
+        String[] pieces = input.next().split(" ");
+        if (pieces.length == 0) {
+            output.println("invalid command");
+            return;
         }
-        System.out.println("99\tExit");
+        Command cmd = commands.getOrDefault(pieces[0], null);
+        if (cmd == null){
+            output.println("invalid command");
+            return;
+        }
+        cmd.execute(pieces);
     }
 
-    /**
-     * Kiíratja a menüt és bekékéri a felhasználótól, hogy melyik menüpontot akarja elérni,
-     * ezután meghívja a megfelelő inicializáló függvényt.
-     */
-    private static void menu(){
-        names.clear();
-        init = true;
-        printMenu();
-        Scanner sc = new Scanner(System.in);
-        int option = 99;
-        boolean again = true;
-        while (again) {
-            String s = sc.next();
-            try {
-                again = false;
-                option = Integer.parseInt(s);
-            } catch (Exception e) {
-                again = true;
-            }
-        }
-
-        switch (option){
-            /*case 1: craftTeleport(); break;
-            case 2: craftRobot(); break;
-            case 3: placeTeleport(); break;
-            case 4: settlerMoves(); break;
-            case 5: robotMoves(); break;
-            case 6: putMineralBack(); break;
-            case 7: settlerMovesThroughTeleport(); break;
-            case 8: robotMovesThroughTeleport(); break;
-            case 9: settlerDrillsAsteroid(); break;
-            case 10: settlerDrillsIceAsteroid(); break;
-            case 11: settlerDrillsRadioactiveAsteroid(); break;
-            case 12: robotDrillsAsteroid(); break;
-            case 13: robotDrillsIceAsteroid(); break;
-            case 14: robotDrillsRadioactiveAsteroid(); break;
-            case 15: sunMakesAcion(); break;
-            case 16: settlerMines(); break;
-            case 99: System.exit(0); break;*/
-        }
-    }
 
     /**
      * A program belépési pontja, kiírja a menüpontokat és bekéri a felhaszálótól a választott menüpontot a menu()
@@ -927,6 +877,10 @@ public class Skeleton {
      * @param args parancssori argumentumok
      */
     public static void main(String[] args){
+        initializeCommands();
+        while (true){
+            parseCommand();
+        }
         /*hile (true){
             menu();
         }*/

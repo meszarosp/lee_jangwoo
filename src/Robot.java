@@ -55,7 +55,7 @@ public class Robot extends Traveller {
     public void makeAction() {
         Random rand = new Random();
         boolean randDecision = rand.nextBoolean();
-    	if(randDecision)) {
+    	if(randDecision) {
     		drill();
     	} else {
             int randNeighbour = rand.nextInt(asteroid.getNeighbourCount());

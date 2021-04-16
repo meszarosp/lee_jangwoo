@@ -69,11 +69,16 @@ public class Asteroid implements INeighbour {
      * Ha nulla lesz a shell, megnézi a closeToSun változót, amennyiben ez igaz, 
      * meghívja a core exposedToSun metódusát, magát adva paraméterként.
      */
-    public void onDrill() {
-        if (shell > 0)
-        	shell--;
-        if (shell == 0 && closeToSun)
-        	core.exposedToSun(this);
+    public boolean onDrill() {
+        if (shell > 0) {
+            shell--;
+            if (shell == 0 && closeToSun)
+                core.exposedToSun(this);
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
     /**

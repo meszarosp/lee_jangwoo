@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class UFO extends Traveller{
     public UFO(Asteroid a) {
         super(a);
@@ -25,7 +27,7 @@ public class UFO extends Traveller{
     public void makeAction(){
         Random rand = new Random();
         boolean randDecision = rand.nextBoolean();
-    	if(randDecision)) {
+    	if(randDecision) {
     		mine();
     	} else {
             int randNeighbour = rand.nextInt(asteroid.getNeighbourCount());

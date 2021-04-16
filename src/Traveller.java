@@ -37,10 +37,13 @@ public abstract class Traveller {
      * átmegy az aszteroidájáról egy másikra, vagy egy teleportkapuba
      * @param number hányadik szomszédjára megy az utazó az aszteroidának
      */
-    public void move(int number) {
+    public boolean move(int number) {
         INeighbour b = asteroid.getNeighbourAt(number);
+        if (b == null)
+            return false;
         asteroid.removeTraveller(this);
         b.placeTraveller(this);
+        return true;
     }
 
     /**
