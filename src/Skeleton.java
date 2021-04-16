@@ -605,11 +605,41 @@ public class Skeleton {
     /**
      * A robotaction parancshoz tartozó osztály.
      */
-    // TODO Annának
+
     private static class robotactionCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (random) {
+                if (args.length < 2) {
+                    output.println("robot must be specified");
+                    return;
+                }
+                // TODO robot stuff
+            } else {
+                if (args.length < 3) {
+                    output.println("all details must be specified");
+                    return;
+                }
+                Robot r = (Robot) IDs.get(args[1]);
+                if (args[2].equals("drill")) {
+                    if (r.drill())
+                        output.println("robot " + args[1] + " drilled on " +
+                                reverseIDs.get(r.getAsteroid()) + "shell is now" + r.getAsteroid().getShell());
+                    else
+                        output.println("robot " + args[1] + " couldn't drill");
+                }
+                if (args[2].equals("move")) {
+                    if (args.length < 4) {
+                        output.println("all details must be specified");
+                        return;
+                    }
+                    int i = Integer.parseInt(args[3]);
+                    if (r.move(i))
+                        output.println("robot " + args[1] + " moved to " + reverseIDs.get(r.getAsteroid()));
+                    else
+                        output.println("robot couldn't move");
+                }
+            }
         }
     }
     /**
@@ -638,12 +668,37 @@ public class Skeleton {
                         "    selected ID not available\n");
                 return;
             }
-            int r = Integer.parseInt(args[2]);
-            a.solarWind(r);
+            int radius = Integer.parseInt(args[2]);
+            List<Robot> robots = game.getRobots();
+            List<Settler> settlers = game.getSettlers();
+            List<UFO> UFOs = game.getUFOs();
+            List<Teleport> teleports = game.getGates();
+            boolean[] b;
+            b = new boolean[teleports.size()];
+            for (int i = 0; i < teleports.size(); i++) {
+                b[i] = teleports.get(i).getBamboozled();
+            }
+            a.solarWind(radius);
             output.println("solarwind created with asteroid " + args[1] + "in the middle");
-            output.println("and a " + r + " radius");
+            output.println("and a " + radius + " radius");
             output.println("events caused:");
-            // TODO honnan a rákból tudjuk hogy mi történt?
+
+            for (Robot r : robots) {
+                if (!game.getRobots().contains(r))
+                   output.println(reverseIDs.get(r) + " robot died");
+            }
+            for (Settler s : settlers) {
+                if (!game.getSettlers().contains(s))
+                    output.println(reverseIDs.get(s) + " settler died");
+            }
+            for (UFO u : UFOs) {
+                if (!game.getUFOs().contains(u))
+                    output.println(reverseIDs.get(u) + " ufo died");
+            }
+            for (int i = 0; i < teleports.size(); i++) {
+                if (!b[i] && teleports.get(i).getBamboozled())
+                    output.println(reverseIDs.get(teleports.get(i)) + " teleportgate gone mad");
+            }
         }
     }
     /**

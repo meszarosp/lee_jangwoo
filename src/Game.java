@@ -103,6 +103,8 @@ public class Game {
         return robots;
     }
 
+    public List<UFO> getUFOs() { return UFOs;}
+
     public Sun getSun() {
         return sun;
     }
