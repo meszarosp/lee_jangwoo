@@ -10,7 +10,6 @@ public class Coal extends Mineral {
     /**
      * Default constructor
      */
-    public Coal() {
-    }
+    public Coal() {}
 
 }

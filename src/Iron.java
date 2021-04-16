@@ -10,7 +10,6 @@ public class Iron extends Mineral {
     /**
      * Default constructor
      */
-    public Iron() {
-    }
+    public Iron() {}
 
 }

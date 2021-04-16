@@ -7,17 +7,12 @@ public abstract class Mineral {
     /**
      * Default constructor
      */
-    public Mineral() {
-    }
+    public Mineral() {}
 
     /**
      * Napközelbe kerüléskor meghívódó (jelenleg üres) függvény. A leszármazottak
      * újraimplementálhatják, ha szükséges(pl. jég, radioaktív nyersanyagok).
      * @param a az az aszteroida, amelynek ez a nyersanyag a magja.
      */
-    public void exposedToSun(Asteroid a) {
-    	Skeleton.startMethod(this, "exposedToSun", a);
-    	Skeleton.endMethod(this, null);
-    }
-
+    public void exposedToSun(Asteroid a) {}
 }

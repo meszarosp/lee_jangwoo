@@ -1,30 +1,36 @@
-
+﻿
 import java.util.*;
 
 /**
- * Interf�szt biztos�t az Aszteroida �s Teleport oszt�lyoknak. Ezzel val�sul meg a telepes vagy
- * robot mozgat�sa aszteroid�r�l aszteroid�ra ak�r teleporton kereszt�l, vagy an�lk�l. Ennek
- * seg�ts�g�vel van ki�p�tve az aszteroid�k �s teleportkapuk szomsz�ds�gi h�l�ja. Seg�ts�g�vel el
- * lehet t�vol�tani szomsz�dokat.
+ * Interfészt biztosít az Aszteroida és Teleport osztályoknak. Ezzel valósul meg a telepes vagy robot 
+ * mozgatása aszteroidáról aszteroidára akár teleporton keresztül, vagy anélkül. Ennek segítségével van kiépítve az 
+ * aszteroidák és teleportkapuk szomszédsági hálója. Segítségével el lehet távolítani szomszédokat. Tudja napszél érni.
  */
 public interface INeighbour {
 
     /**
-     * @param traveller
+     * Áthelyezi a traveller-t egy másik aszteroidára, kifejtése az egyes interfész megvalósításoknál.
+     * @param traveller - az áthelyezendő traveller
      */
     void placeTraveller(Traveller traveller);
 
     /**
-     * @param neighbour
+     * Egy szomszéd megszűnéséről értesít, kifejtése az egyes interfész megvalósításoknál.
+     * @param neighbour a megszűnő neighbour	
      */
     void removeNeighbour(INeighbour neighbour);
-
+    
     /**
-     * @param neighbour
+     * A napszélről értesítik ezzel egymást a megvalósított interfészek.
+     * @param i napszél mélysége (hogy mekkora területet ér majd el)
+     * @param neighbour aki meghívta a függvényt (rá nem kell visszahívni)
      */
-    //void addNeighbour(INeighbour neighbour);
-
     void solarWind(int i);
 
+    /**
+     * A teleport mozgatásáért felelős metódus
+     * @param t a mozgatandó teleport
+     * @return a mozgatás sikeressége
+     */
     boolean moveTeleport(Teleport t);
 }
