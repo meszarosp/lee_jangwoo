@@ -5,4 +5,4 @@ core: empty
 settler s1 added to asteroid: a1
 settler s1 is now active
 putting back mineral unsuccessful
-settler doesn’t have the neccessary mineral
+settler doesn't have the neccessary mineral

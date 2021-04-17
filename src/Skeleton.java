@@ -357,7 +357,7 @@ public class Skeleton {
             Sun sun = game.getSun();
             List<Asteroid> asteroids = sun.getAsteroids();
             if (asteroid == null || !asteroids.contains((Asteroid) asteroid)){
-                output.println("couldn’t complete request\n" +
+                output.println("couldn't complete request\n" +
                         "    selected ID not available\n");
             }else{
                 Settler s = new Settler((Asteroid) asteroid, game);
@@ -410,7 +410,7 @@ public class Skeleton {
             Sun sun = game.getSun();
             List<Asteroid> asteroids = sun.getAsteroids();
             if (asteroid == null || !asteroids.contains((Asteroid) asteroid)){
-                output.println("couldn’t complete request\n" +
+                output.println("couldn't complete request\n" +
                         "    selected ID not available\n");
             }else{
                 Robot r = new Robot((Asteroid) asteroid, game);
@@ -437,7 +437,7 @@ public class Skeleton {
             Sun sun = game.getSun();
             List<Asteroid> asteroids = sun.getAsteroids();
             if (asteroid == null || !asteroids.contains((Asteroid) asteroid)){
-                output.println("couldn’t complete request\n" +
+                output.println("couldn't complete request\n" +
                         "    selected ID not available\n");
             }else{
                 UFO ufo = new UFO((Asteroid) asteroid, game);
@@ -463,7 +463,7 @@ public class Skeleton {
             Asteroid a1 = (Asteroid) IDs.getOrDefault(args[1], null);
             Asteroid a2 = (Asteroid) IDs.getOrDefault(args[2], null);
             if (a1 == null || a2 == null){
-                output.println("couldn’t complete request\n" +
+                output.println("couldn't complete request\n" +
                         "    selected ID not available\n");
                 return;
             }
@@ -484,7 +484,7 @@ public class Skeleton {
             }
             Settler settler = (Settler)IDs.getOrDefault(args[1], null);
             if (settler == null){
-                output.println("couldn’t complete request\n" +
+                output.println("couldn't complete request\n" +
                         "    selected ID not available\n");
                 return;
             }
@@ -516,7 +516,7 @@ public class Skeleton {
             }
             int index = Integer.parseInt(args[1])-1;
             if (activeSettler.move(index)) {
-                INeighbour n = activeSettler.getAsteroid().getNeighbourAt(index);
+                INeighbour n = activeSettler.getAsteroid().getNeighbourAt(index-1);
                 String id = reverseIDs.get(n);
                 output.println("move to " + id + " successful");
             } else {
@@ -654,7 +654,7 @@ public class Skeleton {
                 if (activeSettler.getTeleportgates().size() < 2)
                     output.println("new pair of teleportgates couldn't be crafted, insufficient minerals");
                 else
-                    output.println("new pair of teleportgates couldn’t be crafted inventory too full");
+                    output.println("new pair of teleportgates couldn't be crafted inventory too full");
             }
         }
     }
@@ -703,7 +703,7 @@ public class Skeleton {
             Asteroid a1 = (Asteroid) IDs.getOrDefault(args[1], null);
             Asteroid a2 = (Asteroid) IDs.getOrDefault(args[2], null);
             if (a1 == null || a2 == null){
-                output.println("couldn’t complete request\n" +
+                output.println("couldn't complete request\n" +
                         "    selected ID not available\n");
                 return;
             }
@@ -871,7 +871,7 @@ public class Skeleton {
             }
             if (args.length == 4){
                 int i = Integer.parseInt(args[3]);
-                ufo.move(i);
+                ufo.move(i-1);
             }
             if (a != ufo.getAsteroid()){
                 output.println("UFO " + args[1] + " moved to " + reverseIDs.get(ufo.getAsteroid()));
@@ -890,7 +890,6 @@ public class Skeleton {
             if (core != a.getCore()){
                 output.println("UFO " + args[1] + " mined on " + reverseIDs.get(a)) ;
                 output.println("is got one unit of " + core.toString());
-                return;
             }
         }
     }
@@ -928,7 +927,7 @@ public class Skeleton {
             }
             Asteroid a = (Asteroid) IDs.getOrDefault(args[1], null);
             if (a == null){
-                output.println("couldn’t complete request\n" +
+                output.println("couldn't complete request\n" +
                         "    selected ID not available\n");
                 return;
             }
@@ -1101,7 +1100,7 @@ public class Skeleton {
             return false;
         }
         if (activeSettler == null){
-            output.println("couldn’t complete request\n" +
+            output.println("couldn't complete request\n" +
                     "    no active settler selected\n");
             return false;
         }

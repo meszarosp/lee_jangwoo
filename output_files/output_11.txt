@@ -1,2 +1,2 @@
 loaded test.txt
-robot r1 couldn’t move
+robot r1 couldn't move

@@ -96,21 +96,26 @@ public class Settler extends Traveller {
         int ironCount = 0;
         int uraniumCount = 0;
         int i = 0;
+        ArrayList<Mineral> removeMinerals = new ArrayList<Mineral>();
         while((coalCount < 1 || ironCount < 1 || uraniumCount < 1) && i < minerals.size()){
             if(minerals.get(i).toString().contains("uranium") && uraniumCount < 1){
             	++uraniumCount;
+                removeMinerals.add(minerals.get(i));
             }
             else if(minerals.get(i).toString() == "iron" && ironCount < 1){
                 ++ironCount;
+                removeMinerals.add(minerals.get(i));
             }
             else if(minerals.get(i).toString() == "coal"  && coalCount < 1){
                 ++coalCount;
+                removeMinerals.add(minerals.get(i));
             }
             ++i;
         }
         if(coalCount >= 1 && ironCount >= 1 && uraniumCount >= 1) {
+            minerals.removeAll(removeMinerals);
             //Építéskor felhasznált nyersanyagok eltávolítása a minerals listából
-            i = 0;
+            /*i = 0;
             while (coalCount >= 0 || ironCount >= 0 || uraniumCount >= 0) {
             	if(minerals.get(i).toString().contains("uranium") && uraniumCount > 0){
                 	--uraniumCount;
@@ -125,7 +130,7 @@ public class Settler extends Traveller {
                     minerals.remove(i);
                 }
                 else ++i;
-            }
+            }*/
             Robot r = new Robot(asteroid, game);
             game.addRobot(r);
             return true;

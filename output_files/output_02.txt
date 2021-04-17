@@ -7,4 +7,4 @@ settler s1 received one unit of iron
 settler s1 received one unit of iron
 settler s1 received one unit of ice
 settler s1 received one unit of uranium(0)
-new pair of teleportgates couldn’t be crafted inventory too full
+new pair of teleportgates couldn't be crafted, inventory too full
