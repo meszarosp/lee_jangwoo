@@ -85,8 +85,9 @@ public class Settler extends Traveller {
 
     /**
      * A telepes a nála lévõ nyersanyagokból egy robotot készít
+     * @return
      */
-    public void craftRobot() {
+    public boolean craftRobot() {
         if (minerals.size()>=3) {
 
                 //Kellõ nyersanyagok meglétének ellenõrzése, illetve kigyûjtése
@@ -129,8 +130,10 @@ public class Settler extends Traveller {
                     Robot r = new Robot();
                     asteroid.placeTraveller(r);
                     game.addRobot(r);
+                    return true;
                 }
         }
+        return false;
     }
 
     /**

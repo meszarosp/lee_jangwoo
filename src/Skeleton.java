@@ -188,7 +188,7 @@ public class Skeleton {
     /**
      * A save parancshoz tartozó osztály.
      */
-    // TODO Annának
+    // TODO Petinek<3 mégis
     private static class saveCommand implements Command{
 
         public void execute(String[] args) {
@@ -291,6 +291,7 @@ public class Skeleton {
                 int n = maxIDs.get("settler");
                 maxIDs.replace("settler", n+1);
                 addID("s" + (n+1), s);
+                game.addSettler(s);
                 ((Asteroid) asteroid).placeTraveller(s);
                 output.println("settler s" + (n+1) + " added to asteroid: " + args[1]);
             }
@@ -343,6 +344,7 @@ public class Skeleton {
                 int n = maxIDs.get("robot");
                 maxIDs.replace("robot", n+1);
                 addID("r" + (n+1), r);
+                game.addRobot(r);
                 ((Asteroid) asteroid).placeTraveller(r);
                 output.println("robot r" + (n+1) + " added to asteroid: " + args[1]);
             }
@@ -370,6 +372,7 @@ public class Skeleton {
                 maxIDs.replace("ufo", n+1);
                 addID("r" + (n+1), ufo);
                 ((Asteroid) asteroid).placeTraveller(ufo);
+                game.addUFO(ufo);
                 output.println("ufo u" + (n+1) + " added to asteroid: " + args[1]);
             }
         }
@@ -522,7 +525,11 @@ public class Skeleton {
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
                 return;
-            activeSettler.craftRobot();
+            if (activeSettler.craftRobot()) {
+                output.println("new robot successfully crafted");
+            } else {
+                output.println("new robot couldn't be crafted, insufficient materials");
+            }
         }
     }
     /**
@@ -534,9 +541,9 @@ public class Skeleton {
             if (!settlerCommandCheck(args, 1))
                 return;
             if (activeSettler.craftTeleport()) {
-                output.println("new robot successfully crafted");
+                output.println("new teleport successfully crafted");
             } else {
-                output.println("new robot couldn't be crafted, insufficient materials");
+                output.println("new teleport couldn't be crafted, insufficient materials");
             }
         }
     }
@@ -878,7 +885,7 @@ public class Skeleton {
                     "    no active settler selected\n");
             return false;
         }
-        if (!game.getSettlers().contains((Settler)IDs.getOrDefault(args[1], null))){
+        if (!game.getSettlers().contains(activeSettler)){
             output.println("active settler died");
             return false;
         }
