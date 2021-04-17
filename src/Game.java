@@ -88,7 +88,45 @@ public class Game {
      * @return
      */
     public boolean checkWin() {
-        // TODO implement here
+    	List<Mineral> allMinerals = Mineral.getAllMinerals();
+    	int allMineralCount = allMinerals.size();
+    	int[] counter = new int[allMineralCount];
+        for(Settler s1 : settlers) {
+        	Asteroid currAsteroid = s1.getAsteroid();
+        	List<Mineral> backpack = s1.getMinerals();
+        	for(Mineral backPackItem : backpack) {
+        		for(int i = 0; i < allMineralCount; i++) {
+        			if(backPackItem.toString().equals(allMinerals.get(i).toString()) ||
+        			(backPackItem.toString().contains("uranium")&&allMinerals.get(i).toString().contains("uranium"))) {
+        				counter[i]++;
+        			}
+        		}
+        	}
+        	for(Settler s2 : settlers) {
+        		if(!s1.equals(s2)) {
+        			if(currAsteroid.equals(s2.getAsteroid())) {
+        				backpack = s2.getMinerals();
+        				for(Mineral backPackItem : backpack) {
+        	        		for(int i = 0; i < allMineralCount; i++) {
+        	        			if(backPackItem.toString().equals(allMinerals.get(i).toString()) ||
+        	        			(backPackItem.toString().contains("uranium")&&allMinerals.get(i).toString().contains("uranium"))) {
+        	        				counter[i]++;
+        	        			}
+        	        		}
+        	        	}
+        			}
+        		}
+        	}
+        	for(int i = 0; i < allMineralCount; i++) {
+        		if(counter[i] < 3) {
+        			break;
+        		}
+        		if(i == allMineralCount-1) {
+        			return true;
+        		}
+        	}
+        	
+        }
         return false;
     }
 
