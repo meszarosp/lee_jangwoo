@@ -22,12 +22,12 @@ public class Settler extends Traveller {
     /**
      * A telepesnél található nyersanyagok listája
      */
-    private List<Mineral> minerals;
+    private List<Mineral> minerals = new ArrayList<Mineral>();
 
     /**
      * A telepesnél található teleportkapuk listája
      */
-    private List<Teleport> teleportgates;
+    private List<Teleport> teleportgates = new ArrayList<Teleport>();
 
     public Settler(Asteroid a) {
         super(a);

@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.*;
 import java.util.*;
 
@@ -91,17 +92,17 @@ public class Skeleton {
                 if (a == null)
                     throw new Exception();
                 Settler s = new Settler(a);
-                addID(pieces[0].substring(0, pieces[0].length()-2), s);
+                String ID = pieces[0].substring(0, pieces[0].length()-1);
+                updateMaxID("settler", ID);
+                addID(ID, s);
                 game.addSettler(s);
                 int k = Integer.parseInt(pieces[2]);
                 for (int j = 0; j < k; j++){
                     Mineral m = parseMineral(pieces[3+j]);
-                    if (m == null)
-                        throw new Exception();
                     s.addMineral(m);
                 }
                 int t = Integer.parseInt(pieces[3+k]);
-                for (int j = 0; j < k; j++){
+                for (int j = 0; j < t; j++){
                     Teleport teleport = (Teleport)IDs.getOrDefault(pieces[3+k+1+j], null);
                     if (teleport == null)
                         throw new Exception();
@@ -114,7 +115,9 @@ public class Skeleton {
                 if (a == null)
                     throw new Exception();
                 Robot r = new Robot(a);
-                addID(pieces[0].substring(0, pieces[0].length()-2), r);
+                String ID = pieces[0].substring(0, pieces[0].length()-1);
+                updateMaxID("robot", ID);
+                addID(ID, r);
                 game.addRobot(r);
             }
             for (int i = 0; i < nUFOs; i++){
@@ -123,7 +126,9 @@ public class Skeleton {
                 if (a == null)
                     throw new Exception();
                 UFO ufo = new UFO(a);
-                addID(pieces[0].substring(0, pieces[0].length()-2), ufo);
+                String ID = pieces[0].substring(0, pieces[0].length()-1);
+                updateMaxID("ufo", ID);
+                addID(ID, ufo);
                 game.addUFO(ufo);
             }
         }
@@ -219,7 +224,7 @@ public class Skeleton {
             }
             input.close();
             input = temp;
-            output.println("input set to " + args[1]);
+            System.out.println("input set to " + args[1]);
         }
     }
     /**
@@ -244,9 +249,9 @@ public class Skeleton {
                 output.println("unsuccessful");
                 return;
             }
+            System.out.println("output set to " + args[1]);
             output.close();
             output = temp;
-            output.println("output set to " + args[1]);
         }
     }
     /**
@@ -931,18 +936,23 @@ public class Skeleton {
             return null;
     }
 
-    private static void parseCommand(){
-        String[] pieces = input.nextLine().split(" ");
+    private static boolean parseCommand(){
+        String[] pieces;
+        if (input.hasNextLine())
+            pieces = input.nextLine().split(" ");
+        else
+            return false;
         if (pieces.length == 0) {
             output.println("invalid command");
-            return;
+            return true;
         }
         Command cmd = commands.getOrDefault(pieces[0], null);
         if (cmd == null){
             output.println("invalid command");
-            return;
+            return true;
         }
         cmd.execute(pieces);
+        return true;
     }
 
     private static void initializeMaxIDs(){
@@ -963,8 +973,16 @@ public class Skeleton {
     public static void main(String[] args){
         initializeCommands();
         initializeMaxIDs();
-        while (true){
-            parseCommand();
+        if (args.length >= 2){
+            String[] cmdargs = new String[2];
+            cmdargs[1] = args[0];
+            commands.get("input").execute(cmdargs);
+            cmdargs[1] = args[1];
+            commands.get("output").execute(cmdargs);
+        }
+        boolean hasNext = true;
+        while (hasNext){
+            hasNext = parseCommand();
             //output.flush();
         }
         /*hile (true){
