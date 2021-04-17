@@ -147,7 +147,7 @@ public class Asteroid implements INeighbour {
      * @param i a lekérdezni kívánt szomszéd sorszáma a neighbours listában.
      */
     public INeighbour getNeighbourAt(int i) {
-        if (i <= neighbours.size() && i > 0)
+        if (i < neighbours.size() && i >= 0)
         	return neighbours.get(i);
         return null;
     }
@@ -163,8 +163,10 @@ public class Asteroid implements INeighbour {
      */
     @Override
     public void placeTraveller(Traveller traveller){
-    	travellers.add(traveller);
-    	traveller.setAsteroid(this);
+    	if (!travellers.contains(traveller)) {
+    		travellers.add(traveller);
+    		traveller.setAsteroid(this);
+    	}
     }
     
     /**
@@ -223,11 +225,13 @@ public class Asteroid implements INeighbour {
     }
 
     /**
-     * a megvalósított interfész függvénye, hozzáadja a neighbours listájához a szomszédot.
+     * a megvalósított interfész függvénye, hozzáadja a neighbours listájához a szomszédot,
+     * amennyiben az még nem része.
      * @param neighbour a hozzáadni kívánt szomszéd
      */
     public void addNeighbour(INeighbour neighbour){
-    	neighbours.add(neighbour);
+    	if (!neighbours.contains(neighbour))
+    		neighbours.add(neighbour);
     }
     
     /** Visszaadja az aszteroida magját.
@@ -236,6 +240,11 @@ public class Asteroid implements INeighbour {
     public Mineral getCore() {
         return core;
     }
+    
+    /**
+     * Lekérdezi hogy napközel van-e?
+     * @return boolean aszerint hogy napközel (true) vagy naptávol (false) van
+     */
     public boolean getCloseToSun(){
     	return closeToSun;
     }

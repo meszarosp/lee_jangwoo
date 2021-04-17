@@ -181,11 +181,21 @@ public class Skeleton {
                 Teleport t = (Teleport)IDs.getOrDefault(pieces[0].substring(0, pieces[0].length()-1), null);
                 if (!"0".equals(pieces[1])) {
                     Asteroid a = (Asteroid) IDs.getOrDefault(pieces[1], null);
-                    Teleport t2 = (Teleport) IDs.getOrDefault(pieces[2], null);
-                    if (a == null || t2 == null)
+                    if (a == null)
                         throw new Exception();
+                    a.addNeighbour(t);
                     t.setNeighbour(a);
+                }else{
+                    t.setNeighbour(null);
+                }
+                if (!"0".equals(pieces[2])){
+                    Teleport t2 = (Teleport) IDs.getOrDefault(pieces[2], null);
+                    if (t2 == null)
+                        throw new Exception();
                     t.setPair(t2);
+                    t2.setPair(t);
+                }else{
+                    t.setPair(null);
                 }
             }
         }
@@ -193,11 +203,69 @@ public class Skeleton {
     /**
      * A save parancshoz tartozó osztály.
      */
-    // TODO Petinek<3 mégis
     private static class saveCommand implements Command{
-
+        private PrintWriter fileOutput;
         public void execute(String[] args) {
+            if (args.length < 2) {
+                output.println("save unsuccessful");
+                return;
+            }
+            File file = new File(args[1]);
+            try {
+                fileOutput = new PrintWriter(file);
+                saveAsteroidTeleport();
+                fileOutput.println("S: " + game.getSettlers().size() + " R: " + game.getRobots().size() + " U: " + game.getUFOs().size());
+                saveSettlers();
+                saverobotsUFOs();
+            }catch (Exception e){
+                e.printStackTrace();
+                output.println("save unsuccessful");
+                return;
+            }
+            fileOutput.close();
+            output.println("saved to " + args[1]);
+        }
 
+        private void saveSettlers(){
+            List<Settler> settlers = game.getSettlers();
+            for (Settler s : settlers){
+                List<Mineral> minerals = s.getMinerals();
+                fileOutput.print(reverseIDs.get(s) + ": " + reverseIDs.get(s.getAsteroid()) + " " + minerals.size() + " ");
+                for (Mineral m : minerals)
+                    fileOutput.print(m.toString() + " ");
+
+                List<Teleport> teleports = s.getTeleportgates();
+                int t = teleports.size();
+                fileOutput.print(t + (t > 0 ? " " : ""));
+                for (int i = 0; i < t-1; i++)
+                    fileOutput.print(reverseIDs.get(teleports.get(i)));
+                if (t > 0)
+                    fileOutput.print(reverseIDs.get(teleports.get(t-1)));
+            }
+        }
+
+        private void saverobotsUFOs(){
+            for (Robot r : game.getRobots())
+                fileOutput.println(reverseIDs.get(r) + ": " + reverseIDs.get(r.getAsteroid()));
+            for (UFO ufo : game.getUFOs())
+                fileOutput.println(reverseIDs.get(ufo) + ": " + reverseIDs.get(ufo.getAsteroid()));
+        }
+
+        private void saveAsteroidTeleport(){
+            List<Asteroid> asteroids = game.getSun().getAsteroids();
+            List <Teleport> gates = game.getGates();
+            fileOutput.println("A: " + asteroids.size() + " T: " + gates.size());
+
+            for (Asteroid a : asteroids){
+                int ncount = a.getNeighbourCount();
+                fileOutput.print(reverseIDs.get(a) + ": " + ncount + " ");
+                for (int i = 0; i < ncount; i++)
+                    fileOutput.print(reverseIDs.get(a.getNeighbourAt(i)) + " ");
+                fileOutput.print(a.getShell() + " " + (a.getCloseToSun() ? "1" : "0") + " ");
+                fileOutput.println(a.getCore() == null ? "empty" : a.getCore().toString());
+            }
+            for (Teleport t : gates)
+                fileOutput.println(reverseIDs.get(t) + ": " + reverseIDs.getOrDefault(t.getNeighbour(), "0") + " " + reverseIDs.getOrDefault(t.getPair(), "0"));
         }
     }
     /**
@@ -442,7 +510,7 @@ public class Skeleton {
                         type = "asteroid";
                     if (id.charAt(0) == 't')
                         type = "teleportgate";
-                    output.println(n + ": " + type);
+                    output.println(id + ": " + type);
                 }
                 return;
             }
@@ -900,16 +968,16 @@ public class Skeleton {
             Sun sun = game.getSun();
             List<Asteroid> asteroids = sun.getAsteroids();
             if (asteroid == null || !asteroids.contains(asteroid)){
-                output.println("couldn’t complete request\n" +
+                output.println("couldn't complete request\n" +
                         "    selected ID not available\n");
             }else{
                 boolean oldCloseToSun = asteroid.getCloseToSun();
                 boolean newCloseToSun = !"0".equals(args[2]) && ("1".equals(args[2]));
                 if (oldCloseToSun == newCloseToSun){
-                    output.println(args[1] + "already " + (oldCloseToSun ? "close to " : "far from ") + "sun, no change");
+                    output.println(args[1] + " already " + (oldCloseToSun ? "close to " : "far from ") + "sun, no change");
                 }else{
                     asteroid.setCloseToSun();
-                    output.println(args[1] + "set " + (newCloseToSun ? "close to " : "far from ") + "sun");
+                    output.println(args[1] + " set " + (newCloseToSun ? "close to " : "far from ") + "sun");
                 }
             }
         }

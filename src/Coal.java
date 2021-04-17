@@ -11,5 +11,14 @@ public class Coal extends Mineral {
      * Default constructor
      */
     public Coal() {}
-
+    
+    /**
+     * Az adott nyersanyag tipusát adja vissza Stringben. 
+     * A mineralban lévőt írja felül.
+     * @return a típus neve szövegként
+     */
+    @Override
+    public String toString() { 
+    	return "coal";
+    }
 }

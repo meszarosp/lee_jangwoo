@@ -11,5 +11,15 @@ public class Iron extends Mineral {
      * Default constructor
      */
     public Iron() {}
+    
+    /**
+     * Az adott nyersanyag tipusát adja vissza Stringben. 
+     * A mineralban lévőt írja felül.
+     * @return a típus neve szövegként
+     */
+    @Override
+    public String toString() { 
+    	return "iron";
+    }
 
 }

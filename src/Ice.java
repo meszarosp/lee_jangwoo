@@ -21,5 +21,14 @@ public class Ice extends Mineral {
     public void exposedToSun(Asteroid a) {
         a.removeMineral();
     }
-
+    
+    /**
+     * Az adott nyersanyag tipusát adja vissza Stringben. 
+     * A mineralban lévőt írja felül.
+     * @return a típus neve szövegként
+     */
+    @Override
+    public String toString() { 
+    	return "ice";
+    }
 }
