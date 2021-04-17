@@ -228,4 +228,7 @@ public class Settler extends Traveller {
         return minerals;
     }
 
+    public List<Teleport> getTeleportgates() {
+        return teleportgates;
+    }
 }
