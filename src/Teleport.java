@@ -164,7 +164,7 @@ public class Teleport implements INeighbour {
      */
     public void setNeighbour(Asteroid a){
         neighbour = a;
-        if(pair == null && neighbour != null){
+        if(pair != null && neighbour != null){
             neighbour.addNeighbour(this);
         }
     }
@@ -183,13 +183,13 @@ public class Teleport implements INeighbour {
     		Asteroid old = neighbour;
     		boolean placed = false;
     		int i = 0;
-    		while(!placed) {
+    		while(!placed && i < old.getNeighbourCount()) {
     			INeighbour temp = old.getNeighbourAt(i);
     			if(temp==null) {
     				return;
     			}
     			if(temp.moveTeleport(this)) {
-    				neighbour = (Asteroid)temp;
+    				//neighbour = (Asteroid)temp;
     				old.removeNeighbour(this);
     				placed = true;
     			}

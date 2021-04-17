@@ -2,3 +2,4 @@ addasteroid 1 1 ice
 addsettler a1
 selectsettler s1
 drill
+mine

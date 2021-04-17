@@ -9,7 +9,7 @@ shell is now 0 unit(s) thick
 a1 set far from sun
 a1 set close to sun
 a1 set far from sun
-set close to sun
+a1 set close to sun
 events caused:
 a1 exploded
 s1 settler died

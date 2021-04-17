@@ -2,4 +2,4 @@ loaded test.txt
 settler s1 is now active
 settler s1 received one unit of iron
 settler s1 received one unit of ice
-new pair of teleportgates successfully crafted
+new pair of teleportgates t3 and t4 successfully crafted

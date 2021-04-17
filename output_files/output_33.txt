@@ -1,5 +1,5 @@
 loaded test.txt
-solarwind created with asteroid a1 in the middle
+solarwind created with asteroid a4 in the middle
 and a 1 radius
 events caused:
-t1 teleportgate gone mad
+t2 teleportgate gone mad

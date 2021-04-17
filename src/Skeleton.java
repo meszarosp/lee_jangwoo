@@ -516,11 +516,11 @@ public class Skeleton {
             }
             int index = Integer.parseInt(args[1])-1;
             INeighbour n = activeSettler.getAsteroid().getNeighbourAt(index);
+            String id = reverseIDs.getOrDefault(n, "");
             if (activeSettler.move(index)) {
-                String id = reverseIDs.get(n);
                 output.println("move to " + id + " successful");
             } else {
-                output.println("move unsuccessful");
+                output.println("move to" + ("".equals(id) ? "" : " ") + id + " unsuccessful");
             };
 
         }
@@ -537,7 +537,7 @@ public class Skeleton {
                 Asteroid a = activeSettler.getAsteroid();
                 int shell = a.getShell();
                 output.println("drilling successful");
-                output.println("shell is now " + shell + " units thick");
+                output.println("shell is now " + shell + " unit(s) thick");
             } else {
                 output.println("drilling unsuccessful");
                 output.println("shell has already been drilled through");
@@ -590,10 +590,10 @@ public class Skeleton {
             }
             int i = Integer.parseInt(args[1]) -1;
             Mineral core = activeSettler.getAsteroid().getCore();
-            List<Robot> robots = game.getRobots();
-            List<Settler> settlers = game.getSettlers();
-            List<UFO> UFOs = game.getUFOs();
-            List<Teleport> teleports = game.getGates();
+            List<Robot> robots = new ArrayList<Robot>(game.getRobots());
+            List<Settler> settlers = new ArrayList<Settler>(game.getSettlers());
+            List<UFO> UFOs = new ArrayList<UFO>(game.getUFOs());
+            List<Teleport> teleports = new ArrayList<Teleport>(game.getGates());
             if (activeSettler.putMineralBack(i)) {
                 output.println(activeSettler.asteroid.getCore().toString() + " is now in the asteroid");
                 if (!game.getSun().getAsteroids().contains(activeSettler.getAsteroid())) {
@@ -741,15 +741,13 @@ public class Skeleton {
             t2.setPair(t1);
             t1.setNeighbour(a1);
             t2.setNeighbour(a2);
-            a1.addNeighbour(t1);
-            a2.addNeighbour(t2);
             int id = maxIDs.get("teleport");
             addID("t" + (id+1), t1);
             addID("t" + (id+2), t2);
             maxIDs.replace("teleport", id+2);
             game.addTeleport(t1);
             game.addTeleport(t2);
-            output.println("connected teleportgates " + ("t" + (id+1)) +" " + ("t" + (id+2)) + " placed by " + args[1] + " " + args[2]);
+            output.println("connected teleportgates " + ("t" + (id+1)) +" " + ("t" + (id+2)) + " placed by " + args[1] + " and " + args[2]);
         }
     }
     /**
@@ -988,10 +986,10 @@ public class Skeleton {
                 return;
             }
             int radius = Integer.parseInt(args[2]);
-            List<Robot> robots = game.getRobots();
-            List<Settler> settlers = game.getSettlers();
-            List<UFO> UFOs = game.getUFOs();
-            List<Teleport> teleports = game.getGates();
+            List<Robot> robots = new ArrayList<Robot>(game.getRobots());
+            List<Settler> settlers = new ArrayList<Settler>(game.getSettlers());
+            List<UFO> UFOs = new ArrayList<UFO>(game.getUFOs());
+            List<Teleport> teleports = new ArrayList<Teleport>(game.getGates());
             boolean[] b;
             b = new boolean[teleports.size()];
             for (int i = 0; i < teleports.size(); i++) {
@@ -1002,13 +1000,14 @@ public class Skeleton {
             output.println("and a " + radius + " radius");
             output.println("events caused:");
 
-            for (Robot r : robots) {
-                if (!game.getRobots().contains(r))
-                   output.println(reverseIDs.get(r) + " robot died");
-            }
+
             for (Settler s : settlers) {
                 if (!game.getSettlers().contains(s))
                     output.println(reverseIDs.get(s) + " settler died");
+            }
+            for (Robot r : robots) {
+                if (!game.getRobots().contains(r))
+                    output.println(reverseIDs.get(r) + " robot died");
             }
             for (UFO u : UFOs) {
                 if (!game.getUFOs().contains(u))
@@ -1132,7 +1131,8 @@ public class Skeleton {
             Teleport teleport = (Teleport)IDs.getOrDefault(args[1], null);
             if (game.getGates().contains(teleport)){
                 boolean bamboozled = !"0".equals(args[2]) && ("1".equals(args[2]));
-                output.println(args[1] + "teleportgate" + (bamboozled ? "" : "not") + "bamboozled");
+                teleport.setBamboozled(bamboozled);
+                output.println(args[1] + " teleportgate " + (bamboozled ? "" : "not ") + "bamboozled");
             }else{
                 output.print("couldn't complete request\n" +
                         "selected ID not available\n");

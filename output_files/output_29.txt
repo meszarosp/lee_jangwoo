@@ -2,4 +2,4 @@ asteroid a1 added
 shell: 0
 closetosun: yes
 core: uranium(2)
-a1 set close to sun
+a1 already close to sun, no change
