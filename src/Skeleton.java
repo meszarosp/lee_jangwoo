@@ -574,11 +574,11 @@ public class Skeleton {
             if (!settlerCommandCheck(args, 2))
                 return;
             Mineral mineral = parseMineral(args[1]);
-            if (mineral == null)
+            if (mineral == null) {
                 output.println("all details must be specified");
-            int n = activeSettler.getMinerals().size();
-            activeSettler.addMineral(mineral);
-            if (n == activeSettler.getMinerals().size())
+                return;
+            }
+            if (activeSettler.addMineral(mineral))
                 output.println("settler " + reverseIDs.get(activeSettler) + " received one unit of " + args[1]);
             else
                 output.println("settler inventory too full");
@@ -927,7 +927,7 @@ public class Skeleton {
             return new Ice();
         else if (arg.startsWith("uranium")){
             try{
-                int exposedToSunCounter = Integer.parseInt(arg.substring(7, arg.length()-2));
+                int exposedToSunCounter = Integer.parseInt(arg.substring(7, arg.length()-1));
                 return new Uranium(exposedToSunCounter);
             }catch (Exception e) {
                 return null;

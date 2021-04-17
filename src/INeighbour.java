@@ -1,35 +1,35 @@
 import java.util.*;
 
 /**
- * InterfÃ©szt biztosÃ­t az Aszteroida Ã©s Teleport osztÃ¡lyoknak. Ezzel valÃ³sul meg a telepes vagy robot 
- * mozgatÃ¡sa aszteroidÃ¡rÃ³l aszteroidÃ¡ra akÃ¡r teleporton keresztÃ¼l, vagy anÃ©lkÃ¼l. Ennek segÃ­tsÃ©gÃ©vel van kiÃ©pÃ­tve az 
- * aszteroidÃ¡k Ã©s teleportkapuk szomszÃ©dsÃ¡gi hÃ¡lÃ³ja. SegÃ­tsÃ©gÃ©vel el lehet tÃ¡volÃ­tani szomszÃ©dokat. Tudja napszÃ©l Ã©rni.
+ * Interfészt biztosít az Aszteroida és Teleport osztályoknak. Ezzel valósul meg a telepes vagy robot 
+ * mozgatása aszteroidáról aszteroidára akár teleporton keresztül, vagy anélkül. Ennek segítségével van kiépítve az 
+ * aszteroidák és teleportkapuk szomszédsági hálója. Segítségével el lehet távolítani szomszédokat. Tudja napszél érni.
  */
 public interface INeighbour {
 
     /**
-     * Ãthelyezi a traveller-t egy mÃ¡sik aszteroidÃ¡ra, kifejtÃ©se az egyes interfÃ©sz megvalÃ³sÃ­tÃ¡soknÃ¡l.
-     * @param traveller - az Ã¡thelyezendÅ‘ traveller
+     * Áthelyezi a traveller-t egy másik aszteroidára, kifejtése az egyes interfész megvalósításoknál.
+     * @param traveller - az áthelyezendõ traveller
      */
     void placeTraveller(Traveller traveller);
 
     /**
-     * Egy szomszÃ©d megszÅ±nÃ©sÃ©rÅ‘l Ã©rtesÃ­t, kifejtÃ©se az egyes interfÃ©sz megvalÃ³sÃ­tÃ¡soknÃ¡l.
-     * @param neighbour a megszÅ±nÅ‘ neighbour	
+     * Egy szomszéd megszûnésérõl értesít, kifejtése az egyes interfész megvalósításoknál.
+     * @param neighbour a megszûnõ neighbour	
      */
     void removeNeighbour(INeighbour neighbour);
     
     /**
-     * A napszÃ©lrÅ‘l Ã©rtesÃ­tik ezzel egymÃ¡st a megvalÃ³sÃ­tott interfÃ©szek.
-     * @param i napszÃ©l mÃ©lysÃ©ge (hogy mekkora terÃ¼letet Ã©r majd el)
-     * @param neighbour aki meghÃ­vta a fÃ¼ggvÃ©nyt (rÃ¡ nem kell visszahÃ­vni)
+     * A napszélrõl értesítik ezzel egymást a megvalósított interfészek.
+     * @param i napszél mélysége (hogy mekkora területet ér majd el)
+     * @param neighbour aki meghívta a függvényt (rá nem kell visszahívni)
      */
     void solarWind(int i);
 
     /**
-     * A teleport mozgatÃ¡sÃ¡Ã©rt felelÅ‘s metÃ³dus
-     * @param t a mozgatandÃ³ teleport
-     * @return a mozgatÃ¡s sikeressÃ©ge
+     * A teleport mozgatásáért felelõs metódus
+     * @param t a mozgatandó teleport
+     * @return a mozgatás sikeressége
      */
     boolean moveTeleport(Teleport t);
 }
