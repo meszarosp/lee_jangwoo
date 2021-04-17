@@ -31,7 +31,9 @@ os.system("javac src/*.java -d bin")
 input_files_path = os.getcwd()+ '\\' + 'input_files'
 input_files = []
 for root, dirs, files in os.walk(input_files_path):
-    input_files = files
+    for i in files:
+        if i != 'test.txt':
+            input_files.append(i)
 
 
 try:
@@ -68,7 +70,7 @@ else:
 
 with open('test_results.txt', 'w') as f:
     f.write(out)
-print("The program finised compareing the test results, you can find them in 'test_results.txt' file.\nPress enter to close.")
+input("The program finised compareing the test results, you can find them in 'test_results.txt' file.\nPress enter to close.")
 
 
 
