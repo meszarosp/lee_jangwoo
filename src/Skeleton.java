@@ -927,7 +927,7 @@ public class Skeleton {
             return new Ice();
         else if (arg.startsWith("uranium")){
             try{
-                int exposedToSunCounter = Integer.parseInt(arg.substring(7, arg.length()-1));
+                int exposedToSunCounter = Integer.parseInt(arg.substring(8, arg.length()-2));
                 return new Uranium(exposedToSunCounter);
             }catch (Exception e) {
                 return null;
