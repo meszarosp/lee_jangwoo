@@ -580,9 +580,15 @@ public class Skeleton {
     private static class putmineralbackCommand implements Command{
 
         public void execute(String[] args) {
-            if (!settlerCommandCheck(args, 2))
+            if (!settlerCommandCheck(args, 1))
                 return;
-            int i = Integer.parseInt(args[3]);
+            if (args.length == 1){
+                List<Mineral> minerals = activeSettler.getMinerals();
+                for (Mineral m : minerals)
+                    output.println(m.toString());
+                return;
+            }
+            int i = Integer.parseInt(args[1]) -1;
             Mineral core = activeSettler.getAsteroid().getCore();
             List<Robot> robots = game.getRobots();
             List<Settler> settlers = game.getSettlers();

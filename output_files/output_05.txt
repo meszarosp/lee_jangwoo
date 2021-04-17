@@ -1,3 +1,3 @@
 loaded test.txt
 settler s2 is now active
-new robot couldn't be crafted insufficient minerals
+new robot couldn't be crafted, insufficient minerals

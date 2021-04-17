@@ -157,7 +157,7 @@ public class Game {
     }
 
     public void addTeleport(Teleport t){
-        if (!gates.contain(t)) 
+        if (!gates.contains(t))
             gates.add(t);
     }
 
@@ -170,7 +170,7 @@ public class Game {
     }
 
     public void addUFO(UFO ufo) {
-        if (!UFOs.contain(ufo)) 
+        if (!UFOs.contains(ufo))
             UFOs.add(ufo);
     }
     public void removeUFO(UFO ufo) {
