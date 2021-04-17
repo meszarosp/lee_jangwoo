@@ -15,4 +15,13 @@ public abstract class Mineral {
      * @param a az az aszteroida, amelynek ez a nyersanyag a magja.
      */
     public void exposedToSun(Asteroid a) {}
+    
+    /**
+     * A mineral tipusát adja vissza Stringben. 
+     * Mivel a mineral abstract ezért ez sosem hívódhat meg.
+     * @return a típus neve szövegként
+     */
+    public String toString() { 
+    	return "mineral";
+    }
 }

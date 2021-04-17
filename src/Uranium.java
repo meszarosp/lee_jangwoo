@@ -32,10 +32,21 @@ public class Uranium extends Mineral {
      * akkor meghívja a paraméterül kapott aszteroidára a radioactiveBlast metódust,
      * @param a a nyersanyag aszteroidája, amelyet felrobbantunk, ha kell.
      */
+    @Override
     public void exposedToSun(Asteroid a) {
     	exposedToSunCounter++;
     	if (exposedToSunCounter >= 3)
     		a.radioactiveBlast();
+    }
+    
+    /**
+     * Az adott nyersanyag tipusát adja vissza Stringben. 
+     * A mineralban lévőt írja felül.
+     * @return a típus neve szövegként
+     */
+    @Override
+    public String toString() { 
+    	return "uranium("+String.valueOf(exposedToSunCounter)+")";
     }
 
 }
