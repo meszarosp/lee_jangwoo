@@ -48,7 +48,7 @@ public class Settler extends Traveller {
      * @return a hozzáadás sikerességét jelzi
      */
     public boolean addMineral(Mineral m){
-        if (minerals.size() < 10){
+        if (minerals.size() < 10 && m != null){
             minerals.add(m);
             return true;
         }else{
@@ -228,4 +228,7 @@ public class Settler extends Traveller {
         return minerals;
     }
 
+    public List<Teleport> getTeleportgates() {
+        return teleportgates;
+    }
 }
