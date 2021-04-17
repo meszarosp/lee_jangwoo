@@ -270,7 +270,7 @@ public class Skeleton {
             }
             if ("0".equals(args[1]))
                 random = false;
-            else if ("1".equals(args[0]))
+            else if ("1".equals(args[1]))
                 random = true;
             output.println("random events " + (random ? "on" : "off"));
         }
