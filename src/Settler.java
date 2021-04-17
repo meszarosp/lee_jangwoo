@@ -196,6 +196,7 @@ public class Settler extends Traveller {
      * @param t A lehelyezendõ kapu
      */
     public void placeTeleport(Teleport t) {
+        asteroid.addNeighbour(t);
         t.setNeighbour(asteroid);
     }
 
