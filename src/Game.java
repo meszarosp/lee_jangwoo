@@ -134,8 +134,7 @@ public class Game {
      * @return
      */
     public boolean checkLose() {
-        // TODO implement here
-        return false;
+        return settlers.size() == 0;
     }
 
     public List<Settler> getSettlers() {
