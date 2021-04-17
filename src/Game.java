@@ -78,6 +78,7 @@ public class Game {
         List<Asteroid> asteroids = new ArrayList<Asteroid>();
     }
 
+
     /**
      * Hozzáad egy robotot a robotok listájához.
      * @param r A hozzáadni kívánt robot.
