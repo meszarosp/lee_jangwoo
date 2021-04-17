@@ -753,17 +753,17 @@ public class Skeleton {
     private static class nextturnCommand implements Command{
 
         public void execute(String[] args) {
-            if (random) {
-                for (Teleport t : game.getGates()) {
-                    if (t.getBamboozled()) {
-                        Asteroid a = t.getNeighbour();
-                        t.makeAction();
-                        if (a.equals(t.getNeighbour()))
-                            output.println("teleport " + reverseIDs.get(t) + " couldn't move");
-                        else
-                            output.println("teleport " + reverseIDs.get(t) + " moved to " + reverseIDs.get(t.getNeighbour()));
-                    }
+            for (Teleport t : game.getGates()) {
+                if (t.getBamboozled()) {
+                    Asteroid a = t.getNeighbour();
+                    t.makeAction();
+                    if (a.equals(t.getNeighbour()))
+                        output.println("teleport " + reverseIDs.get(t) + " couldn't move");
+                    else
+                        output.println("teleport " + reverseIDs.get(t) + " moved to " + reverseIDs.get(t.getNeighbour()));
                 }
+            }
+            if (random) {
                 for (Robot r : game.getRobots()) {
                     commands.get("robotaction").execute(new String[]{"robotaction", reverseIDs.get(r)});
                 }
@@ -772,7 +772,9 @@ public class Skeleton {
                 }
                 commands.get("sunaction").execute(new String[]{"sunaction"});
             } else {
-                // TODO
+                for (Robot r : game.getRobots()) {
+                    output.println("enter a robotaction command for robot " + reverseIDs.get(r));
+                }
             }
         }
     }

@@ -182,7 +182,7 @@ public class Teleport implements INeighbour {
     	if(bamboozled) {
     		Asteroid old = neighbour;
     		boolean placed = false;
-    		int i = 1;
+    		int i = 0;
     		while(!placed) {
     			INeighbour temp = old.getNeighbourAt(i);
     			if(temp==null) {
