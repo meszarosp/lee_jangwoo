@@ -76,6 +76,15 @@ public class Game {
     public void init(int nSettler, int nAsteroid) {
         sun = new Sun();
         List<Asteroid> asteroids = new ArrayList<Asteroid>();
+        List<Mineral> allMinerals = Mineral.getAllMinerals();
+        Random rand = new Random();
+        for(int i = 0; i < nAsteroid; i++) {
+        	asteroids.add(new Asteroid(rand.nextInt()% 6,rand.nextBoolean(),rand.nextInt() % 5 == 0 ? null : allMinerals.get(rand.nextInt(allMinerals.size())), sun));
+        }
+        for(int i = 0; i < nSettler; i++) {
+        	settlers.add(new Settler(asteroids.get(rand.nextInt(asteroids.size())), this));
+        }
+        sun.addAsteroids(asteroids);
     }
 
 

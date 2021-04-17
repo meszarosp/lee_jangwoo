@@ -14,6 +14,7 @@ public abstract class Traveller {
      */
     public Traveller(Asteroid a, Game g) {
         a.placeTraveller(this);
+        asteroid = a;
         setGame(g);
     }
 
