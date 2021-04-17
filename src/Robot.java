@@ -52,15 +52,18 @@ public class Robot extends Traveller {
      * itt vagy mozog, vagypedig fúr a robot
      * ha a generált random igaz, akkor fúr, egyébként pedig morog az aszteroidájának egy random szomszédjára
      */
-    public void makeAction() {
+    public boolean makeAction() {
         Random rand = new Random();
         boolean randDecision = rand.nextBoolean();
-    	if(randDecision) {
-    		drill();
-    	} else {
-            int randNeighbour = rand.nextInt(asteroid.getNeighbourCount());
-    		move(randNeighbour);
+    	if (randDecision) {
+    	    if (drill()) {
+    	        return true;
+            }
     	}
+    	if (asteroid.getNeighbourCount() == 0)
+    	    return false;
+        int randNeighbour = rand.nextInt(asteroid.getNeighbourCount());
+        return move(randNeighbour);
     }
 
 }

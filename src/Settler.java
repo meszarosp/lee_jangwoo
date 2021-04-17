@@ -76,6 +76,8 @@ public class Settler extends Traveller {
      */
     public boolean mine() {
         Mineral temp = asteroid.onMine();
+        if (temp == null)
+            return false;
         if(!addMineral(temp)){
             asteroid.putMineralBack(temp);
             return false;

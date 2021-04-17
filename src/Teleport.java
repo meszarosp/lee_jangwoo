@@ -116,6 +116,12 @@ public class Teleport implements INeighbour {
             removeNeighbour(this);
         }
     }
+
+    public Asteroid getNeighbour() {
+        return neighbour;
+    }
+
+
     public void makeAction() {
         if(neighbour == null){
             return;

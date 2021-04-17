@@ -495,6 +495,8 @@ public class Skeleton {
                     output.println("asteroid still has shell");
                 if (m == null)
                     output.println("asteroid is already empty");
+                if (activeSettler.getMinerals().size() == 10)
+                    output.println("settler inventory too full");
             }
         }
     }
@@ -508,9 +510,33 @@ public class Skeleton {
                 return;
             Mineral m = parseMineral(args[1]);
             Mineral core = activeSettler.getAsteroid().getCore();
+            List<Robot> robots = game.getRobots();
+            List<Settler> settlers = game.getSettlers();
+            List<UFO> UFOs = game.getUFOs();
+            List<Teleport> teleports = game.getGates();
+
             if (activeSettler.putMineralBack(m)) {
                 output.println(m.toString() + " is now in the asteroid");
-                // TODO ha felrobban
+                if (!game.getSun().getAsteroids().contains(activeSettler.getAsteroid())) {
+                    output.println("the returned uranium caused an explosion");
+                    for (Robot r : robots) {
+                        if (!game.getRobots().contains(r))
+                            output.println(reverseIDs.get(r) + " robot died");
+                    }
+                    for (Settler s : settlers) {
+                        if (!game.getSettlers().contains(s))
+                            output.println(reverseIDs.get(s) + " settler died");
+                    }
+                    for (UFO u : UFOs) {
+                        if (!game.getUFOs().contains(u))
+                            output.println(reverseIDs.get(u) + " ufo died");
+                    }
+                    for (Teleport t : teleports) {
+                        if (!game.getGates().contains(t))
+                            output.println(reverseIDs.get(t) + " teleport perished");
+                    }
+                }
+
             } else {
                 output.println("putting back mineral unsuccessful");
                 if (activeSettler.getAsteroid().getShell() > 0)
@@ -625,7 +651,27 @@ public class Skeleton {
     private static class nextturnCommand implements Command{
 
         public void execute(String[] args) {
-
+            if (random) {
+                for (Teleport t : game.getGates()) {
+                    if (t.getBamboozled()) {
+                        Asteroid a = t.getNeighbour();
+                        t.makeAction();
+                        if (a.equals(t.getNeighbour()))
+                            output.println("teleport " + reverseIDs.get(t) + " couldn't move");
+                        else
+                            output.println("teleport " + reverseIDs.get(t) + " moved to " + reverseIDs.get(t.getNeighbour()));
+                    }
+                }
+                for (Robot r : game.getRobots()) {
+                    commands.get("robotaction").execute(new String[]{"robotaction", reverseIDs.get(r)});
+                }
+                for (UFO u : game.getUFOs()) {
+                    commands.get("ufoaction").execute(new String[]{"ufoaction", reverseIDs.get(u)});
+                }
+                commands.get("sunaction").execute(new String[]{"sunaction"});
+            } else {
+                // TODO
+            }
         }
     }
     /**
@@ -640,7 +686,52 @@ public class Skeleton {
                     output.println("robot must be specified");
                     return;
                 }
-                // TODO robot stuff
+                Robot r = (Robot) IDs.get(args[1]);
+                Asteroid a = r.getAsteroid();
+                int shell = a.getShell();
+                if (args.length == 2) {
+                    if (r.makeAction()) {
+                        if (!a.equals(r.getAsteroid())) {
+                            output.println("robot " + args[1] + " moved to " + reverseIDs.get(r.getAsteroid()));
+                            return;
+                        }
+                        if (shell != r.getAsteroid().getShell()){
+                            output.println("robot " + args[1] + " drilled on " + reverseIDs.get(a) + " shell is now " + r.getAsteroid().getShell());
+                            return;
+                        }
+                    } else {
+                        output.println("robot " + args[1] + " couldn't make action");
+                    }
+                    return;
+                }
+                if (args[2].equals("drill")) {
+                    if (r.drill())
+                        output.println("robot " + args[1] + " drilled on " +
+                                reverseIDs.get(r.getAsteroid()) + "shell is now" + r.getAsteroid().getShell());
+                    else
+                        output.println("robot " + args[1] + " couldn't drill");
+                }
+                if (args[2].equals("move")) {
+                    if (args.length < 4) {
+                        if (a.getNeighbourCount() == 0) {
+                            output.println("robot " + args[1] + " couldn't move");
+                            return;
+                        }
+                        Random rand = new Random();
+                        int randNeighbour = rand.nextInt(a.getNeighbourCount());
+                        if (r.move(randNeighbour)) {
+                            output.println("robot " + args[1] + " moved to " + reverseIDs.get(r.getAsteroid()));
+                        } else {
+                            output.println("robot couldn't move");
+                        }
+                        return;
+                    }
+                    int i = Integer.parseInt(args[3]);
+                    if (r.move(i))
+                        output.println("robot " + args[1] + " moved to " + reverseIDs.get(r.getAsteroid()));
+                    else
+                        output.println("robot couldn't move");
+                }
             } else {
                 if (args.length < 3) {
                     output.println("all details must be specified");
@@ -663,7 +754,7 @@ public class Skeleton {
                     if (r.move(i))
                         output.println("robot " + args[1] + " moved to " + reverseIDs.get(r.getAsteroid()));
                     else
-                        output.println("robot couldn't move");
+                        output.println("robot " + args[1] + " couldn't move");
                 }
             }
         }
@@ -674,8 +765,17 @@ public class Skeleton {
     private static class sunactionCommand implements Command{
 
         public void execute(String[] args) {
-            game.getSun().makeAction();
-            // TODO honnan a rákból tudjuk hogy mi történt?
+            if (random) {
+                game.getSun().makeAction();
+                // TODO honnan a rákból tudjuk hogy mi történt?
+            } else {
+                Asteroid a = game.getSun().getAsteroids().get(0);
+                if (a == null)
+                    return;
+                else {
+                    commands.get("solarwind").execute(new String[] {"solarwind", reverseIDs.get(a), "0"});
+                }
+            }
         }
     }
     /**
