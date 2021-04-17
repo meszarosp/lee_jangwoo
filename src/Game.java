@@ -73,7 +73,7 @@ public class Game {
      * @param nAsteroid
      */
     public void init(int nSettler, int nAsteroid) {
-        // TODO implement here
+        Mineral.Init();
     }
 
     /**
