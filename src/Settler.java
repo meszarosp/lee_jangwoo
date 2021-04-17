@@ -111,7 +111,7 @@ public class Settler extends Traveller {
         if(coalCount >= 1 && ironCount >= 1 && uraniumCount >= 1) {
             //Építéskor felhasznált nyersanyagok eltávolítása a minerals listából
             i = 0;
-            while ((coalCount >= 0 || ironCount >= 0 || uraniumCount || 0)) {
+            while (coalCount >= 0 || ironCount >= 0 || uraniumCount >= 0) {
             	if(minerals.get(i).toString().contains("uranium") && uraniumCount > 0){
                 	--uraniumCount;
                 	minerals.remove(i);
@@ -139,27 +139,30 @@ public class Settler extends Traveller {
      */
     public boolean craftTeleport() {
         if (teleportgates.size() < 2) {
-        	//Kellõ nyersanyagok meglétének ellenõrzése
+            //Kellõ nyersanyagok meglétének ellenõrzése
             int iceCount = 0;
             int ironCount = 0;
             int uraniumCount = 0;
             int i = 0;
-            while((iceCount < 1 || ironCount < 2 || uraniumCount < 1) && i < minerals.size()){
-                if(minerals.get(i).toString().contains("uranium") && uraniumCount < 1){
-                	++uraniumCount;
-                }
-                else if(minerals.get(i).toString() == "iron" && ironCount < 2){
+            ArrayList<Mineral> removeMinerals = new ArrayList<Mineral>();
+            while ((iceCount < 1 || ironCount < 2 || uraniumCount < 1) && i < minerals.size()) {
+                if (minerals.get(i).toString().contains("uranium") && uraniumCount < 1) {
+                    ++uraniumCount;
+                    removeMinerals.add(minerals.get(i));
+                } else if ("iron".equals(minerals.get(i).toString()) && ironCount < 2) {
                     ++ironCount;
-                }
-                else if(minerals.get(i).toString() == "ice"  && iceCount < 1){
+                    removeMinerals.add(minerals.get(i));
+                } else if ("ice".equals(minerals.get(i).toString()) && iceCount < 1) {
                     ++iceCount;
+                    removeMinerals.add(minerals.get(i));
                 }
                 ++i;
             }
-            if(iceCount >= 1 && ironCount >= 2 && uraniumCount >= 1) {
+            if (iceCount >= 1 && ironCount >= 2 && uraniumCount >= 1) {
+                minerals.removeAll(removeMinerals);
                 //Építéskor felhasznált nyersanyagok eltávolítása a minerals listából
-                i = 0;
-                while ((coalCount >= 0 || ironCount >= 0 || uraniumCount || 0)) {
+                /*i = 0;
+                while ((iceCount >= 0 || ironCount >= 0 || uraniumCount >= 0) && i < minerals.size()) {
                 	if(minerals.get(i).toString().contains("uranium") && uraniumCount > 0){
                     	--uraniumCount;
                     	minerals.remove(i);
@@ -173,7 +176,7 @@ public class Settler extends Traveller {
                         minerals.remove(i);
                     }
                     else ++i;
-                }
+                }*/
                 Teleport t1 = new Teleport();
                 Teleport t2 = new Teleport();
                 t1.setPair(t2);

@@ -91,7 +91,7 @@ public class Skeleton {
                 Asteroid a = (Asteroid)IDs.getOrDefault(pieces[1], null);
                 if (a == null)
                     throw new Exception();
-                Settler s = new Settler(a);
+                Settler s = new Settler(a, game);
                 String ID = pieces[0].substring(0, pieces[0].length()-1);
                 updateMaxID("settler", ID);
                 addID(ID, s);
@@ -114,7 +114,7 @@ public class Skeleton {
                 Asteroid a = (Asteroid)IDs.getOrDefault(pieces[1], null);
                 if (a == null)
                     throw new Exception();
-                Robot r = new Robot(a);
+                Robot r = new Robot(a, game);
                 String ID = pieces[0].substring(0, pieces[0].length()-1);
                 updateMaxID("robot", ID);
                 addID(ID, r);
@@ -125,7 +125,7 @@ public class Skeleton {
                 Asteroid a = (Asteroid)IDs.getOrDefault(pieces[1], null);
                 if (a == null)
                     throw new Exception();
-                UFO ufo = new UFO(a);
+                UFO ufo = new UFO(a, game);
                 String ID = pieces[0].substring(0, pieces[0].length()-1);
                 updateMaxID("ufo", ID);
                 addID(ID, ufo);
@@ -183,7 +183,6 @@ public class Skeleton {
                     Asteroid a = (Asteroid) IDs.getOrDefault(pieces[1], null);
                     if (a == null)
                         throw new Exception();
-                    a.addNeighbour(t);
                     t.setNeighbour(a);
                 }else{
                     t.setNeighbour(null);
@@ -193,7 +192,6 @@ public class Skeleton {
                     if (t2 == null)
                         throw new Exception();
                     t.setPair(t2);
-                    t2.setPair(t);
                 }else{
                     t.setPair(null);
                 }
@@ -241,6 +239,7 @@ public class Skeleton {
                     fileOutput.print(reverseIDs.get(teleports.get(i)));
                 if (t > 0)
                     fileOutput.print(reverseIDs.get(teleports.get(t-1)));
+                fileOutput.print("\n");
             }
         }
 
@@ -265,7 +264,8 @@ public class Skeleton {
                 fileOutput.println(a.getCore() == null ? "empty" : a.getCore().toString());
             }
             for (Teleport t : gates)
-                fileOutput.println(reverseIDs.get(t) + ": " + reverseIDs.getOrDefault(t.getNeighbour(), "0") + " " + reverseIDs.getOrDefault(t.getPair(), "0"));
+                fileOutput.println(reverseIDs.get(t) + ": " + reverseIDs.getOrDefault(t.getNeighbour(), "0")
+                        + " " + reverseIDs.getOrDefault(t.getPair(), "0") + (t.getBamboozled() ? " 1" : " 0"));
         }
     }
     /**
@@ -360,7 +360,7 @@ public class Skeleton {
                 output.println("couldn’t complete request\n" +
                         "    selected ID not available\n");
             }else{
-                Settler s = new Settler((Asteroid) asteroid);
+                Settler s = new Settler((Asteroid) asteroid, game);
                 int n = maxIDs.get("settler");
                 maxIDs.replace("settler", n+1);
                 addID("s" + (n+1), s);
@@ -413,7 +413,7 @@ public class Skeleton {
                 output.println("couldn’t complete request\n" +
                         "    selected ID not available\n");
             }else{
-                Robot r = new Robot((Asteroid) asteroid);
+                Robot r = new Robot((Asteroid) asteroid, game);
                 int n = maxIDs.get("robot");
                 maxIDs.replace("robot", n+1);
                 addID("r" + (n+1), r);
@@ -440,10 +440,10 @@ public class Skeleton {
                 output.println("couldn’t complete request\n" +
                         "    selected ID not available\n");
             }else{
-                UFO ufo = new UFO((Asteroid) asteroid);
+                UFO ufo = new UFO((Asteroid) asteroid, game);
                 int n = maxIDs.get("ufo");
                 maxIDs.replace("ufo", n+1);
-                addID("r" + (n+1), ufo);
+                addID("u" + (n+1), ufo);
                 ((Asteroid) asteroid).placeTraveller(ufo);
                 game.addUFO(ufo);
                 output.println("ufo u" + (n+1) + " added to asteroid: " + args[1]);
@@ -576,15 +576,14 @@ public class Skeleton {
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 2))
                 return;
-            Mineral m = parseMineral(args[1]);
+            int i = Integer.parseInt(args[3]);
             Mineral core = activeSettler.getAsteroid().getCore();
             List<Robot> robots = game.getRobots();
             List<Settler> settlers = game.getSettlers();
             List<UFO> UFOs = game.getUFOs();
             List<Teleport> teleports = game.getGates();
-
-            if (activeSettler.putMineralBack(m)) {
-                output.println(m.toString() + " is now in the asteroid");
+            if (activeSettler.putMineralBack(i)) {
+                output.println(activeSettler.asteroid.getCore().toString() + " is now in the asteroid");
                 if (!game.getSun().getAsteroids().contains(activeSettler.getAsteroid())) {
                     output.println("the returned uranium caused an explosion");
                     for (Robot r : robots) {
@@ -640,9 +639,12 @@ public class Skeleton {
             if (!settlerCommandCheck(args, 1))
                 return;
             if (activeSettler.craftTeleport()) {
-                output.println("new teleport successfully crafted");
+                output.println("new pair of teleportgates successfully crafted");
             } else {
-                output.println("new teleport couldn't be crafted, insufficient materials");
+                if (activeSettler.getTeleportgates().size() < 2)
+                    output.println("new pair of teleportgates couldn't be crafted, insufficient minerals");
+                else
+                    output.println("new pair of teleportgates couldn’t be crafted inventory too full");
             }
         }
     }
@@ -673,7 +675,7 @@ public class Skeleton {
                 return;
             }
             if (activeSettler.addMineral(mineral))
-                output.println("settler " + reverseIDs.get(activeSettler) + " received one unit of " + args[1]);
+                output.println("settler " + reverseIDs.get(activeSettler) + " received one unit of " + mineral.toString());
             else
                 output.println("settler inventory too full");
         }
@@ -827,6 +829,63 @@ public class Skeleton {
             }
         }
     }
+
+    /**
+     * A ufoaction parancshoz tartozó osztály.
+     */
+    private static class ufoactionCommand implements Command{
+
+        public void execute(String[] args) {
+            if (args.length < 2 || (args.length == 3 && !"mine".equals(args[2])) || (args.length == 4 && !"move".equals(args[2]))){
+                output.println("all details must be specified");
+                return;
+            }
+            UFO ufo = (UFO)IDs.getOrDefault(args[1], null);
+            if (ufo == null) {
+                output.print("couldn't complete request\n" +
+                            "selected ID not available\n");
+                return;
+            }
+            Asteroid a = ufo.getAsteroid();
+            Mineral core = a.getCore();
+            int shell = a.getShell();
+            if (args.length == 2){
+                ufo.makeAction();
+                if (a == ufo.getAsteroid() && core == a.getCore()){
+                    output.println("UFO " + args[1] + " couldn't make action");
+                    return;
+                }
+            }
+            if (args.length == 3){
+                ufo.mine();
+            }
+            if (args.length == 4){
+                int i = Integer.parseInt(args[3]);
+                ufo.move(i);
+            }
+            if (a != ufo.getAsteroid()){
+                output.println("UFO " + args[1] + " moved to " + reverseIDs.get(ufo.getAsteroid()));
+                return;
+            }
+            if (shell > 0){
+                output.println("UFO " + args[1] + " couldn't mine");
+                output.println("asteroid still has shell");
+                return;
+            }
+            if (core == null){
+                output.println("UFO " + args[1] + " couldn't mine");
+                output.println("asteroid is already empty");
+                return;
+            }
+            if (core != a.getCore()){
+                output.println("UFO " + args[1] + " mined on " + reverseIDs.get(a)) ;
+                output.println("is got one unit of " + core.toString());
+                return;
+            }
+        }
+    }
+
+
     /**
      * A sunaction parancshoz tartozó osztály.
      */
@@ -836,6 +895,7 @@ public class Skeleton {
             if (random) {
                 game.getSun().makeAction();
                 // TODO honnan a rákból tudjuk hogy mi történt?
+                //Imádom ezt a kommentet.
             } else {
                 Asteroid a = game.getSun().getAsteroids().get(0);
                 if (a == null)
@@ -992,30 +1052,7 @@ public class Skeleton {
 
         }
     }
-    /**
-     * A ufoaction parancshoz tartozó osztály.
-     */
-    //TODO Peti
-    private static class ufoactionCommand implements Command{
 
-        public void execute(String[] args) {
-            if (args.length < 2 || (args.length == 3 && !"mine".equals(args[2])) || (args.length == 4 && !"move".equals(args[2]))){
-                output.println("all details must be specified");
-                return;
-            }
-            if (args.length == 2){
-                UFO ufo = (UFO)IDs.getOrDefault(args[1], null);
-                if (ufo == null)
-                    output.print("couldn’t complete request\n" +
-                            "    selected ID not available\n");
-                else {
-                }
-            }
-            if (args.length == 3){
-
-            }
-        }
-    }
 
     /**
      * A bammboozleteleport parancshoz tartozó osztály.
@@ -1032,8 +1069,8 @@ public class Skeleton {
                 boolean bamboozled = !"0".equals(args[2]) && ("1".equals(args[2]));
                 output.println(args[1] + "teleportgate" + (bamboozled ? "" : "not") + "bamboozled");
             }else{
-                output.print("couldn’t complete request\n" +
-                        "    selected ID not available\n");
+                output.print("couldn't complete request\n" +
+                        "selected ID not available\n");
             }
         }
     }
@@ -1095,7 +1132,7 @@ public class Skeleton {
             return new Ice();
         else if (arg.startsWith("uranium")){
             try{
-                int exposedToSunCounter = Integer.parseInt(arg.substring(8, arg.length()-2));
+                int exposedToSunCounter = Integer.parseInt(arg.substring(8, arg.length()-1));
                 return new Uranium(exposedToSunCounter);
             }catch (Exception e) {
                 return null;

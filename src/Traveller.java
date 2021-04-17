@@ -2,14 +2,14 @@
 import java.util.*;
 
 /**
- * Absztrakt osztÃ¡ly. FelelÃµssÃ©ge nyilvÃ¡ntartani a jelenlegi aszteroidÃ¡jÃ¡t, 
- * Ã©s egy Game objektumot. BiztosÃ­tania kell virtuÃ¡lis fÃ¼ggvÃ©nyeket a tÃµle 
- * Ã¶rÃ¶klÃµ osztÃ¡lyoknak. Mozognia kell tudni aszteroidÃ¡rÃ³l aszteroidÃ¡ra, 
- * akÃ¡r kÃ¶ztes teleportkapuval, akÃ¡r anÃ©lkÃ¼l. Tudnia kell aszteroidÃ¡t fÃºrni.
+ * Absztrakt osztály. Felel?ssége nyilvántartani a jelenlegi aszteroidáját, 
+ * és egy Game objektumot. Biztosítania kell virtuális függvényeket a t?le 
+ * örökl? osztályoknak. Mozognia kell tudni aszteroidáról aszteroidára, 
+ * akár köztes teleportkapuval, akár anélkül. Tudnia kell aszteroidát fúrni.
  */
 public abstract class Traveller {
     /**
-     * Traveller konstruktora, ahol paramÃ©terben kapja azt az aszteroidÃ¡t ahol elhelyezzÃ¼k.
+     * Traveller konstruktora, ahol paraméterben kapja azt az aszteroidát ahol elhelyezzük.
      * @param asteroid a traveller helye
      */
     public Traveller(Asteroid a, Game g) {
@@ -18,26 +18,26 @@ public abstract class Traveller {
     }
 
     /**
-     * A traveller helyÃ©t jelkÃ©pezÃµ aszteroida tÃ­pusÃº attribÃºtum.
+     * A traveller helyét jelképez? aszteroida típusú attribútum.
      */
     protected Asteroid asteroid;
 
     /**
-     * A game objektumot jelkÃ©pezÅ‘ attibÃºtum.
+     * A game objektumot jelképezõ attibútum.
      */
     protected Game game;
 
     /**
      * A game settere
-     * @param game az Ãºj game objektum
+     * @param game az új game objektum
      */
     public void setGame(Game game){
         this.game = game;
     }
 
     /**
-     * Ãtmegy az aszteroidÃ¡jÃ¡rÃ³l egy mÃ¡sikra, vagy egy teleportkapuba
-     * @param number hÃ¡nyadik szomszÃ©djÃ¡ra megy az utazÃ³ az aszteroidÃ¡nak
+     * Átmegy az aszteroidájáról egy másikra, vagy egy teleportkapuba
+     * @param number hányadik szomszédjára megy az utazó az aszteroidának
      */
     public boolean move(int number) {
         INeighbour b = asteroid.getNeighbourAt(number);
@@ -49,26 +49,26 @@ public abstract class Traveller {
     }
 
     /**
-     * Absztrakt hitByBlast fÃ¼ggvÃ©ny, amely a leszÃ¡rmazottakban lehet felÃ¼lÃ­rva, ott kifejtve.
+     * Absztrakt hitByBlast függvény, amely a leszármazottakban lehet felülírva, ott kifejtve.
      */
     public abstract void hitByBlast();
 
     /**
-     * Absztrakt die fÃ¼ggvÃ©ny, amely a leszÃ¡rmazottakban lesz felÃ¼lÃ­rva, ott kifejtve.
+     * Absztrakt die függvény, amely a leszármazottakban lesz felülírva, ott kifejtve.
      */
     public abstract void die();
 
     /**  
-     * beÃ¡llÃ­tja az utazÃ³ aszteroidÃ¡jÃ¡t
-     * @param a az az aszteroida amin az utazÃ³ Ã¡ll
+     * beállítja az utazó aszteroidáját
+     * @param a az az aszteroida amin az utazó áll
      */
     public void setAsteroid(Asteroid a) {
     	asteroid = a;
     }
 
     /**	 
-     * visszaadja az aszteroidÃ¡t, amin az utazÃ³ Ã¡ll
-     * @return az az aszteroida amin az utazÃ³ Ã¡ll
+     * visszaadja az aszteroidát, amin az utazó áll
+     * @return az az aszteroida amin az utazó áll
      */
     public Asteroid getAsteroid() {
         return asteroid;

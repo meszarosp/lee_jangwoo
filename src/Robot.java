@@ -9,12 +9,6 @@ import java.util.*;
 public class Robot extends Traveller {
 
     /**
-     * Default constructor
-     */
-    public Robot() {
-    }
-
-    /**
      * Konstruktor amely a traveller ősre meghívja a konstruktort.
      * @param a az aszteroida ahol az objektum lesz.
      */
