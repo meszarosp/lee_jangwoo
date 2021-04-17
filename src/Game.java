@@ -14,6 +14,7 @@ public class Game {
      * Default constructor
      */
     public Game() {
+        sun = new Sun();
     }
 
     /**

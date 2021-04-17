@@ -9,7 +9,7 @@ import java.util.*;
 public class Skeleton {
 
     private static Scanner input = new Scanner(System.in);
-    private static PrintWriter output = new PrintWriter(System.out);
+    private static PrintStream output = System.out;
     private static boolean random = false;
     private static Game game = new Game();
     private static Settler activeSettler = null;
@@ -51,6 +51,8 @@ public class Skeleton {
      */
     private static class loadCommand implements Command{
 
+        private Scanner fileInput;
+
         public void execute(String[] args) {
             if (args.length < 2) {
                 output.println("load unsuccessful");
@@ -62,27 +64,29 @@ public class Skeleton {
                 return;
             }
             game = new Game();
-            Sun sun = new Sun();
-            game.setSun(sun);
+            Sun sun = game.getSun();
             activeSettler = null;
             IDs.clear();
             reverseIDs.clear();
             try {
+                fileInput = new Scanner(file);
                 readAsteroidsTeleports(sun);
                 readTravellers();
             }catch (Exception e){
+                e.printStackTrace();
                 output.println("load unsuccessful");
                 return;
             }
+            output.println("loaded " + args[1]);
         }
 
         private void readTravellers() throws Exception{
-            String[] pieces = input.next().split(" ");
+            String[] pieces = fileInput.nextLine().split(" ");
             int nSettlers = Integer.parseInt(pieces[1]);
             int nRobots = Integer.parseInt(pieces[3]);
             int nUFOs = Integer.parseInt(pieces[5]);
             for (int i = 0; i < nSettlers; i++){
-                pieces = input.next().split(" ");
+                pieces = fileInput.nextLine().split(" ");
                 Asteroid a = (Asteroid)IDs.getOrDefault(pieces[1], null);
                 if (a == null)
                     throw new Exception();
@@ -105,7 +109,7 @@ public class Skeleton {
                 }
             }
             for (int i = 0; i < nRobots; i++){
-                pieces = input.next().split(" ");
+                pieces = fileInput.nextLine().split(" ");
                 Asteroid a = (Asteroid)IDs.getOrDefault(pieces[1], null);
                 if (a == null)
                     throw new Exception();
@@ -114,7 +118,7 @@ public class Skeleton {
                 game.addRobot(r);
             }
             for (int i = 0; i < nUFOs; i++){
-                pieces = input.next().split(" ");
+                pieces = fileInput.nextLine().split(" ");
                 Asteroid a = (Asteroid)IDs.getOrDefault(pieces[1], null);
                 if (a == null)
                     throw new Exception();
@@ -124,42 +128,52 @@ public class Skeleton {
             }
         }
 
+        private void updateMaxID(String type, String ID){
+            int number = Integer.parseInt(ID.substring(1));
+            if (number > maxIDs.get(type))
+                maxIDs.replace(type, number);
+        }
+
         private void readAsteroidsTeleports(Sun sun) throws Exception {
-            String[] pieces = input.next().split(" ");
+            String[] pieces = fileInput.nextLine().split(" ");
             int nAsteroids=Integer.parseInt(pieces[1]);
             int nTeleports=Integer.parseInt(pieces[3]);
             ArrayList<String[]> lines = new ArrayList<>();
             List<Asteroid> asteroids = new ArrayList<Asteroid>();
             for (int i = 0; i < nAsteroids; i++){
-                pieces = input.next().split(" ");
+                pieces = fileInput.nextLine().split(" ");
                 lines.add(pieces);
                 Mineral m = parseMineral(pieces[pieces.length-1]);
                 boolean closeToSun = !"0".equals(pieces[pieces.length-2]) && "1".equals(pieces[pieces.length-2]);
                 int shell = Integer.parseInt(pieces[pieces.length-3]);
                 Asteroid a = new Asteroid(shell, closeToSun, m, sun);
                 asteroids.add(a);
-                addID(pieces[0].substring(0, pieces[0].length()-2), a);
+                String ID = pieces[0].substring(0, pieces[0].length()-1);
+                updateMaxID("asteroid", ID);
+                addID(ID, a);
             }
             sun.addAsteroids(asteroids);
             for (int i = 0; i < nTeleports; i++){
-                pieces = input.next().split(" ");
+                pieces = fileInput.nextLine().split(" ");
                 lines.add(pieces);
                 Teleport t = new Teleport();
                 game.addTeleport(t);
-                addID(pieces[0].substring(0, pieces[0].length()-2), t);
+                String ID = pieces[0].substring(0, pieces[0].length()-1);
+                updateMaxID("teleport", ID);
+                addID(ID, t);
             }
             for (int i = 0; i < nAsteroids; i++){
                 pieces = lines.get(i);
                 int k = Integer.parseInt(pieces[1]);
                 for (int j = 0; j < k; j++){
-                    Asteroid a = (Asteroid) IDs.getOrDefault(pieces[0].substring(0, pieces[0].length()-2), null);
+                    Asteroid a = (Asteroid) IDs.getOrDefault(pieces[0].substring(0, pieces[0].length()-1), null);
                     INeighbour neighbour = (INeighbour)IDs.getOrDefault(pieces[2+j], null);
                     a.addNeighbour(neighbour);
                 }
             }
             for (int i = nAsteroids; i < nAsteroids+nTeleports; i++){
                 pieces = lines.get(i);
-                Teleport t = (Teleport)IDs.getOrDefault(pieces[0].substring(0, pieces[0].length()-2), null);
+                Teleport t = (Teleport)IDs.getOrDefault(pieces[0].substring(0, pieces[0].length()-1), null);
                 if (!"0".equals(pieces[1])) {
                     Asteroid a = (Asteroid) IDs.getOrDefault(pieces[1], null);
                     Teleport t2 = (Teleport) IDs.getOrDefault(pieces[2], null);
@@ -223,9 +237,9 @@ public class Skeleton {
                 return;
             }
             File file = new File(args[1]);
-            PrintWriter temp;
+            PrintStream temp;
             try {
-                temp = new PrintWriter(new FileWriter(file));
+                temp = new PrintStream(new FileOutputStream(file));
             } catch (Exception e) {
                 output.println("unsuccessful");
                 return;
@@ -856,7 +870,7 @@ public class Skeleton {
     }
 
     private static void parseCommand(){
-        String[] pieces = input.next().split(" ");
+        String[] pieces = input.nextLine().split(" ");
         if (pieces.length == 0) {
             output.println("invalid command");
             return;
@@ -869,6 +883,14 @@ public class Skeleton {
         cmd.execute(pieces);
     }
 
+    private static void initializeMaxIDs(){
+        maxIDs.put("asteroid", 0);
+        maxIDs.put("teleport", 0);
+        maxIDs.put("settler", 0);
+        maxIDs.put("robot", 0);
+        maxIDs.put("ufo", 0);
+    }
+
 
     /**
      * A program belépési pontja, kiírja a menüpontokat és bekéri a felhaszálótól a választott menüpontot a menu()
@@ -878,8 +900,10 @@ public class Skeleton {
      */
     public static void main(String[] args){
         initializeCommands();
+        initializeMaxIDs();
         while (true){
             parseCommand();
+            //output.flush();
         }
         /*hile (true){
             menu();
