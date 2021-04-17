@@ -6,19 +6,18 @@ import java.util.List;
  */
 public abstract class Mineral {
 
-    private static List<Mineral> AllMinerals = null;
+    static private List<Mineral> AllMinerals;
+    static public void Init() {
+    	AllMinerals = new ArrayList<Mineral>();
+        AllMinerals.add(new Uranium(0));
+        AllMinerals.add(new Iron());
+        AllMinerals.add(new Ice());
+        AllMinerals.add(new Coal());
+    }
     /**
      * Default constructor
      */
-    public Mineral() {
-        if (AllMinerals == null) {
-            AllMinerals = new ArrayList<Mineral>();
-            AllMinerals.add(new Uranium(0));
-            AllMinerals.add(new Iron());
-            AllMinerals.add(new Ice());
-            AllMinerals.add(new Coal());
-        }
-    }
+        public Mineral() {}
     /**
      * Napközelbe kerüléskor meghívódó (jelenleg üres) függvény. A leszármazottak
      * újraimplementálhatják, ha szükséges(pl. jég, radioaktív nyersanyagok).

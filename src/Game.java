@@ -73,7 +73,7 @@ public class Game {
      * @param nAsteroid
      */
     public void init(int nSettler, int nAsteroid) {
-        // TODO implement here
+        Mineral.Init();
     }
 
     /**
@@ -134,8 +134,7 @@ public class Game {
      * @return
      */
     public boolean checkLose() {
-        // TODO implement here
-        return false;
+        return settlers.size() == 0;
     }
 
     public List<Settler> getSettlers() {
