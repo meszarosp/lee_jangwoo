@@ -623,7 +623,7 @@ public class Skeleton {
                 else if (core != null)
                     output.println("asteroid has other mineral");
                 else
-                    output.println("settler doesn't have specified mineral");
+                    output.println("settler doesn't have the neccessary mineral\n");
             }
         }
     }
@@ -642,7 +642,7 @@ public class Skeleton {
                 addID("r" + (n+1), newrobot);
                 output.println("new robot r" + (n+1) + " successfully crafted");
             } else {
-                output.println("new robot couldn't be crafted, insufficient materials");
+                output.println("new robot couldn't be crafted, insufficient minerals");
             }
         }
     }

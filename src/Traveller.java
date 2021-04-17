@@ -44,8 +44,9 @@ public abstract class Traveller {
         if (b == null)
             return false;
         asteroid.removeTraveller(this);
+        Asteroid previousAsteroid = asteroid;
         b.placeTraveller(this);
-        return true;
+        return previousAsteroid != asteroid;
     }
 
     /**
