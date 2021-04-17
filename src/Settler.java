@@ -203,6 +203,7 @@ public class Settler extends Traveller {
     public void placeTeleport(Teleport t) {
         asteroid.addNeighbour(t);
         t.setNeighbour(asteroid);
+        teleportgates.remove(t);
     }
 
     /**

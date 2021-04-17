@@ -163,9 +163,9 @@ public class Teleport implements INeighbour {
      * @param a itt nincs szerepe
      */
     public void setNeighbour(Asteroid a){
-    	neighbour = a;
-        if(pair == null){
-            removeNeighbour(this);
+        neighbour = a;
+        if(pair == null && neighbour != null){
+            neighbour.addNeighbour(this);
         }
     }
 

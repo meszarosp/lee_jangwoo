@@ -1,4 +1,4 @@
 load test.txt
-u1 ufoaction move 1
-u1 ufoaction move 1
-u1 ufoaction mine
+ufoaction u1 move 1
+ufoaction u1 move 1
+ufoaction u1 mine

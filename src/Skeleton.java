@@ -358,7 +358,7 @@ public class Skeleton {
             List<Asteroid> asteroids = sun.getAsteroids();
             if (asteroid == null || !asteroids.contains((Asteroid) asteroid)){
                 output.println("couldn't complete request\n" +
-                        "    selected ID not available\n");
+                        "selected ID not available\n");
             }else{
                 Settler s = new Settler((Asteroid) asteroid, game);
                 int n = maxIDs.get("settler");
@@ -515,8 +515,8 @@ public class Skeleton {
                 return;
             }
             int index = Integer.parseInt(args[1])-1;
+            INeighbour n = activeSettler.getAsteroid().getNeighbourAt(index);
             if (activeSettler.move(index)) {
-                INeighbour n = activeSettler.getAsteroid().getNeighbourAt(index-1);
                 String id = reverseIDs.get(n);
                 output.println("move to " + id + " successful");
             } else {
@@ -559,12 +559,18 @@ public class Skeleton {
                 output.println("asteroid is now empty");
             } else {
                 output.println("mining unsuccessful");
-                if (activeSettler.getAsteroid().getShell() > 0)
+                if (activeSettler.getAsteroid().getShell() > 0) {
                     output.println("asteroid still has shell");
-                if (m == null)
+                    return;
+                }
+                if (m == null){
                     output.println("asteroid is already empty");
-                if (activeSettler.getMinerals().size() == 10)
+                    return;
+                }
+                if (activeSettler.getMinerals().size() == 10) {
                     output.println("settler inventory too full");
+                    return;
+                }
             }
         }
     }
@@ -654,7 +660,7 @@ public class Skeleton {
                 if (activeSettler.getTeleportgates().size() < 2)
                     output.println("new pair of teleportgates couldn't be crafted, insufficient minerals");
                 else
-                    output.println("new pair of teleportgates couldn't be crafted inventory too full");
+                    output.println("new pair of teleportgates couldn't be crafted, inventory too full");
             }
         }
     }
@@ -667,8 +673,24 @@ public class Skeleton {
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 2))
                 return;
-            ///TODO megkérdezni a Petit
-            //activeSettler.placeTeleport();
+            List<Teleport> gates = activeSettler.getTeleportgates();
+            if (gates.size() == 0){
+                output.println("there's no teleport to place");
+                return;
+            }
+            if (args.length == 1){
+                for (Teleport gate : gates)
+                    output.println(reverseIDs.get(gate));
+            }
+            int i = Integer.parseInt(args[1]) - 1;
+            if (i < 0 || i >= gates.size()) {
+                output.println("all details must be specified");
+                return;
+            }
+            Teleport t = gates.get(i);
+            activeSettler.placeTeleport(t);
+            output.println("teleport " + reverseIDs.get(t) + " placed");
+
         }
     }
     /**
@@ -889,7 +911,8 @@ public class Skeleton {
             }
             if (core != a.getCore()){
                 output.println("UFO " + args[1] + " mined on " + reverseIDs.get(a)) ;
-                output.println("is got one unit of " + core.toString());
+                output.println("it got one unit of " + core.toString());
+                output.println("asteroid is now empty");
             }
         }
     }
@@ -942,7 +965,7 @@ public class Skeleton {
                 b[i] = teleports.get(i).getBamboozled();
             }
             a.solarWind(radius);
-            output.println("solarwind created with asteroid " + args[1] + "in the middle");
+            output.println("solarwind created with asteroid " + args[1] + " in the middle");
             output.println("and a " + radius + " radius");
             output.println("events caused:");
 
