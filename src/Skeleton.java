@@ -749,7 +749,6 @@ public class Skeleton {
     /**
      * A nextturn parancshoz tartozó osztály.
      */
-    // TODO Annának
     private static class nextturnCommand implements Command{
 
         public void execute(String[] args) {
@@ -774,7 +773,33 @@ public class Skeleton {
             } else {
                 for (Robot r : game.getRobots()) {
                     output.println("enter a robotaction command for robot " + reverseIDs.get(r));
+                    String[] pieces;
+                    if (input.hasNextLine()) {
+                        pieces = input.nextLine().split(" ");
+                        if (pieces[0].equals("robotaction") && pieces[1].equals(reverseIDs.get(r))) {
+                            commands.get("robotaction").execute(pieces);
+                        } else {
+                            output.println("invalid command");
+                        }
+                    }
+                    else
+                        return;
                 }
+                for (UFO u : game.getUFOs()) {
+                    output.println("enter a ufoaction command for robot " + reverseIDs.get(u));
+                    String[] pieces;
+                    if (input.hasNextLine()) {
+                        pieces = input.nextLine().split(" ");
+                        if (pieces[0].equals("ufoaction") && pieces[1].equals(reverseIDs.get(u))) {
+                            commands.get("ufoaction").execute(pieces);
+                        } else {
+                            output.println("invalid command");
+                        }
+                    }
+                    else
+                        return;
+                }
+                commands.get("sunaction").execute(new String[]{"sunaction"});
             }
         }
     }
