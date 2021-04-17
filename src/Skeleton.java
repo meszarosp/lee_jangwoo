@@ -624,7 +624,11 @@ public class Skeleton {
             if (!settlerCommandCheck(args, 1))
                 return;
             if (activeSettler.craftRobot()) {
-                output.println("new robot successfully crafted");
+                Robot newrobot = game.getRobots().get(game.getRobots().size()-1);
+                int n = maxIDs.get("robot");
+                maxIDs.replace("robot", n+1);
+                addID("r" + (n+1), newrobot);
+                output.println("new robot r" + (n+1) + " successfully crafted");
             } else {
                 output.println("new robot couldn't be crafted, insufficient materials");
             }
@@ -639,7 +643,13 @@ public class Skeleton {
             if (!settlerCommandCheck(args, 1))
                 return;
             if (activeSettler.craftTeleport()) {
-                output.println("new pair of teleportgates successfully crafted");
+                Teleport t1 = game.getGates().get(game.getGates().size()-2);
+                Teleport t2 = game.getGates().get(game.getGates().size()-1);
+                int n = maxIDs.get("teleport");
+                addID("t" + (n+1), t1);
+                addID("t" + (n+2), t2);
+                maxIDs.replace("teleport", (n+2));
+                output.println("new pair of teleportgates t" + (n+1) + " and t" + (n+2) + " successfully crafted");
             } else {
                 if (activeSettler.getTeleportgates().size() < 2)
                     output.println("new pair of teleportgates couldn't be crafted, insufficient minerals");
