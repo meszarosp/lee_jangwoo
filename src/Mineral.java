@@ -18,10 +18,8 @@ public abstract class Mineral {
     
     /**
      * A mineral tipusát adja vissza Stringben. 
-     * Mivel a mineral abstract ezért ez sosem hívódhat meg.
+     * Mivel a mineral abstract ezért erre a mineralban nincs szükség.
      * @return a típus neve szövegként
      */
-    public String toString() { 
-    	return "mineral";
-    }
+    public abstract String toString();
 }

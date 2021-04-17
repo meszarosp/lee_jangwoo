@@ -2,40 +2,42 @@
 import java.util.*;
 
 /**
- * Absztrakt oszt·ly. FelelıssÈge nyilv·ntartani a jelenlegi aszteroid·j·t, 
- * Ès egy Game objektumot. BiztosÌtania kell virtu·lis f¸ggvÈnyeket a tıle 
- * ˆrˆklı oszt·lyoknak. Mozognia kell tudni aszteroid·rÛl aszteroid·ra, 
- * ak·r kˆztes teleportkapuval, ak·r anÈlk¸l. Tudnia kell aszteroid·t f˙rni.
+ * Absztrakt oszt√°ly. Felel√µss√©ge nyilv√°ntartani a jelenlegi aszteroid√°j√°t, 
+ * √©s egy Game objektumot. Biztos√≠tania kell virtu√°lis f√ºggv√©nyeket a t√µle 
+ * √∂r√∂kl√µ oszt√°lyoknak. Mozognia kell tudni aszteroid√°r√≥l aszteroid√°ra, 
+ * ak√°r k√∂ztes teleportkapuval, ak√°r an√©lk√ºl. Tudnia kell aszteroid√°t f√∫rni.
  */
 public abstract class Traveller {
-
     /**
-     * Default constructor
+     * Traveller konstruktora, ahol param√©terben kapja azt az aszteroid√°t ahol elhelyezz√ºk.
+     * @param asteroid a traveller helye
      */
-    public Traveller() {
-    }
-
-    public Traveller(Asteroid asteroid) {
-        this.asteroid = asteroid;
+    public Traveller(Asteroid a, Game g) {
+        a.placeTraveller(this);
+        setGame(g);
     }
 
     /**
-     * 
+     * A traveller hely√©t jelk√©pez√µ aszteroida t√≠pus√∫ attrib√∫tum.
      */
     protected Asteroid asteroid;
 
     /**
-     * 
+     * A game objektumot jelk√©pez≈ë attib√∫tum.
      */
     protected Game game;
 
+    /**
+     * A game settere
+     * @param game az √∫j game objektum
+     */
     public void setGame(Game game){
         this.game = game;
     }
 
     /**
-     * ·tmegy az aszteroid·j·rÛl egy m·sikra, vagy egy teleportkapuba
-     * @param number h·nyadik szomszÈdj·ra megy az utazÛ az aszteroid·nak
+     * √Åtmegy az aszteroid√°j√°r√≥l egy m√°sikra, vagy egy teleportkapuba
+     * @param number h√°nyadik szomsz√©dj√°ra megy az utaz√≥ az aszteroid√°nak
      */
     public boolean move(int number) {
         INeighbour b = asteroid.getNeighbourAt(number);
@@ -47,27 +49,28 @@ public abstract class Traveller {
     }
 
     /**
-     * 
+     * Absztrakt hitByBlast f√ºggv√©ny, amely a lesz√°rmazottakban lehet fel√ºl√≠rva, ott kifejtve.
      */
     public abstract void hitByBlast();
 
     /**
-     * 
+     * Absztrakt die f√ºggv√©ny, amely a lesz√°rmazottakban lesz fel√ºl√≠rva, ott kifejtve.
      */
     public abstract void die();
 
-    /**  be·llÌtja az utazÛ aszteroid·j·t
-     * @param a az az aszteroida amin az utazÛ ·ll
+    /**  
+     * be√°ll√≠tja az utaz√≥ aszteroid√°j√°t
+     * @param a az az aszteroida amin az utaz√≥ √°ll
      */
     public void setAsteroid(Asteroid a) {
     	asteroid = a;
     }
 
-    /**	 visszaadja az aszteroid·t, amin az utazÛ ·ll
-     * @return az az aszteroida amin az utazÛ ·ll
+    /**	 
+     * visszaadja az aszteroid√°t, amin az utaz√≥ √°ll
+     * @return az az aszteroida amin az utaz√≥ √°ll
      */
     public Asteroid getAsteroid() {
         return asteroid;
     }
-
 }

@@ -72,7 +72,7 @@ public class Asteroid implements INeighbour {
     public boolean onDrill() {
         if (shell > 0) {
             shell--;
-            if (shell == 0 && closeToSun)
+            if (shell == 0 && getCloseToSun())
                 core.exposedToSun(this);
             return true;
         }else{

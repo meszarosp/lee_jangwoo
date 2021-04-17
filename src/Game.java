@@ -2,79 +2,83 @@
 import java.util.*;
 
 /**
- * A telepesek, robotok Ès a nap nyilv·ntartÛja.
- * A telepesek Ès a robotok list·j·t menedzseli. Ha
- * ˙j robot jˆn lÈtre, fel kell vennie a nyilv·ntart·sba.
- * FelelıssÈge inicializ·lni a telepeseket, az
- * aszteroid·kat. A j·tÈk vÈgÈt ellenırzı metÛdusokÈrt is ı felel.
+ * A telepesek, robotok √©s a nap nyilv√°ntart√≥ja.
+ * A telepesek √©s a robotok list√°j√°t menedzseli. Ha
+ * √∫j robot j√∂n l√©tre, fel kell vennie a nyilv√°ntart√°sba.
+ * Felel√µss√©ge inicializ√°lni a telepeseket, az
+ * aszteroid√°kat. A j√°t√©k v√©g√©t ellen√µrz√µ met√≥dusok√©rt is √µ felel.
  */
 public class Game {
-
     /**
-     * Default constructor
-     */
-    public Game() {
-        sun = new Sun();
-    }
-
-    /**
-     * A j·tÈkban lÈvı nap.
+     * A j√°t√©kban l√©v√µ nap.
      */
     private Sun sun;
 
     /**
-     * A j·tÈkban lÈvı telepesek.
+     * A j√°t√©kban l√©v√µ telepesek.
      */
     private List<Settler> settlers = new ArrayList<Settler>();
 
     /**
-     * A j·tÈkban lÈvı robotok
+     * A j√°t√©kban l√©v√µ robotok.
      */
     private List<Robot> robots = new ArrayList<Robot>();
 
     /**
-     * A j·tÈkban lÈvı UFO-k
+     * A j√°t√©kban l√©v√µ UFO-k.
      */
     private List<UFO> UFOs = new ArrayList<UFO>();
 
 
-
+    /**
+     * A j√°t√©kban l√©v≈ë lehelyezett teleportkapuk. Amik a j√°t√©kosn√°l vannak azok is benne vannak.
+     */
     private List<Teleport> gates = new ArrayList<Teleport>();
 
     /**
-     * Hozz·ad egy telepest a telepesek list·j·hoz.
-     * @param s A hozz·adni kÌv·nt telepes.
+     * Konstruktor, l√©trehozza a napot is.
+     */
+    public Game() {
+        sun = new Sun();
+    }
+    
+    /**
+     * Hozz√°ad egy telepest a telepesek list√°j√°hoz, ha m√©g nem r√©sze.
+     * @param s A hozz√°adni k√≠v√°nt telepes.
      */
     public void addSettler(Settler s){
-        settlers.add(s);
+    	if (!settlers.contains(s))
+    		settlers.add(s);
     }
 
     /**
-     * Kivesz egy robotot a robotok list·j·bÛl.
-     * @param r A kivenni kÌv·nt robot.
+     * Kivesz egy robotot a robotok list√°j√°b√≥l.
+     * @param r A kivenni k√≠v√°nt robot.
      */
     public void removeRobot(Robot r) {
         robots.remove(r);
     }
 
     /**
-     * Kivesz egy telepest a telepesek list·j·bÛl.
-     * @param s A kivenni kÌv·nt telepes.
+     * Kivesz egy telepest a telepesek list√°j√°b√≥l.
+     * @param s A kivenni k√≠v√°nt telepes.
      */
     public void removeSettler(Settler s) {
         settlers.remove(s);
     }
 
     /**
-     * @param n
+     * 
+     * @param nSettler
+     * @param nAsteroid
      */
     public void init(int nSettler, int nAsteroid) {
         // TODO implement here
     }
 
     /**
-     * Hozz·ad egy robotot a robotok list·j·hoz.
-     * @param r A hozz·adni kÌv·nt robot.
+     * Hozz√°ad egy robotot a robotok list√°j√°hoz.
+     * @param r A hozz√°adni k√≠v√°nt robot.
      */
     public void addRobot(Robot r) {
         robots.add(r);

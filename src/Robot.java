@@ -1,10 +1,10 @@
 import java.util.*;
 
 /**
- * Folyamatosan f˙r, vagy mozog. FelelıssÈge meghalni, ha napvihar Èri, 
- * vagy m·sik aszteroid·ra ker¸lni, ha radioaktÌv robban·s tˆrtÈnik az 
- * aszteroid·j·n. Ha meghal, el kell t·volÌttatnia mag·t a Game 
- * list·j·bÛl, valamint a saj·t aszteroid·j·rÛl.
+ * Folyamatosan f√∫r, vagy mozog. Felel√µss√©ge meghalni, ha napvihar √©ri, 
+ * vagy m√°sik aszteroid√°ra ker√ºlni, ha radioakt√≠v robban√°s t√∂rt√©nik az 
+ * aszteroid√°j√°n. Ha meghal, el kell t√°vol√≠ttatnia mag√°t a Game 
+ * list√°j√°b√≥l, valamint a saj√°t aszteroid√°j√°r√≥l.
  */
 public class Robot extends Traveller {
 
@@ -14,14 +14,19 @@ public class Robot extends Traveller {
     public Robot() {
     }
 
-    public Robot(Asteroid a) {
-        super(a);
+    /**
+     * Konstruktor amely a traveller ≈ësre megh√≠vja a konstruktort.
+     * @param a az aszteroida ahol az objektum lesz.
+     */
+    public Robot(Asteroid a, Game g) {
+        super(a, g);
     }
 
     /**
-     * az aszteroida egy random szomszÈdj·ra ·tmozgatja a robotot. 
-     * amennyiben nincs szomszÈd, a robot meghal
+     * az aszteroida egy random szomsz√©dj√°ra √°tmozgatja a robotot. 
+     * amennyiben nincs szomsz√©d, a robot meghal, mert l√©te √©rtelm√©t vesztette.
      */
+    @Override
     public void hitByBlast() {
         Random rand = new Random();
         int randNeighbour = rand.nextInt(asteroid.getNeighbourCount());
@@ -34,23 +39,24 @@ public class Robot extends Traveller {
     }
 
     /**
-     * robot meghal
+     * A robot meghal. Ekkor elt√°vol√≠tjuk az aszteroida √©s a game t√°rol√≥ib√≥l.
      */
+    @Override
     public void die() {
     	asteroid.removeTraveller(this);
         game.removeRobot(this);
     }
 
     /**
-     * megf˙rja az aszteroid·t
+     * megf√∫rja az aszteroid√°t: megh√≠vja az aszteroid√°ra az onDrill f√ºggv√©nyt.
      */
     public boolean drill() {
     	return asteroid.onDrill();
     }
 
     /**
-     * itt vagy mozog, vagypedig f˙r a robot
-     * ha a gener·lt random igaz, akkor f˙r, egyÈbkÈnt pedig morog az aszteroid·j·nak egy random szomszÈdj·ra
+     * makeAction f√ºggv√©ny: vagy mozog, vagypedig f√∫r a robot.
+     * ha a gener√°lt random igaz, akkor f√∫r, egy√©bk√©nt pedig mozog az aszteroid√°j√°nak egy random szomsz√©dj√°ra.
      */
     public void makeAction() {
         Random rand = new Random();

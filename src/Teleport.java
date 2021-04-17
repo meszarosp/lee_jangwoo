@@ -2,11 +2,11 @@
 import java.util.*;
 
 /**
- * Nyilvántartani a teleportkapu párját, valamint egy INeighbour interfészt megvalósító
- * objektumot. Ez a szomszédja, mellyel az utazók áthaladását biztosítja a másik teleportkapun
- * át. Ha a szomszéd aszteroidán robbanás történik, azaz megszûnik ez a szomszéd, akkor a rajta
- * lévõ kapunak is meg kell szûnnie. Ha egy kapu megszûnik, a párjának is meg kell.
- * Felelõssége nem átengedni utazókat, amennyiben a kapupárja még nincs letéve.
+ * NyilvÃ¡ntartani a teleportkapu pÃ¡rjÃ¡t, valamint egy INeighbour interfÃ©szt megvalÃ³sÃ­tÃ³
+ * objektumot. Ez a szomszÃ©dja, mellyel az utazÃ³k Ã¡thaladÃ¡sÃ¡t biztosÃ­tja a mÃ¡sik teleportkapun
+ * Ã¡t. Ha a szomszÃ©d aszteroidÃ¡n robbanÃ¡s tÃ¶rtÃ©nik, azaz megszÃ»nik ez a szomszÃ©d, akkor a rajta
+ * lÃ©vÃµ kapunak is meg kell szÃ»nnie. Ha egy kapu megszÃ»nik, a pÃ¡rjÃ¡nak is meg kell.
+ * FelelÃµssÃ©ge nem Ã¡tengedni utazÃ³kat, amennyiben a kapupÃ¡rja mÃ©g nincs letÃ©ve.
  */
 public class Teleport implements INeighbour {
 
@@ -26,7 +26,7 @@ public class Teleport implements INeighbour {
     }
 
     /**
-     * A teleportkapu párja.
+     * A teleportkapu pÃ¡rja.
      */
     private Teleport pair;
 
@@ -56,7 +56,7 @@ public class Teleport implements INeighbour {
     }
 
     /**
-     * A teleport párját null-ra állítja, és ha a neighbour nem null (azaz már le van rakva a teleportkapu), akkor a neighbour removeNeighbour metódusát meghívja
+     * A teleport pÃ¡rjÃ¡t null-ra Ã¡llÃ­tja, Ã©s ha a neighbour nem null (azaz mÃ¡r le van rakva a teleportkapu), akkor a neighbour removeNeighbour metÃ³dusÃ¡t meghÃ­vja
      */
     public void perish() {
         pair = null;
@@ -68,17 +68,17 @@ public class Teleport implements INeighbour {
     }
 
     /**
-     * Beállítja a kapu párját a paraméterül kapott teleportkapura.
-     * @param t teleportkapu párja
+     * BeÃ¡llÃ­tja a kapu pÃ¡rjÃ¡t a paramÃ©terÃ¼l kapott teleportkapura.
+     * @param t teleportkapu pÃ¡rja
      */
     public void setPair(Teleport t) {
     	pair = t;
     }
 
     /**
-     * Ha a neighbour nem null, akkor meghívja rá a placeTraveller metódust és true-val tér vissza, egyébként false-al tér vissza
-     * @param traveller az áthelyezendõ traveller
-     * @return bool a traveller áthelyezésének sikerességérõl
+     * Ha a neighbour nem null, akkor meghÃ­vja rÃ¡ a placeTraveller metÃ³dust Ã©s true-val tÃ©r vissza, egyÃ©bkÃ©nt false-al tÃ©r vissza
+     * @param traveller az Ã¡thelyezendÃµ traveller
+     * @return bool a traveller Ã¡thelyezÃ©sÃ©nek sikeressÃ©gÃ©rÃµl
      */
     public boolean teleportTraveller(Traveller traveller) {
          if(neighbour != null) {
@@ -89,7 +89,7 @@ public class Teleport implements INeighbour {
     }
 
     /**
-     * Meghívja a pair teleportTraveller metódusát. Abban az esetben, ha az hamissal tér vissza, meghívja a neighbour placeTraveller metódusát.
+     * MeghÃ­vja a pair teleportTraveller metÃ³dusÃ¡t. Abban az esetben, ha az hamissal tÃ©r vissza, meghÃ­vja a neighbour placeTraveller metÃ³dusÃ¡t.
      * @param traveller
      */
     public void placeTraveller(Traveller traveller){
@@ -102,7 +102,7 @@ public class Teleport implements INeighbour {
 
 
     /**
-     * Meghívja a pair-nek a perish metódusát.
+     * MeghÃ­vja a pair-nek a perish metÃ³dusÃ¡t.
      * @param neighbour
      */
     public void removeNeighbour(INeighbour neighbour){
@@ -119,7 +119,7 @@ public class Teleport implements INeighbour {
     }
 
     /**
-     *Abban az esetben, ha a pair nem null (azaz már le van rakva a kapu párja), a paraméterül kapott neighbour-nek meghívja az addNeighbour metódusát, aminek saját magát adja paraméterül.
+     *Abban az esetben, ha a pair nem null (azaz mÃ¡r le van rakva a kapu pÃ¡rja), a paramÃ©terÃ¼l kapott neighbour-nek meghÃ­vja az addNeighbour metÃ³dusÃ¡t, aminek sajÃ¡t magÃ¡t adja paramÃ©terÃ¼l.
      * @param neighbour
      */
     public void setNeighbour(Asteroid a){

@@ -1,28 +1,40 @@
 import java.util.Random;
 
-public class UFO extends Traveller{
-    public UFO(Asteroid a) {
-        super(a);
+/**
+ * A Traveller leszármazottja. Képes bányászni és mozogni. Felelõssége csinálnia ezek közül
+ * valamit körönként. Meg kell halnia, ha napszél éri, vagy ha felrobban az aszteroidája.
+ *
+ */
+public class UFO extends Traveller {
+	
+	/**
+     * Konstruktor amely a traveller ősre meghívja a konstruktort
+     * @param a az aszteroida ahol az objektum lesz.
+     */
+    public UFO(Asteroid a, Game g) {
+        super(a, g);
     }
 
     /**
-     * Az UFO-t radioakt�v robban�s �ri, amit�l meghal
+     * Az UFO-t radioaktív robbanás éri, amitõl meghal.
      */
+    @Override
     public void hitByBlast() {
         die();
     }
 
     /**
-     * Az UFO meghal
+     * Az UFO meghal. Ekkor eltávolítjuk az aszteroida és a game tárolóiból.
      */
+    @Override
     public void die() {
         asteroid.removeTraveller(this);
         game.removeUFO(this);
     }
 
     /**
-     * itt vagy mozog, vagypedig b�ny�szik az UFO
-     * ha a gener�lt random igaz, akkor b�ny�szik, egy�bk�nt pedig morog az aszteroid�j�nak egy random szomsz�dj�ra
+     * makeAction függvény: vagy mozog, vagypedig bányászik az UFO.
+     * ha a generált random igaz, akkor bányászik, egyébként pedig mozog az aszteroidájának egy random szomszédjára.
      */
     public void makeAction(){
         Random rand = new Random();
@@ -37,7 +49,7 @@ public class UFO extends Traveller{
     }
 
     /**
-     * Az UFO ki�r�ti az aszteroid�t, amin tart�zkodik
+     * Az UFO kiüríti az aszteroidát, amin tartózkodik, és eldobja annak magját eltárolás nélkül.
      */
     public void mine(){
         asteroid.onMine();
