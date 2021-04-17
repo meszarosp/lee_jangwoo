@@ -41,6 +41,8 @@ public class Teleport implements INeighbour {
         this.bamboozled = bamboozled;
     }
 
+    public boolean getBamboozled() { return bamboozled; }
+
     /**
      * A teleport párját null-ra állítja, és ha a neighbour nem null (azaz már le van rakva a teleportkapu), akkor a neighbour removeNeighbour metódusát meghívja
      */

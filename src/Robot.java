@@ -44,8 +44,8 @@ public class Robot extends Traveller {
     /**
      * megfúrja az aszteroidát
      */
-    public void drill() {
-    	asteroid.onDrill();
+    public boolean drill() {
+    	return asteroid.onDrill();
     }
 
     /**
