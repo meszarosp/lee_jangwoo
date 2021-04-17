@@ -39,6 +39,7 @@ public class Game {
      * Konstruktor, létrehozza a napot is.
      */
     public Game() {
+        Mineral.Init();
         sun = new Sun();
     }
     
@@ -73,7 +74,8 @@ public class Game {
      * @param nAsteroid
      */
     public void init(int nSettler, int nAsteroid) {
-        Mineral.Init();
+        sun = new Sun();
+        List<Asteroid> asteroids = new ArrayList<Asteroid>();
     }
 
     /**
