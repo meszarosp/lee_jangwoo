@@ -514,7 +514,7 @@ public class Skeleton {
                 }
                 return;
             }
-            int index = Integer.parseInt(args[1]);
+            int index = Integer.parseInt(args[1])-1;
             if (activeSettler.move(index)) {
                 INeighbour n = activeSettler.getAsteroid().getNeighbourAt(index);
                 String id = reverseIDs.get(n);
@@ -788,7 +788,7 @@ public class Skeleton {
                             return;
                         }
                         Random rand = new Random();
-                        int randNeighbour = rand.nextInt(a.getNeighbourCount());
+                        int randNeighbour = rand.nextInt(a.getNeighbourCount())-1;
                         if (r.move(randNeighbour)) {
                             output.println("robot " + args[1] + " moved to " + reverseIDs.get(r.getAsteroid()));
                         } else {
@@ -796,7 +796,7 @@ public class Skeleton {
                         }
                         return;
                     }
-                    int i = Integer.parseInt(args[3]);
+                    int i = Integer.parseInt(args[3]) - 1;
                     if (r.move(i))
                         output.println("robot " + args[1] + " moved to " + reverseIDs.get(r.getAsteroid()));
                     else
@@ -820,7 +820,7 @@ public class Skeleton {
                         output.println("all details must be specified");
                         return;
                     }
-                    int i = Integer.parseInt(args[3]);
+                    int i = Integer.parseInt(args[3]) - 1;
                     if (r.move(i))
                         output.println("robot " + args[1] + " moved to " + reverseIDs.get(r.getAsteroid()));
                     else

@@ -43,13 +43,12 @@ public class Teleport implements INeighbour {
 
     public boolean getBamboozled() { return bamboozled; }
 
+    public Asteroid getNeighbour() { return  neighbour; }
+
     public Teleport getPair() {
         return pair;
     }
 
-    public Asteroid getNeighbour() {
-        return neighbour;
-    }
 
     public boolean isBamboozled() {
         return bamboozled;
@@ -120,7 +119,7 @@ public class Teleport implements INeighbour {
 
     /**
      *Abban az esetben, ha a pair nem null (azaz már le van rakva a kapu párja), a paraméterül kapott neighbour-nek meghívja az addNeighbour metódusát, aminek saját magát adja paraméterül.
-     * @param neighbour
+     * @param
      */
     public void setNeighbour(Asteroid a){
     	neighbour = a;
