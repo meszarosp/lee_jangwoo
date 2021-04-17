@@ -11,7 +11,7 @@ import java.util.*;
 public class Teleport implements INeighbour {
 
     /**
-     * Default constructor
+     * Default constructor. Létrehozza a teleportkaput a megfelelo kiindulási értékekkel.
      */
     public Teleport() {
     	bamboozled = false;
@@ -19,6 +19,11 @@ public class Teleport implements INeighbour {
         neighbour = null;
     }
 
+    /**
+     * Egy paraméteres constructor. Létrehozza a teleportkaput a megfelelő kiindulási értékekkel.
+     * Megadható kiindulási bamboozled érték
+     * @param bamboozled értékét állítja be
+     */
     public Teleport(boolean bamboozled) {
         this.bamboozled = bamboozled;
         pair = null;
@@ -35,27 +40,50 @@ public class Teleport implements INeighbour {
      */
     private Asteroid neighbour;
 
+    /**
+     * Meg van-e őrülve a teleportkapu (ha igen akkor mozoghat)
+     */
     private boolean bamboozled;
 
+    /**
+     * beállíthatjuk a bamboozled értékét.
+     * @param bamboozled bamboozled leendő értéke
+     */
     public void setBamboozled(boolean bamboozled) {
         this.bamboozled = bamboozled;
     }
 
+    /**
+     * bamboozled változó gettere
+     * @return bamboozled értékét adja vissza
+     */
     public boolean getBamboozled() { return bamboozled; }
 
+    /**
+     * visszaadja a szomszédot.
+     * @return a szomszéd aszteroida
+     */
     public Asteroid getNeighbour() { return  neighbour; }
 
+    /**
+     * visszaadja a teleportkapu párját
+     * @return a teleportkapu párja
+     */
     public Teleport getPair() {
         return pair;
     }
 
-
+    /**
+     * Visszaadja, hogy igaz-e hogy a kapu bamboozled
+     * @return bool aszerint hogy a kapu bamboozled vagy nem
+     */
     public boolean isBamboozled() {
         return bamboozled;
     }
 
     /**
-     * A teleport párját null-ra állítja, és ha a neighbour nem null (azaz már le van rakva a teleportkapu), akkor a neighbour removeNeighbour metódusát meghívja
+     * A teleport párját null-ra állítja, és ha a neighbour nem null (
+     * azaz már le van rakva a teleportkapu), akkor a neighbour removeNeighbour metódusát meghívja
      */
     public void perish() {
         pair = null;
@@ -91,6 +119,7 @@ public class Teleport implements INeighbour {
      * Meghívja a pair teleportTraveller metódusát. Abban az esetben, ha az hamissal tér vissza, meghívja a neighbour placeTraveller metódusát.
      * @param traveller
      */
+    @Override
     public void placeTraveller(Traveller traveller){
     	if(pair == null) {
     		return;
@@ -104,22 +133,34 @@ public class Teleport implements INeighbour {
      * Meghívja a pair-nek a perish metódusát.
      * @param neighbour
      */
+    @Override
     public void removeNeighbour(INeighbour neighbour){
     	if (pair != null)
     	    pair.perish();
     }
 
+    /**
+     * Napvihar érkezik, ilyenkor a teleportkapu megõrül, ha már le van téve.
+     */
+    @Override
     public void solarWind(int i) {
-        bamboozled = true;
+        if(neighbour != null)
+            bamboozled = true;
     }
 
+     /**
+     * A teleportkapun teleportkapu nem tud átmenni.
+     * @return mindig false, mert nem lehet sikeres
+     */
+    @Override
     public boolean moveTeleport(Teleport t) {
         return false;
     }
 
     /**
-     *Abban az esetben, ha a pair nem null (azaz már le van rakva a kapu párja), a paraméterül kapott neighbour-nek meghívja az addNeighbour metódusát, aminek saját magát adja paraméterül.
-     * @param
+     *Abban az esetben, ha a pair nem null (azaz már le van rakva a kapu párja), a paraméterül kapott 
+     *neighbour-nek meghívja az addNeighbour metódusát, aminek saját magát adja paraméterül.
+     * @param a itt nincs szerepe
      */
     public void setNeighbour(Asteroid a){
     	neighbour = a;
@@ -128,6 +169,12 @@ public class Teleport implements INeighbour {
         }
     }
 
+    /**
+     * ha le van téve és a kapu megkergült (bamboozled == true) akkor meghívja a szomszédjaira a getNeighbourAt függvénnyel a 
+     * moveTeleport metódust magát adva paraméterként. Ha ez igazzal tér vissza, akkor meghívja a régi aszteroidájára
+     * (ezt eltárolja) a removeNeighbour függvényt magát paraméterül adva, majd visszatér. Ha végigért az összes szomszédon,
+     * és még nem tért vissza, akkor ebben a körben nem mozdul.
+     */
     public void makeAction() {
         if(neighbour == null){
             return;
