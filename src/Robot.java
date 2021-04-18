@@ -43,6 +43,7 @@ public class Robot extends Traveller {
 
     /**
      * megfúrja az aszteroidát: meghívja az aszteroidára az onDrill függvényt.
+     * @return visszaadja, hogy sikeres volt-e a fúrás.
      */
     public boolean drill() {
     	return asteroid.onDrill();
@@ -51,6 +52,7 @@ public class Robot extends Traveller {
     /**
      * makeAction függvény: vagy mozog, vagypedig fúr a robot.
      * ha a generált random igaz, akkor fúr, egyébként pedig mozog az aszteroidájának egy random szomszédjára.
+     * @return a visszaadott érték azt jelzi, hogy sikeresen fúrt/mozgott, vagy sem.
      */
     public boolean makeAction() {
         Random rand = new Random();

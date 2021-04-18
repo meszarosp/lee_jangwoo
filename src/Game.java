@@ -14,6 +14,9 @@ public class Game {
      */
     private Sun sun;
 
+    /**
+     * A játék végét jelző logikai változó
+     */
     private boolean gameEnded = false;
 
     /**
@@ -134,8 +137,10 @@ public class Game {
      * és típusú nyersanyag, megy a következő telepes aszteroidájára.
      * Az ellenőrzést a Mineral osztály statikus allMinerals listája
      * segíti. Ebben tárol a játék elejétől fogva elérhető
-     * nyersanyagokból egy-egy példányt
-     * @return 
+     * nyersanyagokból egy-egy példányt. Ha megnyerték a játékot,
+     * beállítja az endgame változót igazra.
+     * @return egy boolean-t ad vissza, ha igazzal tér vissza, akkor a
+     * telepesek megnyerték a játékot. Ha nem, a játék folytatódik.
      */
     public boolean checkWin() {
     	List<Mineral> allMinerals = Mineral.getAllMinerals();
@@ -182,6 +187,9 @@ public class Game {
     }
 
     /**
+     * Ellenőrzi, hogy a telepesek elvesztették-e a játékot.
+     * Ha már nincsen telepes játékban (mindegyik meghalt),
+     * elvesztették, egyébként folytatódik a játék.
      * @return
      */
     public boolean checkLose() {
@@ -189,48 +197,99 @@ public class Game {
         return settlers.size() == 0;
     }
 
+    /**
+     * gameEnd változó gettere.
+     * @return visszaadja, hogy vége van-e a játéknak.
+     */
     public boolean getGameEnd(){
         return gameEnd;
     }
+
+    /**
+     * gameEnd változó settere.
+     * @param end Az érték, amire a gameEndet állítjuk. Ettől függően folytatódik,
+     * illetve fejeződik be a játék.
+     */
     public void setGameEnd(boolean end){
         gameEnd = end;
     }
 
+    /**
+     * settlers változó gettere.
+     * @return visszaadja a telepesek listáját.
+     */
     public List<Settler> getSettlers() {
         return settlers;
     }
 
+    /**
+     * robots változó gettere.
+     * @return visszaadja a robotok listáját.
+     */
     public List<Robot> getRobots() {
         return robots;
     }
 
+    /**
+     * UFOs változó gettere.
+     * @return visszaadja az UFO-k listáját.
+     */
     public List<UFO> getUFOs() { return UFOs;}
 
+    /**
+     * sun változó gettere.
+     * @return visszaadja a nap vátozót.
+     */
     public Sun getSun() {
         return sun;
     }
 
+    /**
+     * sun változó settere.
+     * @param sun beállítja a nap változót a paraéterül kapottra.
+     */
     public void setSun(Sun sun) {
         this.sun = sun;
     }
 
+    /**
+     * Hozzáad egy teleportkaput a gates listájához.
+     * @param t a paraméterül kapott kapu, amit nyilvántartásba veszünk.
+     */
     public void addTeleport(Teleport t){
         if (!gates.contains(t))
             gates.add(t);
     }
 
+    /**
+     * Kivesz egy teleportkaput a gates listából.
+     * @param t a paraméterül kapott kaput veszi ki.
+     */
     public void removeTeleport(Teleport t){
         gates.remove(t);
     }
 
+    /**
+     * gates változó gettere.
+     * @return visszaadja a teleportkapuk listáját.
+     */
     public List<Teleport> getGates(){
         return gates;
     }
 
+    /**
+     * Hozzáad egy UFO-t az UFOs listához, ha még nem szerepel benne.
+     * @param ufo a paraméterül kapott UFO-t teszi be a listába.
+     */
     public void addUFO(UFO ufo) {
         if (!UFOs.contains(ufo))
             UFOs.add(ufo);
     }
+
+    /**
+     * Kiveszi a paraméterül kapott UFO-t a UFOs listából.
+     * @param ufo a kivevendő UFO objektum.
+     */
     public void removeUFO(UFO ufo) {
     	UFOs.remove(ufo);
     }

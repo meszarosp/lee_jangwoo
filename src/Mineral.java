@@ -6,7 +6,17 @@ import java.util.List;
  */
 public abstract class Mineral {
 
+	/**
+	 * Az összes elérhető Mineral-t tartalmazó lista. Ennek segítségével
+	 * ellenőrizhető, hogy megvannak-e a szükséges nyersanyagok a játék
+	 * megnyeréséhez.
+	 */
     static private List<Mineral> AllMinerals;
+
+    /**
+     * Felveszi a játékban elérhető Mineralokat. Ha új nyersanyagok jönnek,
+     * bővíthető
+     */
     static public void Init() {
     	AllMinerals = new ArrayList<Mineral>();
         AllMinerals.add(new Uranium(0));
@@ -25,6 +35,10 @@ public abstract class Mineral {
      */
     public void exposedToSun(Asteroid a) {}
 
+    /**
+     * Az allMinerals statikus változó gettere.
+     * @return visszaadja az allMinerals listát
+     */
     public static List<Mineral> getAllMinerals(){
         return AllMinerals;
     }
