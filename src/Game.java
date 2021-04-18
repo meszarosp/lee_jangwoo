@@ -14,7 +14,7 @@ public class Game {
      */
     private Sun sun;
 
-    private boolean gameEnded;
+    private boolean gameEnded = false;
 
     /**
      * A játékban lévõ telepesek listája.
@@ -65,6 +65,22 @@ public class Game {
      */
     public void removeRobot(Robot r) {
         robots.remove(r);
+    }
+
+    /**
+     * Visszaadja, hogy véget ért-e a játék.
+     * @return igaz, ha véget ért a játék, különben hamis.
+     */
+    public boolean getGameEnded() {
+        return gameEnd;
+    }
+
+    /**
+     * Beállítja, hogy véget ért-e a játék.
+     * @param gameEnded a beállítandó érték.
+     */
+    public void setGameEnded(boolean gameEnded) {
+        this.gameEnded = gameEnded;
     }
 
     /**

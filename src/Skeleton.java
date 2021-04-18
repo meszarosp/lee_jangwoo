@@ -4,8 +4,8 @@ import java.util.*;
 
 
 /**
- * Kezeli a felhasznÃ¡lÃ³val valÃ³ interakciÃ³kat Ã©s a menÃ¼t.
- * Az egyes parancsokhoz vÃ©grehajtja a modellen a megfelelÅ‘ mÅ±veleteket, majd jelzi a felhasznÃ¡lÃ³nak, hogy mi tÃ¶rtÃ©nt.
+ * Kezeli a felhasználóval való interakciókat és a menüt.
+ * Az egyes parancsokhoz végrehajtja a modellen a megfelelõ mûveleteket, majd jelzi a felhasználónak, hogy mi történt.
  */
 public class Skeleton {
 
@@ -15,46 +15,46 @@ public class Skeleton {
     private static Scanner input = new Scanner(System.in);
 
     /**
-     * Az output, ahovÃ¡ a parancsok kimenetÃ©t Ã­rja. Alapesetben a standard kimenet.
+     * Az output, ahová a parancsok kimenetét írja. Alapesetben a standard kimenet.
      */
     private static PrintStream output = System.out;
 
     /**
-     * Jelzi, hogy a vÃ©letlenszerÅ± tÃ¶rtÃ©nÃ©sek ki vannak-e kapcsolva.
+     * Jelzi, hogy a véletlenszerû történések ki vannak-e kapcsolva.
      */
     private static boolean random = false;
 
     /**
-     * A game objektum, amivel Ã©ppen tÃ¶rtÃ©nik a jÃ¡tÃ©k.
+     * A game objektum, amivel éppen történik a játék.
      */
     private static Game game = new Game();
 
     /**
-     * Az a settler, amelyikkel Ã©ppen jÃ¡tszik a felhasznÃ¡lÃ³. Ez a settler kapja majd a settlereknek fÅ±zÃ¶tt kommentek.
+     * Az a settler, amelyikkel éppen játszik a felhasználó. Ez a settler kapja majd a settlereknek fûzött kommentek.
      */
     private static Settler activeSettler = null;
 
     /**
-     * TÃ¡rolja, hogy a jÃ¡tÃ©kban azonosÃ­tÃ³val ellÃ¡tott objektumok kÃ¶zÃ¼l,
-     * mi a legnagyobb mÃ¡r kiosztott azonosÃ­tÃ³nak a szÃ¡ma.
-     * AzonosÃ­tÃ³ a felhasznÃ¡lÃ³ felÃ© kommunikÃ¡lt azonosÃ­tÃ³t jelenti.
-     * TÃ¡rolt adatok pl.: settler, asteroid, ufo, robot.
+     * Tárolja, hogy a játékban azonosítóval ellátott objektumok közül,
+     * mi a legnagyobb már kiosztott azonosítónak a száma.
+     * Azonosító a felhasználó felé kommunikált azonosítót jelenti.
+     * Tárolt adatok pl.: settler, asteroid, ufo, robot.
      */
     private static HashMap<String, Integer> maxIDs = new HashMap<String, Integer>();
 
     /**
-     * A jÃ¡tÃ©kban lÃ©vÅ‘ objektumok Ã©s a felhasznÃ¡lÃ³ felÃ© kÃ¶zÃ¶lt azonosÃ­tÃ³k Ã¶sszerendelÃ©se. A kulcs az azonosÃ­tÃ³.
+     * A játékban lévõ objektumok és a felhasználó felé közölt azonosítók összerendelése. A kulcs az azonosító.
      */
     public static HashMap<String, Object> IDs = new HashMap<String, Object>();
 
     /**
-     * A jÃ¡tÃ©kban lÃ©vÅ‘ objektumok Ã©s a felhasznÃ¡lÃ³ felÃ© kÃ¶zÃ¶lt azonosÃ­tÃ³k Ã¶sszerendelÃ©se. A kulcs az objektum.
+     * A játékban lévõ objektumok és a felhasználó felé közölt azonosítók összerendelése. A kulcs az objektum.
      */
     public static HashMap<Object, String> reverseIDs = new HashMap<Object, String>();
 
     /**
-     * HozzÃ¡ad egy Ãºj azonosÃ­tÃ³t az azonosÃ­tÃ³ tÃ¡rolÃ³khoz.
-     * @param s A szÃ¶veges azonosÃ­tÃ³
+     * Hozzáad egy új azonosítót az azonosító tárolókhoz.
+     * @param s A szöveges azonosító
      * @param o Az objektum
      */
     private static void addID(String s, Object o){
@@ -63,8 +63,8 @@ public class Skeleton {
     }
 
     /**
-     * KitÃ¶rÃ¶l egy azonosÃ­tÃ³-objektum Ã¶sszerendelÃ©st az ezt tÃ¡rolÃ³kbÃ³l.
-     * @param s A szÃ¶veges azonosÃ­tÃ³
+     * Kitöröl egy azonosító-objektum összerendelést az ezt tárolókból.
+     * @param s A szöveges azonosító
      * @param o Az objektum
      */
     private static void removeID(String s, Object o){
@@ -73,7 +73,7 @@ public class Skeleton {
     }
 
     /**
-     * TÃ¶rli az azonosÃ­tÃ³-objektum Ã¶sszerendelÃ©seket.
+     * Törli az azonosító-objektum összerendeléseket.
      */
     private static void resetIDs(){
         IDs.clear();
@@ -81,31 +81,31 @@ public class Skeleton {
     }
 
     /**
-     * InterfÃ©sz, amely a parancsok szÃ¡mÃ¡ra kÃ©szÃ¼lt. A parancsok ezt implementÃ¡ljÃ¡k.
+     * Interfész, amely a parancsok számára készült. A parancsok ezt implementálják.
      */
     private interface Command{
         /**
-         * A parancsot vÃ©grehajtÃ³ fÃ¼ggvÃ©ny.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A parancsot végrehajtó függvény.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args);
     }
 
     /**
-     * A load parancshoz tartozÃ³ osztÃ¡ly. A paramÃ©terkÃ©nt megadott fÃ¡jlbÃ³l beolvas egy pÃ¡lyÃ¡t.
+     * A load parancshoz tartozó osztály. A paraméterként megadott fájlból beolvas egy pályát.
      */
     private static class loadCommand implements Command{
 
         /**
-         * Annak a megnyitott fÃ¡jlnak scannere, amibÅ‘l olvassa a betÃ¶lteni kÃ­vÃ¡nt pÃ¡lyÃ¡t.
+         * Annak a megnyitott fájlnak scannere, amibõl olvassa a betölteni kívánt pályát.
          */
         private Scanner fileInput;
 
         /**
-         * LÃ©trehoz egy Ãºj jÃ¡tÃ©kot, amihez betÃ¶lti a megadott fÃ¡jlbÃ³l a pÃ¡lyÃ¡t.
-         * Jelzi a felhasznÃ¡lÃ³nak a parancs sikeressÃ©gÃ©t.
-         * Ha nincs elÃ©g argumentum, vagy hiba tÃ¶rtÃ©nt olvasÃ¡s kÃ¶zben, akkor jelzi a felhasznÃ¡lÃ³nak.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Létrehoz egy új játékot, amihez betölti a megadott fájlból a pályát.
+         * Jelzi a felhasználónak a parancs sikerességét.
+         * Ha nincs elég argumentum, vagy hiba történt olvasás közben, akkor jelzi a felhasználónak.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -135,11 +135,11 @@ public class Skeleton {
         }
 
         /**
-         * Beolvassa a fÃ¡jlbÃ³l a settlereket, robotokat Ã©s az ufÃ³kat.
-         * Beolvassa az elÅ‘ttÃ¼k lÃ©vÅ‘ sort is, ami jelzi, hogy melyikbÅ‘l hÃ¡ny darab van.
+         * Beolvassa a fájlból a settlereket, robotokat és az ufókat.
+         * Beolvassa az elõttük lévõ sort is, ami jelzi, hogy melyikbõl hány darab van.
          * Ha hiba van, akkor exceptiont dob.
-         * @throws Exception Ha bÃ¡rmilyen hiba tÃ¶rtÃ©nik olvasÃ¡s kÃ¶zben, akkor exceptiont dob.
-         * Hiba lehet, ha nem megfelelÅ‘ a formÃ¡tum vagy a fÃ¡jl olvasÃ¡sa kÃ¶zben hiba tÃ¶rtÃ©nik.
+         * @throws Exception Ha bármilyen hiba történik olvasás közben, akkor exceptiont dob.
+         * Hiba lehet, ha nem megfelelõ a formátum vagy a fájl olvasása közben hiba történik.
          */
         private void readTravellers() throws Exception{
             String[] pieces = fileInput.nextLine().split(" ");
@@ -194,10 +194,10 @@ public class Skeleton {
         }
 
         /**
-         * A megadott tÃ­pushoz tartozÃ³ ID-t frissÃ­ti a maxID Ã¶sszerendelÃ©sben.
-         * Csak akkor frissÃ­t ha az ID-hez tartozÃ³ szÃ¡m, nagyobb, mint az eddigi legnagyobb.
-         * @param type Az tÃ­pus (pl.: settler)
-         * @param ID Az ID, amit ellenÅ‘rizni kell, hogy a szÃ¡ma, nagyobb-e, mint az eddigi legnagyobb.
+         * A megadott típushoz tartozó ID-t frissíti a maxID összerendelésben.
+         * Csak akkor frissít ha az ID-hez tartozó szám, nagyobb, mint az eddigi legnagyobb.
+         * @param type Az típus (pl.: settler)
+         * @param ID Az ID, amit ellenõrizni kell, hogy a száma, nagyobb-e, mint az eddigi legnagyobb.
          */
         private void updateMaxID(String type, String ID){
             int number = Integer.parseInt(ID.substring(1));
@@ -206,11 +206,11 @@ public class Skeleton {
         }
 
         /**
-         * Beolvassa a fÃ¡jlbÃ³l az aszteroidÃ¡kat Ã©s a teleportkapukat.
-         * Beolvassa a leÃ­rÃ¡sok elÅ‘tti sort is, ami azt tÃ¡rolja, hogy melyikbÅ‘l hÃ¡ny darab van.
-         * @param sun A jÃ¡tÃ©kban lÃ©vÅ‘ nap.
-         * @throws Exception Ha bÃ¡rmilyen hiba tÃ¶rtÃ©nik olvasÃ¡s kÃ¶zben, akkor exceptiont dob.
-         * Hiba lehet, ha nem megfelelÅ‘ a formÃ¡tum vagy a fÃ¡jl olvasÃ¡sa kÃ¶zben hiba tÃ¶rtÃ©nik.
+         * Beolvassa a fájlból az aszteroidákat és a teleportkapukat.
+         * Beolvassa a leírások elõtti sort is, ami azt tárolja, hogy melyikbõl hány darab van.
+         * @param sun A játékban lévõ nap.
+         * @throws Exception Ha bármilyen hiba történik olvasás közben, akkor exceptiont dob.
+         * Hiba lehet, ha nem megfelelõ a formátum vagy a fájl olvasása közben hiba történik.
          */
         private void readAsteroidsTeleports(Sun sun) throws Exception {
             String[] pieces = fileInput.nextLine().split(" ");
@@ -273,19 +273,19 @@ public class Skeleton {
     }
 
     /**
-     * A save parancshoz tartozÃ³ osztÃ¡ly. A paramÃ©terkÃ©nt megadott fÃ¡jlba kiÃ­rja a jÃ¡tÃ©kban lÃ©vÅ‘ pÃ¡lya aktuÃ¡lis Ã¡llÃ¡sÃ¡t.
+     * A save parancshoz tartozó osztály. A paraméterként megadott fájlba kiírja a játékban lévõ pálya aktuális állását.
      */
     private static class saveCommand implements Command{
         /**
-         * A PrintWriter, ami a megnyitott fÃ¡jlba Ã­r, ahova a pÃ¡lyÃ¡t ki kell menteni.
+         * A PrintWriter, ami a megnyitott fájlba ír, ahova a pályát ki kell menteni.
          */
         private PrintWriter fileOutput;
 
         /**
-         * A paramÃ©terkÃ©nt megadott fÃ¡jlba kimenti a pÃ¡lya aktuÃ¡lis Ã¡llÃ¡sÃ¡t.
-         * Jelzi a felhasznÃ¡lÃ³nak, hogy sikeres volt-e a parancs.
-         * Ha hiba tÃ¶rtÃ©nik a fÃ¡jlba Ã­rÃ¡s kÃ¶zben, akkor jelzi a felhasznÃ¡lÃ³nak.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A paraméterként megadott fájlba kimenti a pálya aktuális állását.
+         * Jelzi a felhasználónak, hogy sikeres volt-e a parancs.
+         * Ha hiba történik a fájlba írás közben, akkor jelzi a felhasználónak.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -309,7 +309,7 @@ public class Skeleton {
         }
 
         /**
-         * Kimenti a megadott fÃ¡jlba a settlereket.
+         * Kimenti a megadott fájlba a settlereket.
          */
         private void saveSettlers() {
             List<Settler> settlers = game.getSettlers();
@@ -331,7 +331,7 @@ public class Skeleton {
         }
 
         /**
-         * Kimenti a fÃ¡jlba a robotokat Ã©s az ufÃ³kat.
+         * Kimenti a fájlba a robotokat és az ufókat.
          */
         private void saverobotsUFOs(){
             for (Robot r : game.getRobots())
@@ -341,7 +341,7 @@ public class Skeleton {
         }
 
         /**
-         * Kimenti a fÃ¡jlba az aszteoridÃ¡kat Ã©s a robotokat.
+         * Kimenti a fájlba az aszteoridákat és a robotokat.
          */
         private void saveAsteroidTeleport(){
             List<Asteroid> asteroids = game.getSun().getAsteroids();
@@ -362,13 +362,13 @@ public class Skeleton {
         }
     }
     /**
-     * A input parancshoz tartozÃ³ osztÃ¡ly. ÃtirÃ¡nyÃ­tja a bemenetet a paramÃ©terkÃ©nt megadott fÃ¡jlra.
+     * A input parancshoz tartozó osztály. Átirányítja a bemenetet a paraméterként megadott fájlra.
      */
     private static class inputCommand implements Command{
         /**
-         * A paramÃ©terkÃ©nt megadott fÃ¡jlra Ã¡llÃ­tja a bemenetet.
-         * Ha nincs elÃ©g argumentum, akkor hibÃ¡t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A paraméterként megadott fájlra állítja a bemenetet.
+         * Ha nincs elég argumentum, akkor hibát jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -390,13 +390,13 @@ public class Skeleton {
     }
 
     /**
-     * A output parancshoz tartozÃ³ osztÃ¡ly. ÃtirÃ¡nyÃ­tja a kimenetet a paramÃ©terkÃ©nt megadott fÃ¡jlba.
+     * A output parancshoz tartozó osztály. Átirányítja a kimenetet a paraméterként megadott fájlba.
      */
     private static class outputCommand implements Command{
         /**
-         * A paramÃ©terkÃ©nt megadott fÃ¡jlra irÃ¡nyÃ­tja a kimenetet.
-         * Ha nincs elÃ©g argumentum, akkor hibÃ¡t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A paraméterként megadott fájlra irányítja a kimenetet.
+         * Ha nincs elég argumentum, akkor hibát jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -417,13 +417,13 @@ public class Skeleton {
         }
     }
     /**
-     * A setrandom parancshoz tartozÃ³ osztÃ¡ly. BeÃ¡llÃ­tja a random Ã©rtÃ©ket a felhasznÃ¡lÃ³ Ã¡ltal megadott Ã©rtÃ©kre.
+     * A setrandom parancshoz tartozó osztály. Beállítja a random értéket a felhasználó által megadott értékre.
      */
     private static class setrandomCommand implements Command{
         /**
-         * BeÃ¡llÃ­tja a random Ã©rtÃ©kÃ©t a felhasznÃ¡lÃ³ Ã¡ltal megadott Ã©rtÃ©kre.
-         * Ha nincs elÃ©g argumentum, akkor hibaÃ¼zenetet ad Ã©s visszatÃ©r.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Beállítja a random értékét a felhasználó által megadott értékre.
+         * Ha nincs elég argumentum, akkor hibaüzenetet ad és visszatér.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -438,16 +438,16 @@ public class Skeleton {
         }
     }
     /**
-     * A addsettler parancshoz tartozÃ³ osztÃ¡ly. Ãšj settlert ad a pÃ¡lyÃ¡ra.
+     * A addsettler parancshoz tartozó osztály. Új settlert ad a pályára.
      */
     private static class addsettlerCommand implements Command{
 
         /**
-         * A paramÃ©terkÃ©nt megadott aszteroidÃ¡ra teszt egy Ãºj telepest.
-         * Ha nincs elÃ©g argumentum, akkor hibÃ¡val jelez a felhasznÃ¡lÃ³nak.
-         * A hiba fajtÃ¡jÃ¡t is kiÃ­rja a felhasznÃ¡lÃ³nak.
-         * Ha lÃ©trejÃ¶tt a telepes, akkor ezt is jelzi a felhasznÃ¡lÃ³nak.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A paraméterként megadott aszteroidára teszt egy új telepest.
+         * Ha nincs elég argumentum, akkor hibával jelez a felhasználónak.
+         * A hiba fajtáját is kiírja a felhasználónak.
+         * Ha létrejött a telepes, akkor ezt is jelzi a felhasználónak.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -472,15 +472,15 @@ public class Skeleton {
         }
     }
     /**
-     * A addasteroid parancshoz tartozÃ³ osztÃ¡ly. HozzÃ¡ad egy aszteroidÃ¡t a megadott paramÃ©terekkel a pÃ¡lyÃ¡hoz.
+     * A addasteroid parancshoz tartozó osztály. Hozzáad egy aszteroidát a megadott paraméterekkel a pályához.
      */
     private static class addasteroidCommand implements Command{
 
         /**
-         * A megadott a paramÃ©terekkel hozzÃ¡ad egy Å‘j aszteroidÃ¡t a pÃ¡lyÃ¡hoz.
-         * Ha bÃ¡rmilyen hiba van, akkor jelzi a felhasznÃ¡lÃ³nak a hiba fajtÃ¡jÃ¡t.
-         * Ha rendben volt minden, akkor kiÃ­rja a felhasznÃ¡lÃ³nak az Ãºj aszteroida paramÃ©tereit.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A megadott a paraméterekkel hozzáad egy õj aszteroidát a pályához.
+         * Ha bármilyen hiba van, akkor jelzi a felhasználónak a hiba fajtáját.
+         * Ha rendben volt minden, akkor kiírja a felhasználónak az új aszteroida paramétereit.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 4) {
@@ -504,14 +504,14 @@ public class Skeleton {
         }
     }
     /**
-     * A addrobot parancshoz tartozÃ³ osztÃ¡ly. HozzÃ¡ad egy Ãºj robotot a megadott aszteroidÃ¡ra.
+     * A addrobot parancshoz tartozó osztály. Hozzáad egy új robotot a megadott aszteroidára.
      */
     private static class addrobotCommand implements Command{
 
         /**
-         * A paramÃ©terkÃ©nt megadott aszteroidÃ¡ra hozzÃ¡ad egy Ãºj robotot.
-         * Ha nincs elÃ©g paramÃ©ter, akkor hibÃ¡t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A paraméterként megadott aszteroidára hozzáad egy új robotot.
+         * Ha nincs elég paraméter, akkor hibát jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -536,14 +536,14 @@ public class Skeleton {
         }
     }
     /**
-     * A addufo parancshoz tartozÃ³ osztÃ¡ly. HozzÃ¡ad egy Ãºj ufÃ³t a paramÃ©terkÃ©nt megadott aszteroidÃ¡ra.
+     * A addufo parancshoz tartozó osztály. Hozzáad egy új ufót a paraméterként megadott aszteroidára.
      */
     private static class addufoCommand implements Command{
 
         /**
-         * A paramÃ©terkÃ©nt megadott aszteroidÃ¡ra elhelyez egy Ãºj ufÃ³t.
-         * Ha nincs elÃ©g paramÃ©ter, akkor hibÃ¡t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A paraméterként megadott aszteroidára elhelyez egy új ufót.
+         * Ha nincs elég paraméter, akkor hibát jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -568,14 +568,14 @@ public class Skeleton {
         }
     }
     /**
-     * A connectasteroid parancshoz tartozÃ³ osztÃ¡ly. A paramÃ©terkÃ©nt megadott 2 aszteroidÃ¡t szomszÃ©dossa teszi egymÃ¡ssal.
+     * A connectasteroid parancshoz tartozó osztály. A paraméterként megadott 2 aszteroidát szomszédossa teszi egymással.
      */
     private static class connectasteroidCommand implements Command{
 
         /**
-         * A paramÃ©terkÃ©nt megadott 2 aszteroidÃ¡t szomszÃ©dossa teszi egymÃ¡ssal.
-         * Ha nincs elÃ©g paramÃ©ter, vagy nem lÃ©teznek az aszteroidÃ¡k, akkor hibÃ¡t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A paraméterként megadott 2 aszteroidát szomszédossa teszi egymással.
+         * Ha nincs elég paraméter, vagy nem léteznek az aszteroidák, akkor hibát jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 3) {
@@ -595,14 +595,14 @@ public class Skeleton {
         }
     }
     /**
-     * A selectsettler parancshoz tartozÃ³ osztÃ¡ly. A paramÃ©terkÃ©nt megadott telepes lesz az aktÃ­v telepes.
+     * A selectsettler parancshoz tartozó osztály. A paraméterként megadott telepes lesz az aktív telepes.
      */
     private static class selectsettlerCommand implements Command{
 
         /**
-         * A paramÃ©terkÃ©nt megadott telepes lesz az aktÃ­v telepes.
-         * Ha a telepes nem lÃ©tezik vagy meghalt, akkor hibÃ¡t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A paraméterként megadott telepes lesz az aktív telepes.
+         * Ha a telepes nem létezik vagy meghalt, akkor hibát jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2){
@@ -620,19 +620,19 @@ public class Skeleton {
         }
     }
     /**
-     * A move parancshoz tartozÃ³ osztÃ¡ly.
-     * Ha paramÃ©ter nÃ©lkÃ¼l hÃ­vjÃ¡k meg, akkor kiÃ­rja az aktÃ­v telepes szÃ¡mÃ¡ra elÃ©rhetÅ‘ szomszÃ©dokat.
-     * Ha paramÃ©terrel hÃ­vjÃ¡k meg, akkor meg kell adni a szomszÃ©dok listÃ¡jÃ¡ban lÃ©vÅ‘ sorszÃ¡mot (1-tÅ‘l szÃ¡mozva),
-     * amelyre az aktÃ­v telepest mozgatni akarja a felhasznÃ¡lÃ³.
+     * A move parancshoz tartozó osztály.
+     * Ha paraméter nélkül hívják meg, akkor kiírja az aktív telepes számára elérhetõ szomszédokat.
+     * Ha paraméterrel hívják meg, akkor meg kell adni a szomszédok listájában lévõ sorszámot (1-tõl számozva),
+     * amelyre az aktív telepest mozgatni akarja a felhasználó.
      */
     private static class moveCommand implements Command{
 
         /**
-         * Ha paramÃ©ter nÃ©lkÃ¼l hÃ­vjÃ¡k meg, akkor kiÃ­rja az aktÃ­v telepes szÃ¡mÃ¡ra elÃ©rhetÅ‘ szomszÃ©dokat.
-         * a paramÃ©terrel hÃ­vjÃ¡k meg, akkor meg kell adni a szomszÃ©dok listÃ¡jÃ¡ban lÃ©vÅ‘ sorszÃ¡mot (1-tÅ‘l szÃ¡mozva),
-         * amelyre az aktÃ­v telepest mozgatni akarja a felhasznÃ¡lÃ³.
-         * Ha a megadott paramÃ©terek valamiÃ©rt hibÃ¡sak, akkor ezt jelzi a felhasznÃ¡lÃ³nak.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Ha paraméter nélkül hívják meg, akkor kiírja az aktív telepes számára elérhetõ szomszédokat.
+         * a paraméterrel hívják meg, akkor meg kell adni a szomszédok listájában lévõ sorszámot (1-tõl számozva),
+         * amelyre az aktív telepest mozgatni akarja a felhasználó.
+         * Ha a megadott paraméterek valamiért hibásak, akkor ezt jelzi a felhasználónak.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1)) {
@@ -663,13 +663,13 @@ public class Skeleton {
         }
     }
     /**
-     * A drill parancshoz tartozÃ³ osztÃ¡ly. Az aktÃ­v telepessel vÃ©grehajt egy fÃºrÃ¡s mÅ±veletet.
+     * A drill parancshoz tartozó osztály. Az aktív telepessel végrehajt egy fúrás mûveletet.
      */
     private static class drillCommand implements Command{
         /**
-         * Az aktÃ­v telepessel vÃ©grehajt egy fÃºrÃ¡s mÅ±veletet.
-         * Ha valami tÃ¶rtÃ©nt az aktÃ­v telepessel, akkor jelzi a felhasznÃ¡lÃ³nak.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Az aktív telepessel végrehajt egy fúrás mûveletet.
+         * Ha valami történt az aktív telepessel, akkor jelzi a felhasználónak.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
@@ -686,13 +686,13 @@ public class Skeleton {
         }
     }
     /**
-     * A mine parancshoz tartozÃ³ osztÃ¡ly. Az aktÃ­v telepessel vÃ©grehajt egy bÃ¡nyÃ¡szÃ¡s mÅ±veletet.
+     * A mine parancshoz tartozó osztály. Az aktív telepessel végrehajt egy bányászás mûveletet.
      */
     private static class mineCommand implements Command{
         /**
-         * Az aktÃ­v telepessel vÃ©grehajt egy bÃ¡nyÃ¡szÃ¡s mÅ±veletet.
-         * Jelzi a felhasznÃ¡lÃ³nak a mÅ±velet eredmÃ©nyÃ©t.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Az aktív telepessel végrehajt egy bányászás mûveletet.
+         * Jelzi a felhasználónak a mûvelet eredményét.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
@@ -720,22 +720,22 @@ public class Skeleton {
         }
     }
     /**
-     * A putmineralback parancshoz tartozÃ³ osztÃ¡ly.
-     * Ha paramÃ©ter nÃ©lkÃ¼l hÃ­vjÃ¡k meg, akkor kiÃ­rja az aktÃ­v telepesnÃ©l lÃ©vÅ‘ nyersanyagokat.
-     * Ha paramÃ©terrel hÃ­vjÃ¡k meg, akkor a megadott paramÃ©ternek megfelelÅ± sorszÃ¡mÃº (1-tÅ‘l szÃ¡mozva)
-     * a telepesnÃ©l lÃ©vÅ‘ nyersanyagot a telepes nyersanyagai kÃ¶zÃ¼l kivÃ¡lasztja Ã©s ezt a nyersanyagvisszatevÃ©s
-     * mÅ±veletnek Ã¡tadja.
+     * A putmineralback parancshoz tartozó osztály.
+     * Ha paraméter nélkül hívják meg, akkor kiírja az aktív telepesnél lévõ nyersanyagokat.
+     * Ha paraméterrel hívják meg, akkor a megadott paraméternek megfelelû sorszámú (1-tõl számozva)
+     * a telepesnél lévõ nyersanyagot a telepes nyersanyagai közül kiválasztja és ezt a nyersanyagvisszatevés
+     * mûveletnek átadja.
      */
     private static class putmineralbackCommand implements Command{
         /**
-         * Ha paramÃ©ter nÃ©lkÃ¼l hÃ­vjÃ¡k meg, akkor kiÃ­rja az aktÃ­v telepesnÃ©l lÃ©vÅ‘ nyersanyagokat.
-         * Ha paramÃ©terrel hÃ­vjÃ¡k meg, akkor a megadott paramÃ©ternek megfelelÅ± sorszÃ¡mÃº (1-tÅ‘l szÃ¡mozva)
-         * a telepesnÃ©l lÃ©vÅ‘ nyersanyagot a telepes nyersanyagai kÃ¶zÃ¼l kivÃ¡lasztja Ã©s ezt a nyersanyagvisszatevÃ©s
-         * mÅ±veletnek Ã¡tadja.
-         * A felhasznÃ¡lÃ³nak jelzi a mÅ±velet eredmÃ©nyÃ©t.
-         * Ha ez robbanÃ¡st okozott, akkor jelzi a felhasznÃ¡lÃ³nak, hogy a robbanÃ¡s kÃ¶vetkeztÃ©ben mi tÃ¶rtÃ©nt.
-         * (MegvizsgÃ¡lja, hogy mely telepesek, robotok, teleportkapuk haltak meg a robbanÃ¡s miatt.)
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Ha paraméter nélkül hívják meg, akkor kiírja az aktív telepesnél lévõ nyersanyagokat.
+         * Ha paraméterrel hívják meg, akkor a megadott paraméternek megfelelû sorszámú (1-tõl számozva)
+         * a telepesnél lévõ nyersanyagot a telepes nyersanyagai közül kiválasztja és ezt a nyersanyagvisszatevés
+         * mûveletnek átadja.
+         * A felhasználónak jelzi a mûvelet eredményét.
+         * Ha ez robbanást okozott, akkor jelzi a felhasználónak, hogy a robbanás következtében mi történt.
+         * (Megvizsgálja, hogy mely telepesek, robotok, teleportkapuk haltak meg a robbanás miatt.)
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
@@ -786,14 +786,14 @@ public class Skeleton {
         }
     }
     /**
-     * A craftrobot parancshoz tartozÃ³ osztÃ¡ly. Az aktÃ­v telepessel vÃ©grehajt egy robotÃ©szÃ­tÃ©s mÅ±veletet.
+     * A craftrobot parancshoz tartozó osztály. Az aktív telepessel végrehajt egy robotészítés mûveletet.
      */
     private static class craftrobotCommand implements Command{
         /**
-         * Az aktÃ­v telepessel vÃ©grehajt egy robotÃ©szÃ­tÃ©s mÅ±veletet.
-         * Jelzi a felhasznÃ¡lÃ³nak a mÅ±velet eredmÃ©nyÃ©t. Jelzi az elkÃ©szÃ­tett robot azonosÃ­tÃ³jÃ¡t.
-         * Ha hiba tÃ¶rtÃ©nik, azt is jelzi.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Az aktív telepessel végrehajt egy robotészítés mûveletet.
+         * Jelzi a felhasználónak a mûvelet eredményét. Jelzi az elkészített robot azonosítóját.
+         * Ha hiba történik, azt is jelzi.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
@@ -810,14 +810,14 @@ public class Skeleton {
         }
     }
     /**
-     * A craftteleport parancshoz tartozÃ³ osztÃ¡ly. Az aktÃ­v telepessel vÃ©grehajt egy teleportkÃ©szÃ­tÃ©s mÅ±veletet.
+     * A craftteleport parancshoz tartozó osztály. Az aktív telepessel végrehajt egy teleportkészítés mûveletet.
      */
     private static class craftteleportCommand implements Command{
         /**
-         * Az aktÃ­v telepessel vÃ©grehajt egy teleportkÃ©szÃ­tÃ©s mÅ±veletet.
-         * Jelzi a felhasznÃ¡lÃ³nak a mÅ±velet eredmÃ©nyÃ©t. Jelzi az elkÃ©szÃ­tett teleportkapuk azonosÃ­tÃ³jÃ¡t.
-         * Ha hiba tÃ¶rtÃ©nik, azt is jelzi.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Az aktív telepessel végrehajt egy teleportkészítés mûveletet.
+         * Jelzi a felhasználónak a mûvelet eredményét. Jelzi az elkészített teleportkapuk azonosítóját.
+         * Ha hiba történik, azt is jelzi.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
@@ -839,16 +839,16 @@ public class Skeleton {
         }
     }
     /**
-     * A placeteleport parancshoz tartozÃ³ osztÃ¡ly. Az aktÃ­v telepessel vÃ©grehajt egy teleportlehelyezÃ©s mÅ±veletet.
-     * ParamÃ©ter nÃ©lkÃ¼l kilistÃ¡zza az aktÃ­v telepesnÃ©l lÃ©vÅ‘ teleportkapukat.
+     * A placeteleport parancshoz tartozó osztály. Az aktív telepessel végrehajt egy teleportlehelyezés mûveletet.
+     * Paraméter nélkül kilistázza az aktív telepesnél lévõ teleportkapukat.
      */
     private static class placeteleportCommand implements Command{
 
         /**
-         * Az elsÅ‘ paramÃ©ter annak a teleportkapunak a sorszÃ¡ma (1-tÅ‘l szÃ¡mozva), amelyik teleportkaput le akarja
-         * helyezni a felhasznÃ¡lÃ³. ParamÃ©ter nÃ©lkÃ¼l kilistÃ¡zza a telepesnÃ©l lÃ©vÅ‘ teleportkapukat.
-         * Ha hiba tÃ¶rtÃ©nik akkor jelzi a felhasznÃ¡lÃ³nak, kÃ¼lÃ¶nben kiÃ­rja a lehelyezÃ©s tÃ©nyÃ©t.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Az elsõ paraméter annak a teleportkapunak a sorszáma (1-tõl számozva), amelyik teleportkaput le akarja
+         * helyezni a felhasználó. Paraméter nélkül kilistázza a telepesnél lévõ teleportkapukat.
+         * Ha hiba történik akkor jelzi a felhasználónak, különben kiírja a lehelyezés tényét.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 2))
@@ -874,15 +874,15 @@ public class Skeleton {
         }
     }
     /**
-     * Az addmineral parancshoz tartozÃ³ osztÃ¡ly. Az aktÃ­v telepesnek ad egy nyersanyagot.
-     * A nyersanyagot paramÃ©terben kell megadni.
+     * Az addmineral parancshoz tartozó osztály. Az aktív telepesnek ad egy nyersanyagot.
+     * A nyersanyagot paraméterben kell megadni.
      */
     private static class addmineralCommand implements Command{
 
         /**
-         * Az aktÃ­v telepesnek ad egy, az elsÅ‘ paramÃ©terben meghatÃ¡rozott nyersanyagot.
-         * Ha nem jÃ³l adta meg a felhasznÃ¡lÃ³, akkor hibÃ¡t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Az aktív telepesnek ad egy, az elsõ paraméterben meghatározott nyersanyagot.
+         * Ha nem jól adta meg a felhasználó, akkor hibát jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 2))
@@ -899,15 +899,15 @@ public class Skeleton {
         }
     }
     /**
-     * A addteleportpair parancshoz tartozÃ³ osztÃ¡ly. 2 paramÃ©tere van. A megadott 2 aszteroidÃ¡ra lehelyez egy Ãºj
-     * teleportkaput pÃ¡r, amelyek nincsenek megkergÃ¼lve.
+     * A addteleportpair parancshoz tartozó osztály. 2 paramétere van. A megadott 2 aszteroidára lehelyez egy új
+     * teleportkaput pár, amelyek nincsenek megkergülve.
      */
     private static class addteleportpairCommand implements Command{
 
         /**
-         * Az elsÅ‘ Ã©s a mÃ¡sodik paramÃ©terben meghatÃ¡rozott aszteroidÃ¡ra lehelyez egy-egy teleportkaput, amelyek pÃ¡rt alkotnak.
-         * Ha hiba tÃ¶rtÃ©nik, jelez a felhasznÃ¡lÃ³nak, kÃ¼lÃ¶nben kiÃ­rja a teleportkapuk lÃ©trejÃ¶ttÃ©nek tÃ©nyÃ©t.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Az elsõ és a második paraméterben meghatározott aszteroidára lehelyez egy-egy teleportkaput, amelyek párt alkotnak.
+         * Ha hiba történik, jelez a felhasználónak, különben kiírja a teleportkapuk létrejöttének tényét.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 3) {
@@ -937,15 +937,15 @@ public class Skeleton {
         }
     }
     /**
-     * A nextturn parancshoz tartozÃ³ osztÃ¡ly. A kÃ¶r vÃ©gÃ©n meghÃ­vandÃ³ parancs. VÃ©grehajtja a kÃ¶r vÃ©gi lÃ©pÃ©seket.
+     * A nextturn parancshoz tartozó osztály. A kör végén meghívandó parancs. Végrehajtja a kör végi lépéseket.
      */
     private static class nextturnCommand implements Command{
 
         /**
-         * A nextturn parancshoz tartozÃ³ osztÃ¡ly. A kÃ¶r vÃ©gÃ©n meghÃ­vandÃ³ parancs. VÃ©grehajtja a kÃ¶r vÃ©gi lÃ©pÃ©seket.
-         * Minden megkergÃ¼lt teleportkapu lÃ©p, minden robot Ã©s ufÃ³ lÃ©p.
-         * A nap tesz egy lÃ©pÃ©st.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A nextturn parancshoz tartozó osztály. A kör végén meghívandó parancs. Végrehajtja a kör végi lépéseket.
+         * Minden megkergült teleportkapu lép, minden robot és ufó lép.
+         * A nap tesz egy lépést.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             for (Teleport t : game.getGates()) {
@@ -1000,23 +1000,23 @@ public class Skeleton {
         }
     }
     /**
-     * A robotaction parancshoz tartozÃ³ osztÃ¡ly. A megadott paramÃ©terben lÃ©vÅ‘ robottal dolgozik.
-     * Ha ezen felÃ¼l nincs megadva paramÃ©ter, akkor egy makeAction mÅ±veletet hajt vÃ©gre a robottal.
-     * Ha a mÃ¡sodik paramÃ©ter "drill" akkor fÃºrÃ¡st hajt vÃ©gre a robottal.
-     * Ha a mÃ¡sodik paramÃ©ter "move" akkor a harmadik paramÃ©terben megadott sorszÃ¡mÃº (a robot jelenlegi aszteroidÃ¡jÃ¡nak
-     * szomszÃ©dainak listÃ¡jÃ¡ban) szomszÃ©dra megy.
+     * A robotaction parancshoz tartozó osztály. A megadott paraméterben lévõ robottal dolgozik.
+     * Ha ezen felül nincs megadva paraméter, akkor egy makeAction mûveletet hajt végre a robottal.
+     * Ha a második paraméter "drill" akkor fúrást hajt végre a robottal.
+     * Ha a második paraméter "move" akkor a harmadik paraméterben megadott sorszámú (a robot jelenlegi aszteroidájának
+     * szomszédainak listájában) szomszédra megy.
      */
     private static class robotactionCommand implements Command{
 
         /**
-         * Az elsÅ‘ megadott paramÃ©terben lÃ©vÅ‘ robottal dolgozik.
-         * Ha ezen felÃ¼l nincs megadva paramÃ©ter, akkor egy makeAction mÅ±veletet hajt vÃ©gre a robottal.
-         * Ha a mÃ¡sodik paramÃ©ter "drill" akkor fÃºrÃ¡st hajt vÃ©gre a robottal.
-         * Ha a mÃ¡sodik paramÃ©ter "move" akkor a harmadik paramÃ©terben megadott sorszÃ¡mÃº (a robot jelenlegi aszteroidÃ¡jÃ¡nak
-         * szomszÃ©dainak listÃ¡jÃ¡ban) szomszÃ©dra megy.
-         * Ha valami hiba tÃ¶rtÃ©nik, akkor jelzi a felhasznÃ¡lÃ³ felÃ©.
-         * Az esemÃ©nyeket rÃ©szletesen kÃ¶zli a felhasznÃ¡lÃ³val.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Az elsõ megadott paraméterben lévõ robottal dolgozik.
+         * Ha ezen felül nincs megadva paraméter, akkor egy makeAction mûveletet hajt végre a robottal.
+         * Ha a második paraméter "drill" akkor fúrást hajt végre a robottal.
+         * Ha a második paraméter "move" akkor a harmadik paraméterben megadott sorszámú (a robot jelenlegi aszteroidájának
+         * szomszédainak listájában) szomszédra megy.
+         * Ha valami hiba történik, akkor jelzi a felhasználó felé.
+         * Az eseményeket részletesen közli a felhasználóval.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (random) {
@@ -1099,23 +1099,23 @@ public class Skeleton {
     }
 
     /**
-     * A ufoaction parancshoz tartozÃ³ osztÃ¡ly. A megadott paramÃ©terÅ± ufÃ³val dolgozik.
-     * Ha ezen felÃ¼l nincs megadva paramÃ©ter, akkor egy makeAction mÅ±veletet hajt vÃ©gre az ufÃ³n.
-     * Ha a mÃ¡sodik paramÃ©ter "mine" akkor bÃ¡nyÃ¡szÃ¡st hajt vÃ©gre az ufÃ³val.
-     * Ha a mÃ¡sodik paramÃ©ter "move" akkor a harmadik paramÃ©terben megadott sorszÃ¡mÃº (az ufÃ³ jelenlegi aszteroidÃ¡jÃ¡nak
-     * szomszÃ©dainak listÃ¡jÃ¡ban) szomszÃ©dra megy.
+     * A ufoaction parancshoz tartozó osztály. A megadott paraméterû ufóval dolgozik.
+     * Ha ezen felül nincs megadva paraméter, akkor egy makeAction mûveletet hajt végre az ufón.
+     * Ha a második paraméter "mine" akkor bányászást hajt végre az ufóval.
+     * Ha a második paraméter "move" akkor a harmadik paraméterben megadott sorszámú (az ufó jelenlegi aszteroidájának
+     * szomszédainak listájában) szomszédra megy.
      */
     private static class ufoactionCommand implements Command{
 
         /**
-         * A ufoaction parancshoz tartozÃ³ osztÃ¡ly. A megadott paramÃ©terÅ± ufÃ³val dolgozik.
-         * Ha ezen felÃ¼l nincs megadva paramÃ©ter, akkor egy makeAction mÅ±veletet hajt vÃ©gre az ufÃ³n.
-         * Ha a mÃ¡sodik paramÃ©ter "mine" akkor bÃ¡nyÃ¡szÃ¡st hajt vÃ©gre az ufÃ³val.
-         * Ha a mÃ¡sodik paramÃ©ter "move" akkor a harmadik paramÃ©terben megadott sorszÃ¡mÃº (az ufÃ³ jelenlegi aszteroidÃ¡jÃ¡nak
-         * szomszÃ©dainak listÃ¡jÃ¡ban) szomszÃ©dra megy.
-         * Az esetleges hibÃ¡kat a felhasznÃ¡lÃ³val kÃ¶zli.
-         * A megtÃ¶rtÃ©nt esemÃ©nyeket rÃ©szletesen kÃ¶zli a felhasznÃ¡lÃ³ felÃ©.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A ufoaction parancshoz tartozó osztály. A megadott paraméterû ufóval dolgozik.
+         * Ha ezen felül nincs megadva paraméter, akkor egy makeAction mûveletet hajt végre az ufón.
+         * Ha a második paraméter "mine" akkor bányászást hajt végre az ufóval.
+         * Ha a második paraméter "move" akkor a harmadik paraméterben megadott sorszámú (az ufó jelenlegi aszteroidájának
+         * szomszédainak listájában) szomszédra megy.
+         * Az esetleges hibákat a felhasználóval közli.
+         * A megtörtént eseményeket részletesen közli a felhasználó felé.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2 || (args.length == 3 && !"mine".equals(args[2])) || (args.length == 4 && !"move".equals(args[2]))){
@@ -1177,16 +1177,16 @@ public class Skeleton {
 
 
     /**
-     * A sunaction parancshoz tartozÃ³ osztÃ¡ly. Ha a vÃ©letlenszerÅ±sÃ©g be van kapcsolva, akkor a nappal vÃ©grehajt
-     * makeAction mÅ±veletet. KiÃ­rja, hogy milyen esemÃ©nyek kÃ¶vetkeztek be ennek hatÃ¡sÃ¡ra.
+     * A sunaction parancshoz tartozó osztály. Ha a véletlenszerûség be van kapcsolva, akkor a nappal végrehajt
+     * makeAction mûveletet. Kiírja, hogy milyen események következtek be ennek hatására.
      */
     private static class sunactionCommand implements Command{
 
         /**
-         * a a vÃ©letlenszerÅ±sÃ©g be van kapcsolva, akkor a nappal vÃ©grehajt
-         * makeAction mÅ±veletet. KiÃ­rja, hogy milyen esemÃ©nyek kÃ¶vetkeztek be ennek hatÃ¡sÃ¡ra.
-         * A robotok, telepesek, ufÃ³k Ã©s a teleportkapuk vÃ¡ltozÃ¡sait ellenÅ‘rzi Ã©s ezeket kiÃ­rja.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * a a véletlenszerûség be van kapcsolva, akkor a nappal végrehajt
+         * makeAction mûveletet. Kiírja, hogy milyen események következtek be ennek hatására.
+         * A robotok, telepesek, ufók és a teleportkapuk változásait ellenõrzi és ezeket kiírja.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (random) {
@@ -1232,16 +1232,16 @@ public class Skeleton {
         }
     }
     /**
-     * A solarwind parancshoz tartozÃ³ osztÃ¡ly. ElindÃ­t egy napvihart a megadott aszteroidÃ¡n a megadott mÃ©rettel.
-     * EzutÃ¡n kiÃ­rja a tÃ¶rtÃ©nteket.
+     * A solarwind parancshoz tartozó osztály. Elindít egy napvihart a megadott aszteroidán a megadott mérettel.
+     * Ezután kiírja a történteket.
      */
     private static class solarwindCommand implements Command{
         /**
-         * Ha nincs elÃ©g paramÃ©ter, akkor hibÃ¡t jelez. KÃ¼lÃ¶nben elindÃ­t az elsÅ‘ paramÃ©terkÃ©nt megadott aszterodÃ¡n
-         * egy a mÃ¡sodik paramÃ©terben Ã¡tadott mÃ©retÅ± napvihart.
-         * A robotok, telepesek, ufok Ã©s teleportkapuk listÃ¡jÃ¡nak mÃ¡solÃ¡sÃ¡val ellenÅ‘rzi, hogy a napvihar hatÃ¡sÃ¡ra
-         * milyen esemÃ©nyek tÃ¶rtÃ©ntek.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Ha nincs elég paraméter, akkor hibát jelez. Különben elindít az elsõ paraméterként megadott aszterodán
+         * egy a második paraméterben átadott méretû napvihart.
+         * A robotok, telepesek, ufok és teleportkapuk listájának másolásával ellenõrzi, hogy a napvihar hatására
+         * milyen események történtek.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 3) {
@@ -1289,12 +1289,12 @@ public class Skeleton {
         }
     }
     /**
-     * A checkwin parancshoz tartozÃ³ osztÃ¡ly. EllenÅ‘rizteti a game-mel, hogy a jÃ¡tÃ©kot megnyertÃ©k-e mÃ¡r.
+     * A checkwin parancshoz tartozó osztály. Ellenõrizteti a game-mel, hogy a játékot megnyerték-e már.
      */
     private static class checkwinCommand implements Command{
         /**
-         * Ã‰rtesÃ­ti a felhasznÃ¡lÃ³t arrÃ³l, hogy megnyerte-e a jÃ¡tÃ©kot.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Értesíti a felhasználót arról, hogy megnyerte-e a játékot.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (game.checkWin())
@@ -1304,12 +1304,12 @@ public class Skeleton {
         }
     }
     /**
-     * A checklose parancshoz tartozÃ³ osztÃ¡ly. EllenÅ‘rizteti a game-mel, hogy a jÃ¡tÃ©kot elvesztettÃ©k-e mÃ¡r.
+     * A checklose parancshoz tartozó osztály. Ellenõrizteti a game-mel, hogy a játékot elvesztették-e már.
      */
     private static class checkloseCommand implements Command{
         /**
-         * Ã‰rtesÃ­ti a felhasznÃ¡lÃ³t arrÃ³l, hogy elvesztette-e a jÃ¡tÃ©kot.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Értesíti a felhasználót arról, hogy elvesztette-e a játékot.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (game.checkLose())
@@ -1319,12 +1319,12 @@ public class Skeleton {
         }
     }
      /**
-     * A newgame parancshoz tartozÃ³ osztÃ¡ly.
-     * LÃ©trehoz a felhasznÃ¡lÃ³ Ã¡ltal megadott
-     * szÃ¡mÃº telepest, aszteroidÃ¡t Ã©s UFO-t,
-     * valamint egy napot a game init metÃ³dusa
-     * segÃ­tsÃ©gÃ©vel. Ãšj randomizÃ¡lt pÃ¡lya kÃ©szÃ­tÃ©sÃ©re
-     * hasznÃ¡lhatÃ³
+     * A newgame parancshoz tartozó osztály.
+     * Létrehoz a felhasználó által megadott
+     * számú telepest, aszteroidát és UFO-t,
+     * valamint egy napot a game init metódusa
+     * segítségével. Új randomizált pálya készítésére
+     * használható
      */
     private static class newgameCommand implements Command{
 
@@ -1343,6 +1343,7 @@ public class Skeleton {
                 output.println("all details must be specified");
                 return;
             }
+            game = new Game();
             game.init(nSettler, nAsteroid, nUFO);
             resetIDs();
             
@@ -1370,15 +1371,15 @@ public class Skeleton {
         }
     }
     /**
-     * A setclosetosun parancshoz tartozÃ³ osztÃ¡ly.
-     * A paramÃ©terkÃ©nt megkapott aszteroidÃ¡nak a closeToSun vÃ¡ltozÃ³jÃ¡t Ã¡llÃ­tja be a mÃ¡sodik paramÃ©terben megadott Ã©rtÃ©kre.
+     * A setclosetosun parancshoz tartozó osztály.
+     * A paraméterként megkapott aszteroidának a closeToSun változóját állítja be a második paraméterben megadott értékre.
      */
     private static class setclosetosunCommand implements Command{
         /**
-         * A paramÃ©terkÃ©nt megkapott aszteroidÃ¡nak a closeToSun vÃ¡ltozÃ³jÃ¡t Ã¡llÃ­tja be a megadott Ã©rtÃ©kre.
-         * Ha nincs elÃ©g argumentum, vagy nem lÃ©tezik ilyen aszteroida, akkor hibÃ¡t jelez.
-         * Az Ãºj closeToSun Ã©rtÃ©ket Ãºgy kell megadni, hogy "0" ha hamis, "1", ha igaz legyen.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A paraméterként megkapott aszteroidának a closeToSun változóját állítja be a megadott értékre.
+         * Ha nincs elég argumentum, vagy nem létezik ilyen aszteroida, akkor hibát jelez.
+         * Az új closeToSun értéket úgy kell megadni, hogy "0" ha hamis, "1", ha igaz legyen.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 3 || (!"0".equals(args[2]) && !"1".equals(args[2]))) {
@@ -1428,29 +1429,32 @@ public class Skeleton {
         }
     }
     /**
-     * A giveup parancshoz tartozÃ³ osztÃ¡ly.
+     * A giveup parancshoz tartozó osztály.
      */
-    //TODO Peti
     private static class giveupCommand implements Command{
-
+        /**
+         * Feladja és befejezi a játékot.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
+         */
         public void execute(String[] args) {
-
+            game.setGameEnded(true);
+            output.println("game given up");
         }
     }
 
 
     /**
-     * A bammboozleteleport parancshoz tartozÃ³ osztÃ¡ly. A paramÃ©terkÃ©nt kapott teleportkapu bamboozled mezÅ‘jÃ©t a
-     * mÃ¡sodik paramÃ©ternek megadott Ã©rtÃ©kre beÃ¡llÃ­tja.
+     * A bammboozleteleport parancshoz tartozó osztály. A paraméterként kapott teleportkapu bamboozled mezõjét a
+     * második paraméternek megadott értékre beállítja.
      */
     private static class bamboozleteleportCommand implements Command{
 
         /**
-         * A bammboozleteleport parancshoz tartozÃ³ osztÃ¡ly. A paramÃ©terkÃ©nt kapott teleportkapu bamboozled mezÅ‘jÃ©t a
-         * mÃ¡sodik paramÃ©ternek megadott Ã©rtÃ©kre beÃ¡llÃ­tja.
-         * Ha nincs elÃ©g paramÃ©ter vagy nem jÃ³ az azonosÃ­tÃ³, akkor jelzi a felhasznÃ¡lÃ³nak.
-         * Az Ãºj bamboozled Ã©rtÃ©ket Ãºgy kell megadni, hogy "0" ha hamis, "1", ha igaz legyen.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * A bammboozleteleport parancshoz tartozó osztály. A paraméterként kapott teleportkapu bamboozled mezõjét a
+         * második paraméternek megadott értékre beállítja.
+         * Ha nincs elég paraméter vagy nem jó az azonosító, akkor jelzi a felhasználónak.
+         * Az új bamboozled értéket úgy kell megadni, hogy "0" ha hamis, "1", ha igaz legyen.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             if (args.length < 3 || (!"0".equals(args[2]) && !"1".equals(args[2]))) {
@@ -1470,12 +1474,12 @@ public class Skeleton {
     }
 
     /**
-     * Az exit parancshoz tartozÃ³ osztÃ¡ly.
+     * Az exit parancshoz tartozó osztály.
      */
     private static class exitCommand implements Command{
         /**
-         * KilÃ©p a programbÃ³l.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
+         * Kilép a programból.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
             System.exit(0);
@@ -1483,10 +1487,10 @@ public class Skeleton {
     }
 
     /**
-     * Az aktÃ­v telepessel kapcsolatos parancsok paramÃ©tereinek helyessÃ©gÃ©t ellenÅ‘rzi.
-     * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szÃ³kÃ¶zÃ¶kkel lett elvÃ¡lasztva.
-     * @param argscnt HÃ¡ny parancssori argumentumot vÃ¡r a parancs.
-     * @return Igaz, ha megfelelÅ‘ szÃ¡mÃº argumentum van Ã©s az aktÃ­v telepes mÃ©g nem halt meg. KÃ¼lÃ¶nben hamis.
+     * Az aktív telepessel kapcsolatos parancsok paramétereinek helyességét ellenõrzi.
+     * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
+     * @param argscnt Hány parancssori argumentumot vár a parancs.
+     * @return Igaz, ha megfelelõ számú argumentum van és az aktív telepes még nem halt meg. Különben hamis.
      */
     private static boolean settlerCommandCheck(String[] args, int argscnt){
         if (args.length < argscnt){
@@ -1506,12 +1510,12 @@ public class Skeleton {
     }
 
     /**
-     * A parancsok nevÃ©nek Ã©s az ahhoz tartozÃ³ parancsobjektumoknak az Ã¶sszerendelÃ©se.
+     * A parancsok nevének és az ahhoz tartozó parancsobjektumoknak az összerendelése.
      */
     private static HashMap<String, Command> commands;
 
     /**
-     * InicializÃ¡lja a parancsokat. HozzÃ¡adja az Ã¶sszes elÃ©rhetÅ‘ parancsot a parancs nÃ©v- parancsobjektum Ã¶sszerendelÃ©shez.
+     * Inicializálja a parancsokat. Hozzáadja az összes elérhetõ parancsot a parancs név- parancsobjektum összerendeléshez.
      */
     public static void initializeCommands(){
         commands = new HashMap<>();
@@ -1534,9 +1538,9 @@ public class Skeleton {
     }
 
     /**
-     * A paramÃ©terkÃ©nt megadott sztringbÅ‘l egy nyersanyagot prÃ³bÃ¡l meg beolvasni.
-     * @param arg A sztring, amely egy nyersanyagot Ã­r le.
-     * @return A beolvasott nyersanyagnak megfelelÅ‘ nyersanyag objektum,
+     * A paraméterként megadott sztringbõl egy nyersanyagot próbál meg beolvasni.
+     * @param arg A sztring, amely egy nyersanyagot ír le.
+     * @return A beolvasott nyersanyagnak megfelelõ nyersanyag objektum,
      * ha nem tudott nyersanyagot beolvasni, akkor null.
      */
     private static Mineral parseMineral(String arg){
@@ -1558,7 +1562,7 @@ public class Skeleton {
     }
 
     /**
-     * EllenÅ‘rzi, hogy meghalt-e az aktÃ­v telepes. Ha igen, akkor jelzi a felhasznÃ¡lÃ³nak.
+     * Ellenõrzi, hogy meghalt-e az aktív telepes. Ha igen, akkor jelzi a felhasználónak.
      */
     private static void checkActiveSettlerDied(){
         if (activeSettler != null && !game.getSettlers().contains(activeSettler)){
@@ -1567,8 +1571,8 @@ public class Skeleton {
     }
 
     /**
-     * MegprÃ³bÃ¡l egy parancsot kiolvasni a bemenet kÃ¶vetkezÅ‘ sorÃ¡bÃ³l.
-     * @return Hamis, ha a bemenet legutolsÃ³ sorÃ¡t bÃ¡r beolvastÃ¡k. Igaz, ha mÃ©g nem prÃ³bÃ¡ltak a legutolsÃ³ sor utÃ¡n olvasni.
+     * Megpróbál egy parancsot kiolvasni a bemenet következõ sorából.
+     * @return Hamis, ha a bemenet legutolsó sorát bár beolvasták. Igaz, ha még nem próbáltak a legutolsó sor után olvasni.
      */
     private static boolean parseCommand(){
         String[] pieces;
@@ -1585,13 +1589,17 @@ public class Skeleton {
             output.println("invalid command");
             return true;
         }
+        if (!"newgame".equals(pieces[0]) && game.getGameEnded()){
+            output.println("game ended");
+            return true;
+        }
         cmd.execute(pieces);
         checkActiveSettlerDied();
         return true;
     }
 
     /**
-     * InicializÃ¡lja 0-val a maxID Ã¶sszerendelÃ©seket.
+     * Inicializálja 0-val a maxID összerendeléseket.
      */
     private static void initializeMaxIDs(){
         maxIDs.put("asteroid", 0);
@@ -1603,11 +1611,11 @@ public class Skeleton {
 
 
     /**
-     * InicializÃ¡lja a parancsokat Ã©s a maxID-ket.
-     * Ha van elegendÅ‘ parancssori argumentum, akkor az elsÅ‘re Ã¡tÃ­rÃ¡nyÃ­tja a bemenetet, a mÃ¡sodikra a kimenetet.
-     * A program belÃ©pÃ©si pontja, kiÃ­rja a menÃ¼pontokat Ã©s bekÃ©ri a felhaszÃ¡lÃ³tÃ³l a vÃ¡lasztott menÃ¼pontot a menu()
-     * fÃ¼ggvÃ©nnyel, amihez meghÃ­vja a megfelelÅ‘ inicializÃ¡lÃ³ fÃ¼ggvÃ©nyt.
-     * Ezt addig ismÃ©tli, amÃ­g a felhasznÃ¡lÃ³ ki nem lÃ©p a programbÃ³l.
+     * Inicializálja a parancsokat és a maxID-ket.
+     * Ha van elegendõ parancssori argumentum, akkor az elsõre átírányítja a bemenetet, a másodikra a kimenetet.
+     * A program belépési pontja, kiírja a menüpontokat és bekéri a felhaszálótól a választott menüpontot a menu()
+     * függvénnyel, amihez meghívja a megfelelõ inicializáló függvényt.
+     * Ezt addig ismétli, amíg a felhasználó ki nem lép a programból.
      * @param args parancssori argumentumok
      */
     public static void main(String[] args){

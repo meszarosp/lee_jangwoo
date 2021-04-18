@@ -1,47 +1,47 @@
 import java.util.*;
 
 /**
- * Az aszteroida felel a rajta lÃ©vÅ‘ utazÃ³k nyilvÃ¡ntartÃ¡sÃ¡Ã©rt, Ã©rtesÃ­tenie kell Å‘ket amennyiben az aszteroida 
- * felrobban, valamint, ha napszÃ©l Ã©ri el ezt az aszteroidÃ¡t. FelelÅ‘ssÃ©ge nyilvÃ¡ntartani a kÃ©rgÃ©nek vastagsÃ¡gÃ¡t,
- * a magjÃ¡ban tartott nyersanyagot, valamint azt, hogy kÃ¶zel van-e a naphoz.
- * FelelÅ‘ssÃ©ge lehetÅ‘vÃ© tenni a telepesnek, hogy az Ã¼reges aszteroidÃ¡ba tegyen egy nyersanyagot. 
- * Ha megfÃºrjÃ¡k, csÃ¶kkentenie kell a kÃ©rgÃ©nek vastagsÃ¡gÃ¡t, ha bÃ¡nyÃ¡sszÃ¡k, oda kell adnia a benne lÃ©vÅ‘ nyersanyagot.
- * NyilvÃ¡n kell tartania szomszÃ©dait (ezek lehetnek aszteroidÃ¡k Ã©s teleportkapuk), Ã©s vissza is kell adnia
- * egy szomszÃ©djÃ¡nak objektumÃ¡t, ha az utazÃ³ mozogni szeretne. Ha napkÃ¶zelben van Ã©s felszÃ­nre kerÃ¼l a nyersanyag,
- * akkor ezt jeleznie kell a nyersanyag felÃ©.
- * MegvalÃ³sÃ­tja az INeighbour interfÃ©szt (ahogy a Teleport osztÃ¡ly is).
+ * Az aszteroida felel a rajta lévõ utazók nyilvántartásáért, értesítenie kell õket amennyiben az aszteroida 
+ * felrobban, valamint, ha napszél éri el ezt az aszteroidát. Felelõssége nyilvántartani a kérgének vastagságát,
+ * a magjában tartott nyersanyagot, valamint azt, hogy közel van-e a naphoz.
+ * Felelõssége lehetõvé tenni a telepesnek, hogy az üreges aszteroidába tegyen egy nyersanyagot. 
+ * Ha megfúrják, csökkentenie kell a kérgének vastagságát, ha bányásszák, oda kell adnia a benne lévõ nyersanyagot.
+ * Nyilván kell tartania szomszédait (ezek lehetnek aszteroidák és teleportkapuk), és vissza is kell adnia
+ * egy szomszédjának objektumát, ha az utazó mozogni szeretne. Ha napközelben van és felszínre kerül a nyersanyag,
+ * akkor ezt jeleznie kell a nyersanyag felé.
+ * Megvalósítja az INeighbour interfészt (ahogy a Teleport osztály is).
  */
 public class Asteroid implements INeighbour {
 
 	/**
-     * Az aszteroida kÃ©rgÃ©nek vastagsÃ¡gÃ¡t jellemzÅ‘ szÃ¡m.
+     * Az aszteroida kérgének vastagságát jellemzõ szám.
      */
     private int shell;
     
     /**
-     * Az aszteroida naphoz kÃ¶zeli Ã¡llapotÃ¡t tÃ¡rolja el. Ha Ã©rtÃ©ke igaz (true), 
-     * akkor az aszteroida napkÃ¶zelben van, ha false, akkor naptÃ¡volban van.
+     * Az aszteroida naphoz közeli állapotát tárolja el. Ha értéke igaz (true), 
+     * akkor az aszteroida napközelben van, ha false, akkor naptávolban van.
      */
     private boolean closeToSun;
 	
     /**
-     * Az aszteroida szomszÃ©dainak listÃ¡ja, ezen keresztÃ¼l tudja Ã©rtesÃ­teni Å‘ket felrobbanÃ¡sakor.
-     * Valamint lÃ©tezÃ©se lehetÅ‘vÃ© teszi, hogy az utazÃ³ lekÃ©rje egy szomszÃ©djÃ¡t.
+     * Az aszteroida szomszédainak listája, ezen keresztül tudja értesíteni õket felrobbanásakor.
+     * Valamint létezése lehetõvé teszi, hogy az utazó lekérje egy szomszédját.
      */
     private List<INeighbour> neighbours = new ArrayList<INeighbour>();
 
     /**
-     * Az aszteroidÃ¡n lÃ©vÅ‘ utazÃ³k listÃ¡ja. Ezen keresztÃ¼l Ã©rtesÃ­ti Å‘ket az azteroida, ha napszÃ©l Ã©ri, vagy felrobban.
+     * Az aszteroidán lévõ utazók listája. Ezen keresztül értesíti õket az azteroida, ha napszél éri, vagy felrobban.
      */
     private List<Traveller> travellers = new ArrayList<Traveller>();
     
     /**
-     * MielÅ‘tt az aszteroida felrobban Ã©rtesÃ­ti a napot, hogy fel fog robbanni.
+     * Mielõtt az aszteroida felrobban értesíti a napot, hogy fel fog robbanni.
      */
     private Sun sun;
     
     /**
-     * Az aszteroida magjÃ¡ban lÃ©vÅ‘ nyersanyag, ez lehet Ã¼res is, ekkor Ã¼reges az aszteroida.
+     * Az aszteroida magjában lévõ nyersanyag, ez lehet üres is, ekkor üreges az aszteroida.
      */
     private Mineral core;
     
@@ -51,11 +51,11 @@ public class Asteroid implements INeighbour {
     public Asteroid() {}
 
     /**
-     * Konstruktor, ami a paramÃ©terben kapott Ã©rtÃ©kek alapjÃ¡n inicializÃ¡lja az aszteroida objektumot.
-     * @param shell az aszteroida kÃ©regvastagsÃ¡ga
-     * @param closeToSun az aszteroida kÃ¶zel van-e a naphoz?
+     * Konstruktor, ami a paraméterben kapott értékek alapján inicializálja az aszteroida objektumot.
+     * @param shell az aszteroida kéregvastagsága
+     * @param closeToSun az aszteroida közel van-e a naphoz?
      * @param core az aszteroida magja
-     * @param sun az aszteroidÃ¡hoz tartozÃ³ Nap
+     * @param sun az aszteroidához tartozó Nap
      */
     public Asteroid(int shell, boolean closeToSun, Mineral core, Sun sun) {
         this.shell = shell;
@@ -65,9 +65,9 @@ public class Asteroid implements INeighbour {
     }
 
     /**
-     * Az aszteroida "meg lett fÃºrva", ez csÃ¶kkenti a shell-t, amennyiben az nem nulla.
-     * Ha nulla lesz a shell, megnÃ©zi a closeToSun vÃ¡ltozÃ³t, amennyiben ez igaz, 
-     * meghÃ­vja a core exposedToSun metÃ³dusÃ¡t, magÃ¡t adva paramÃ©terkÃ©nt.
+     * Az aszteroida "meg lett fúrva", ez csökkenti a shell-t, amennyiben az nem nulla.
+     * Ha nulla lesz a shell, megnézi a closeToSun változót, amennyiben ez igaz, 
+     * meghívja a core exposedToSun metódusát, magát adva paraméterként.
      */
     public boolean onDrill() {
         if (shell > 0) {
@@ -82,9 +82,9 @@ public class Asteroid implements INeighbour {
     }
 
     /**
-     * Ha a shell 0, a nyersanyag, amely van, vagy nincs az aszteroida magjÃ¡ban "kibÃ¡nyÃ¡szÃ³dik".
-     * Ha volt nyersanyag, akkor visszaadja visszatÃ©rÃ©si Ã©rtÃ©kkÃ©nt a core-t, amennyiben nem is volt,
-     *  vagy a shell nem 0, akkor null-al tÃ©r vissza. Ha volt benne nyersanyag, akkor azt null-ra Ã¡llÃ­tja.
+     * Ha a shell 0, a nyersanyag, amely van, vagy nincs az aszteroida magjában "kibányászódik".
+     * Ha volt nyersanyag, akkor visszaadja visszatérési értékként a core-t, amennyiben nem is volt,
+     *  vagy a shell nem 0, akkor null-al tér vissza. Ha volt benne nyersanyag, akkor azt null-ra állítja.
      * @return
      */
     public Mineral onMine() {
@@ -97,9 +97,9 @@ public class Asteroid implements INeighbour {
     }
 
     /**
-     * MeghÃ­vja minden Traveller-re a travellers listÃ¡ban a hitByBlast metÃ³dusukat, 
-     * ezutÃ¡n minden szomszÃ©djÃ¡ra a removeNeighbour fÃ¼ggvÃ©nyt magÃ¡val paramÃ©terkÃ©nt. 
-     * EzutÃ¡n a sun-nak meghÃ­vja a removeAsteroid metÃ³dusÃ¡t magÃ¡val paramÃ©terkÃ©nt.
+     * Meghívja minden Traveller-re a travellers listában a hitByBlast metódusukat, 
+     * ezután minden szomszédjára a removeNeighbour függvényt magával paraméterként. 
+     * Ezután a sun-nak meghívja a removeAsteroid metódusát magával paraméterként.
      */
     public void radioactiveBlast() {
     	for (int i = 0; i < travellers.size(); i++)
@@ -110,8 +110,8 @@ public class Asteroid implements INeighbour {
     }
 
     /**
-     * NegÃ¡lja a closeToSun-t, Ã©s ha a closeToSun true Ã©s a shell 0 meghÃ­vja a core-ra (ha van)
-     *  az exposedToSun metÃ³dusÃ¡t Ã¶nmagÃ¡t adva paramÃ©terkÃ©nt.
+     * Negálja a closeToSun-t, és ha a closeToSun true és a shell 0 meghívja a core-ra (ha van)
+     *  az exposedToSun metódusát önmagát adva paraméterként.
      */
     public void setCloseToSun() {
         closeToSun = !closeToSun;
@@ -120,11 +120,11 @@ public class Asteroid implements INeighbour {
     }
 
     /**
-     * MegprÃ³bÃ¡lja betenni a core-ba a paramÃ©terÃ¼l kapott Mineral-t. Ez akkor sikerÃ¼l, ha a core Ã¼res,
-     * Ã©s az aszteroidÃ¡nak ki van fÃºrva a kÃ©rge. Ha sikerÃ¼l, akkor true-val tÃ©r vissza, egyÃ©bkÃ©nt false-al,
-     * nem mÃ³dosÃ­tja a core-ban lÃ©vÅ‘ Mineral-t.
-     * @param m az aszteroida magjÃ¡ba (core) betenni kÃ­vÃ¡nt nyersanyag
-     * @return bool a nyersanyag viszzatevÃ©sÃ©nek sikeressÃ©gÃ©rÅ‘l
+     * Megpróbálja betenni a core-ba a paraméterül kapott Mineral-t. Ez akkor sikerül, ha a core üres,
+     * és az aszteroidának ki van fúrva a kérge. Ha sikerül, akkor true-val tér vissza, egyébként false-al,
+     * nem módosítja a core-ban lévõ Mineral-t.
+     * @param m az aszteroida magjába (core) betenni kívánt nyersanyag
+     * @return bool a nyersanyag viszzatevésének sikerességérõl
      */
     public boolean putMineralBack(Mineral m) {
         if (core == null && shell == 0) {
@@ -137,7 +137,7 @@ public class Asteroid implements INeighbour {
     }
 
     /**
-     * A fÃ¼ggvÃ©nyt meghÃ­vva az aszteroida magja null Ã©rtÃ©ket vesz fel.
+     * A függvényt meghívva az aszteroida magja null értéket vesz fel.
      */
     public void removeMineral() {
         core = null;
@@ -145,8 +145,8 @@ public class Asteroid implements INeighbour {
 
     
     /**
-     * A neighbours listÃ¡bÃ³l visszaadja az i-edik szomszÃ©dot, ha nincs ilyen elem, akkor null-al tÃ©r vissza.
-     * @param i a lekÃ©rdezni kÃ­vÃ¡nt szomszÃ©d sorszÃ¡ma a neighbours listÃ¡ban.
+     * A neighbours listából visszaadja az i-edik szomszédot, ha nincs ilyen elem, akkor null-al tér vissza.
+     * @param i a lekérdezni kívánt szomszéd sorszáma a neighbours listában.
      */
     public INeighbour getNeighbourAt(int i) {
         if (i < neighbours.size() && i >= 0)
@@ -159,9 +159,9 @@ public class Asteroid implements INeighbour {
     }
 
     /**
-     * A megvalÃ³sÃ­tott interfÃ©sz fÃ¼ggvÃ©nye, elhelyezi a traveller-t a listÃ¡jÃ¡ban Ã©s meghÃ­vja
-     * erre az utazÃ³ra a setAsteroid fÃ¼ggvÃ©nyÃ©t sajÃ¡t magÃ¡t paramÃ©terÃ¼l adva.
-     * @param traveller az elhelyezni kÃ­vÃ¡nt utazÃ³
+     * A megvalósított interfész függvénye, elhelyezi a traveller-t a listájában és meghívja
+     * erre az utazóra a setAsteroid függvényét saját magát paraméterül adva.
+     * @param traveller az elhelyezni kívánt utazó
      */
     @Override
     public void placeTraveller(Traveller traveller){
@@ -172,16 +172,16 @@ public class Asteroid implements INeighbour {
     }
     
     /**
-     * Kiveszi a kapott utazÃ³t a travellers listÃ¡bÃ³l.
-     * @param traveller az eltÃ¡volÃ­tani kÃ­vÃ¡nt traveller
+     * Kiveszi a kapott utazót a travellers listából.
+     * @param traveller az eltávolítani kívánt traveller
      */
     public void removeTraveller(Traveller traveller) {
         travellers.remove(traveller);
     }
 
     /**
-     * A megvalÃ³sÃ­tott interfÃ©sz fÃ¼ggvÃ©nye, kiveszi a paramÃ©terÃ¼l kapott szomszÃ©dot a neighbours listÃ¡bÃ³l.
-     * @param neighbour az eltÃ¡volÃ­tani kÃ­vÃ¡nt szomszÃ©d
+     * A megvalósított interfész függvénye, kiveszi a paraméterül kapott szomszédot a neighbours listából.
+     * @param neighbour az eltávolítani kívánt szomszéd
      */
     @Override
     public void removeNeighbour(INeighbour neighbour) {
@@ -189,18 +189,18 @@ public class Asteroid implements INeighbour {
     }
     
     /**
-     * Visszaadja az aszteroida szomszÃ©dainak szÃ¡mÃ¡t.
-     * @return a szomszÃ©dok szÃ¡ma
+     * Visszaadja az aszteroida szomszédainak számát.
+     * @return a szomszédok száma
      */
     public int getNeighbourCount() {
     	return neighbours.size();
     }
     
     /**
-     * A teleport mozgatÃ¡sÃ¡Ã©rt felelÅ‘s metÃ³dus. MeghÃ­vja a paramÃ©terÃ¼l kapott teleporton a
-     * setNeighbour metÃ³dust magÃ¡t adva paramÃ©terÃ¼l. Beteszi a teleportot a neighbours listÃ¡jÃ¡ba Ã©s igazzal tÃ©r vissza.
-     * @param t a mozgatandÃ³ teleport
-     * @return a mozgatÃ¡s sikeressÃ©ge
+     * A teleport mozgatásáért felelõs metódus. Meghívja a paraméterül kapott teleporton a
+     * setNeighbour metódust magát adva paraméterül. Beteszi a teleportot a neighbours listájába és igazzal tér vissza.
+     * @param t a mozgatandó teleport
+     * @return a mozgatás sikeressége
      */
     @Override
 	public boolean moveTeleport(Teleport t) {
@@ -210,11 +210,11 @@ public class Asteroid implements INeighbour {
 	}
     
     /**
-     * Ha a core nem Ã¼res, vagy a shell nem 0, az Ã¶sszes Traveller-re a travellers listÃ¡ban meghÃ­vja
-     * a Traveller die metÃ³dusÃ¡t. 
-     * Ha az i nem egyenlÅ‘ 0-val, akkor az Ã¶sszes szomszÃ©djÃ¡ra meghÃ­vja a solarWind metÃ³dust eggyel 
-     * csÃ¶kkentett i-vel. (ez egy szÃ©lessÃ©gi bejÃ¡rÃ¡s).
-     * @param i napszÃ©l mÃ©lysÃ©ge (hogy mekkora terÃ¼letet Ã©r majd el)
+     * Ha a core nem üres, vagy a shell nem 0, az összes Traveller-re a travellers listában meghívja
+     * a Traveller die metódusát. 
+     * Ha az i nem egyenlõ 0-val, akkor az összes szomszédjára meghívja a solarWind metódust eggyel 
+     * csökkentett i-vel. (ez egy szélességi bejárás).
+     * @param i napszél mélysége (hogy mekkora területet ér majd el)
      */
     @Override
     public void solarWind(int i) {
@@ -227,16 +227,16 @@ public class Asteroid implements INeighbour {
     }
 
     /**
-     * a megvalÃ³sÃ­tott interfÃ©sz fÃ¼ggvÃ©nye, hozzÃ¡adja a neighbours listÃ¡jÃ¡hoz a szomszÃ©dot,
-     * amennyiben az mÃ©g nem rÃ©sze.
-     * @param neighbour a hozzÃ¡adni kÃ­vÃ¡nt szomszÃ©d
+     * a megvalósított interfész függvénye, hozzáadja a neighbours listájához a szomszédot,
+     * amennyiben az még nem része.
+     * @param neighbour a hozzáadni kívánt szomszéd
      */
     public void addNeighbour(INeighbour neighbour){
     	if (!neighbours.contains(neighbour))
     		neighbours.add(neighbour);
     }
     
-    /** Visszaadja az aszteroida magjÃ¡t.
+    /** Visszaadja az aszteroida magját.
      * @return az aszteroida magja
      */
     public Mineral getCore() {
@@ -244,8 +244,8 @@ public class Asteroid implements INeighbour {
     }
     
     /**
-     * LekÃ©rdezi hogy napkÃ¶zel van-e?
-     * @return boolean aszerint hogy napkÃ¶zel (true) vagy naptÃ¡vol (false) van
+     * Lekérdezi hogy napközel van-e?
+     * @return boolean aszerint hogy napközel (true) vagy naptávol (false) van
      */
     public boolean getCloseToSun(){
     	return closeToSun;
