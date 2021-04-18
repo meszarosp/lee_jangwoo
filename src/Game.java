@@ -14,6 +14,8 @@ public class Game {
      */
     private Sun sun;
 
+    private boolean gameEnded;
+
     /**
      * A játékban lévõ telepesek.
      */
@@ -69,23 +71,40 @@ public class Game {
     }
 
     /**
+     * Új játék inicializálását végző segédfüggvény. 
      * 
-     * @param nSettler
-     * @param nAsteroid
+     * @param nSettler	létrehozni kívánt Settlerek száma
+     * @param nAsteroid	létrehozni kívánt aszteroidák száma
+     * @param nUFO		létrehizni kívánt ufók száma
      */
-    public void init(int nSettler, int nAsteroid) {
+    public void init(int nSettler, int nAsteroid, int nUFO) {
         sun = new Sun();
         List<Asteroid> asteroids = new ArrayList<Asteroid>();
         List<Mineral> allMinerals = Mineral.getAllMinerals();
+        if(settlers.size() > 0) {
+        	settlers = new ArrayList<Settler>();
+        }
+        if(UFOs.size() > 0) {
+        	UFOs = new ArrayList<UFO>();
+        }
         Random rand = new Random();
         for(int i = 0; i < nAsteroid; i++) {
         	asteroids.add(new Asteroid(rand.nextInt()% 6,rand.nextBoolean(),rand.nextInt() % 5 == 0 ? null : allMinerals.get(rand.nextInt(allMinerals.size())), sun));
         }
+        for(int i = 0; i < 2*nAsteroid; i++) {
+        	int neighbourIndex = rand.nextInt(nAsteroid);
+        	asteroids.get(i%nAsteroid).addNeighbour(asteroids.get(neighbourIndex));
+        	asteroids.get(neighbourIndex).addNeighbour(asteroids.get(i%nAsteroid));
+        }
         for(int i = 0; i < nSettler; i++) {
         	settlers.add(new Settler(asteroids.get(rand.nextInt(asteroids.size())), this));
         }
+        for(int i = 0; i < nSettler; i++) {
+        	UFOs.add(new UFO(asteroids.get(rand.nextInt(asteroids.size())), this));
+        }
         sun.addAsteroids(asteroids);
     }
+
 
 
     /**
