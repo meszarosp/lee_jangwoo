@@ -142,7 +142,16 @@ public class Game {
     }
 
     /**
-     * @return
+     * Leellenőrzi, hogy a telepesek megnyerték-e a játékot.
+     * Ezt úgy teszi, hogy megnézi telepesenként az adott telepes
+     * aszteroidáján lévő nyersanyagokat. Ezt úgy kell érteni, hogy
+     * az adott telepes hátizsákját, és az azon az aszteroidán lévő
+     * másik telepesek hátizsákját is. Ha nincs meg a megfelelő számú
+     * és típusú nyersanyag, megy a következő telepes aszteroidájára.
+     * Az ellenőrzést a Mineral osztály statikus allMinerals listája
+     * segíti. Ebben tárol a játék elejétől fogva elérhető
+     * nyersanyagokból egy-egy példányt
+     * @return 
      */
     public boolean checkWin() {
     	List<Mineral> allMinerals = Mineral.getAllMinerals();
