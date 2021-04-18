@@ -1,0 +1,5 @@
+loaded test.txt
+settler s1 is now active
+move to a3 successful
+move to a4 successful
+move to t2 unsuccessful

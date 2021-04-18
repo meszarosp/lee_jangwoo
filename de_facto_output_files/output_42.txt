@@ -1,0 +1,2 @@
+loaded test.txt
+win conditions not met
