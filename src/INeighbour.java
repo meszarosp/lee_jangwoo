@@ -14,20 +14,19 @@ public interface INeighbour {
     void placeTraveller(Traveller traveller);
 
     /**
-     * Egy szomszéd megsz?nésér?l értesít, kifejtése az egyes interfész megvalósításoknál.
+     * Egy szomszéd megszûnésérõl értesít, kifejtése az egyes interfész megvalósításoknál.
      * @param neighbour a megsz?n? neighbour	
      */
     void removeNeighbour(INeighbour neighbour);
     
     /**
-     * A napszélr?l értesítik ezzel egymást a megvalósított interfészek.
+     * A napszélrõl értesítik ezzel egymást a megvalósított interfészek.
      * @param i napszél mélysége (hogy mekkora területet ér majd el)
-     * @param neighbour aki meghívta a függvényt (rá nem kell visszahívni)
      */
     void solarWind(int i);
 
     /**
-     * A teleport mozgatásáért felel?s metódus
+     * A teleport mozgatásáért felelõs metódus
      * @param t a mozgatandó teleport
      * @return a mozgatás sikeressége
      */

@@ -15,11 +15,6 @@ public class Game {
     private Sun sun;
 
     /**
-     * A játék végét jelző logikai változó
-     */
-    private boolean gameEnded = false;
-
-    /**
      * A játékban lévõ telepesek listája.
      */
     private List<Settler> settlers = new ArrayList<Settler>();
@@ -34,6 +29,10 @@ public class Game {
      */
     private List<UFO> UFOs = new ArrayList<UFO>();
 
+
+    /**
+     * Igaz, ha vége van a játéknak, hamis ha még nem.
+     */
     private boolean gameEnd = false;
    /**
      * A játékban lévő lehelyezett teleportkapuk. Amik a játékos zsebében vannak, azokat is tárolja.

@@ -1328,6 +1328,16 @@ public class Skeleton {
      */
     private static class newgameCommand implements Command{
 
+         /**
+          * A newgame parancshoz tartozó osztály.
+          * Létrehoz a felhasználó által megadott
+          * számú telepest, aszteroidát és UFO-t,
+          * valamint egy napot a game init metódusa
+          * segítségével. Új randomizált pálya készítésére
+          * használható
+          * A paraméterekben a telepesek és az aszteroidák számát is meg kell adni.
+          * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
+          */
         public void execute(String[] args) {
             if (args.length < 4) {
                 output.println("all details must be specified");

@@ -25,19 +25,18 @@ public class Settler extends Traveller {
     /**
      * Konstruktor amely a traveller ősre meghívja a konstruktort
      * @param a az aszteroida ahol az objektum lesz.
-     * @param game a Game objektum, ami tartalmazza a settlert
+     * @param g a játék, amelyben a telepes van
      */
     public Settler(Asteroid a, Game g) {
         super(a, g);
     }
 
     /**
-     * A telepes listájához hozzááad egy teleportkaput, amennyiben az még nem része a listájának,
-     * és van még hely a telepesnél teleportkapunak.
+     * A telepes listájához hozzááad egy teleportkaput, amennyiben az még nem része a listájának.
      * @param t Az új teleportkapu
      */
     public void addTeleport(Teleport t){
-    	if (!teleportgates.contains(t) && teleportgates.size() < 2)
+    	if (!teleportgates.contains(t))
     		teleportgates.add(t); 
     }
 
@@ -67,7 +66,6 @@ public class Settler extends Traveller {
 
     /**
      * megfúrja az aszteroidát meghívva annak onDrill metódusát.
-     * @return visszaadja, hogy sikeres volt-e a fúrás.
      */
     public boolean drill() {
     	return asteroid.onDrill();
@@ -117,23 +115,6 @@ public class Settler extends Traveller {
         }
         if(coalCount >= 1 && ironCount >= 1 && uraniumCount >= 1) {
             minerals.removeAll(removeMinerals);
-            //Építéskor felhasznált nyersanyagok eltávolítása a minerals listából
-            /*i = 0;
-            while (coalCount >= 0 || ironCount >= 0 || uraniumCount >= 0) {
-            	if(minerals.get(i).toString().contains("uranium") && uraniumCount > 0){
-                	--uraniumCount;
-                	minerals.remove(i);
-                }
-                else if(minerals.get(i).toString() == "iron" && ironCount > 0){
-                    --ironCount;
-                    minerals.remove(i);
-                }
-                else if(minerals.get(i).toString() == "coal" && coalCount > 0){
-                    --coalCount;
-                    minerals.remove(i);
-                }
-                else ++i;
-            }*/
             Robot r = new Robot(asteroid, game);
             game.addRobot(r);
             return true;
@@ -142,8 +123,7 @@ public class Settler extends Traveller {
     }
 
     /**
-     * A telepes teleportkaput készít, ha van nála elegendő minőségű, és
-     * megfelelő típusú nyersanyag.
+     * A telepes a nála lévõ nyersanyagokból teleportkaput készít
      * @return a teleportkapu készítés sikeressége alapján true vagy false
      */
     public boolean craftTeleport() {
@@ -169,23 +149,6 @@ public class Settler extends Traveller {
             }
             if (iceCount >= 1 && ironCount >= 2 && uraniumCount >= 1) {
                 minerals.removeAll(removeMinerals);
-                //Építéskor felhasznált nyersanyagok eltávolítása a minerals listából
-                /*i = 0;
-                while ((iceCount >= 0 || ironCount >= 0 || uraniumCount >= 0) && i < minerals.size()) {
-                	if(minerals.get(i).toString().contains("uranium") && uraniumCount > 0){
-                    	--uraniumCount;
-                    	minerals.remove(i);
-                    }
-                    else if(minerals.get(i).toString() == "iron" && ironCount > 0){
-                        --ironCount;
-                        minerals.remove(i);
-                    }
-                    else if(minerals.get(i).toString() == "ice" && iceCount > 0){
-                        --iceCount;
-                        minerals.remove(i);
-                    }
-                    else ++i;
-                }*/
                 Teleport t1 = new Teleport();
                 Teleport t2 = new Teleport();
                 t1.setPair(t2);
@@ -222,7 +185,7 @@ public class Settler extends Traveller {
     /**
      * A telepes egy nála lévõ nyersanyagot elhelyez
      * az éppen aktuális aszteroida magjában
-     * @param i A visszahelyezendõ nyersanyag sorszáma
+     * @param m A visszahelyezendõ nyersanyag
      * @return bool aszerint, hogy a visszahelyezés sikeres volt-e
      */
     public boolean putMineralBack(int i) {

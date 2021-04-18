@@ -10,7 +10,8 @@ import java.util.*;
 public abstract class Traveller {
     /**
      * Traveller konstruktora, ahol paraméterben kapja azt az aszteroidát ahol elhelyezzük.
-     * @param asteroid a traveller helye
+     * @param a traveller helye
+     * @param g a játék amelyben a traveller van
      */
     public Traveller(Asteroid a, Game g) {
         a.placeTraveller(this);

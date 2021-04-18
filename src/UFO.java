@@ -10,6 +10,7 @@ public class UFO extends Traveller {
 	/**
      * Konstruktor amely a traveller ősre meghívja a konstruktort
      * @param a az aszteroida ahol az objektum lesz.
+     * @apram g a játék, amelyben az ufó van.
      */
     public UFO(Asteroid a, Game g) {
         super(a, g);
