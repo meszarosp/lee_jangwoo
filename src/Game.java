@@ -68,22 +68,6 @@ public class Game {
     }
 
     /**
-     * Visszaadja, hogy véget ért-e a játék.
-     * @return igaz, ha véget ért a játék, különben hamis.
-     */
-    public boolean getGameEnded() {
-        return gameEnd;
-    }
-
-    /**
-     * Beállítja, hogy véget ért-e a játék.
-     * @param gameEnded a beállítandó érték.
-     */
-    public void setGameEnded(boolean gameEnded) {
-        this.gameEnded = gameEnded;
-    }
-
-    /**
      * Kivesz egy telepest a telepesek listájából.
      * @param s A kivenni kívánt telepes.
      */

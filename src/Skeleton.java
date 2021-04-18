@@ -1437,7 +1437,7 @@ public class Skeleton {
          * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
          */
         public void execute(String[] args) {
-            game.setGameEnded(true);
+            game.setGameEnd(true);
             output.println("game given up");
         }
     }
@@ -1589,7 +1589,7 @@ public class Skeleton {
             output.println("invalid command");
             return true;
         }
-        if (!"newgame".equals(pieces[0]) && game.getGameEnded()){
+        if (!"newgame".equals(pieces[0]) && game.getGameEnd()){
             output.println("game ended");
             return true;
         }
