@@ -14,6 +14,8 @@ public class Game {
      */
     private Sun sun;
 
+    private boolean gameEnded;
+
     /**
      * A játékban lévõ telepesek.
      */
@@ -73,10 +75,16 @@ public class Game {
      * @param nSettler
      * @param nAsteroid
      */
-    public void init(int nSettler, int nAsteroid) {
+    public void init(int nSettler, int nAsteroid, int nUFO) {
         sun = new Sun();
         List<Asteroid> asteroids = new ArrayList<Asteroid>();
         List<Mineral> allMinerals = Mineral.getAllMinerals();
+        if(settlers.size() > 0) {
+        	settlers = new ArrayList<Settler>();
+        }
+        if(UFOs.size() > 0) {
+        	UFOs = new ArrayList<UFO>();
+        }
         Random rand = new Random();
         for(int i = 0; i < nAsteroid; i++) {
         	asteroids.add(new Asteroid(rand.nextInt()% 6,rand.nextBoolean(),rand.nextInt() % 5 == 0 ? null : allMinerals.get(rand.nextInt(allMinerals.size())), sun));
@@ -84,8 +92,12 @@ public class Game {
         for(int i = 0; i < nSettler; i++) {
         	settlers.add(new Settler(asteroids.get(rand.nextInt(asteroids.size())), this));
         }
+        for(int i = 0; i < nSettler; i++) {
+        	UFOs.add(new UFO(asteroids.get(rand.nextInt(asteroids.size())), this));
+        }
         sun.addAsteroids(asteroids);
     }
+
 
 
     /**

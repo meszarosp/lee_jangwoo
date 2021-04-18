@@ -1259,22 +1259,28 @@ public class Skeleton {
     private static class newgameCommand implements Command{
 
         public void execute(String[] args) {
-            if (args.length < 3) {
+            if (args.length < 4) {
                 output.println("all details must be specified");
                 return;
             }
-            int nSettler, nAsteroid;
+            int nSettler, nAsteroid, nUFO;
             try {
                 nSettler = Integer.parseInt(args[1]);
                 nAsteroid = Integer.parseInt(args[2]);
+                nUFO = Integer.parseInt(args[3]);
 
             }catch (Exception e){
                 output.println("all details must be specified");
                 return;
             }
-            game.init(nSettler, nAsteroid);
+            game.init(nSettler, nAsteroid, nUFO);
             resetIDs();
-
+            List<Settler> allSettlers = game.getSettlers();
+            List<UFO> allUFOs = game.getUFOs();
+            List<Asteroid> allAsteroids = game.getSun().getAsteroids();
+            output.println("new game created with " + allSettlers.size() + " settler" + (allSettlers.size() == 1 ? " " : "s ") 
+            		+ allAsteroids.size() + " asteroid" + (allAsteroids.size() == 1 ? " " : "s ") + "and " + allUFOs.size() +
+            		"UFO" + (allUFOs.size() == 1 ? " " : "s "));
         }
     }
     /**
