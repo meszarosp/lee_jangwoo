@@ -62,7 +62,7 @@ public abstract class Traveller {
 
     /**  
      * beállítja az utazó aszteroidáját
-     * @param a az az aszteroida amin az utazó áll
+     * @param a az az aszteroida, amin az utazó áll
      */
     public void setAsteroid(Asteroid a) {
     	asteroid = a;

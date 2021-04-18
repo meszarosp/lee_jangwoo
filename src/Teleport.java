@@ -117,7 +117,7 @@ public class Teleport implements INeighbour {
 
     /**
      * Meghívja a pair teleportTraveller metódusát. Abban az esetben, ha az hamissal tér vissza, meghívja a neighbour placeTraveller metódusát.
-     * @param traveller
+     * @param traveller a lehelyezendõ traveller
      */
     @Override
     public void placeTraveller(Traveller traveller){
@@ -141,6 +141,7 @@ public class Teleport implements INeighbour {
 
     /**
      * Napvihar érkezik, ilyenkor a teleportkapu megõrül, ha már le van téve.
+     * @param i itt nincs szerepe, az interfész miatt kell
      */
     @Override
     public void solarWind(int i) {
@@ -159,8 +160,8 @@ public class Teleport implements INeighbour {
 
     /**
      *Abban az esetben, ha a pair nem null (azaz már le van rakva a kapu párja), a paraméterül kapott 
-     *neighbour-nek meghívja az addNeighbour metódusát, aminek saját magát adja paraméterül.
-     * @param a itt nincs szerepe
+     * aszteroidának meghívja az addNeighbour metódusát, aminek saját magát adja paraméterül.
+     * @param a az aszteroida, melyet beállít szomszédjának
      */
     public void setNeighbour(Asteroid a){
         neighbour = a;

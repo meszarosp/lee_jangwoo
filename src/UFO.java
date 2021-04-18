@@ -34,7 +34,8 @@ public class UFO extends Traveller {
 
     /**
      * makeAction függvény: vagy mozog, vagypedig bányászik az UFO.
-     * ha a generált random igaz, akkor bányászik, egyébként pedig mozog az aszteroidájának egy random szomszédjára.
+     * ha a generált random igaz, akkor bányászik, egyébként pedig 
+     * mozog az aszteroidájának egy random szomszédjára.
      */
     public void makeAction(){
         Random rand = new Random();
