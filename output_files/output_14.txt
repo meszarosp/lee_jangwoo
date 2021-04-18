@@ -17,5 +17,5 @@ t1 teleportgate bamboozled
 random events off
 teleport t1 moved to a1
 solarwind created with asteroid a1 in the middle
-and a 0 radius 
+and a 0 radius
 events caused:

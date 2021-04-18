@@ -1,0 +1,20 @@
+asteroid a1 added
+shell: 5
+closetosun: no
+core: empty
+asteroid a2 added
+shell: 0
+closetosun: no
+core: empty
+asteroid a3 added
+shell: 1
+closetosun: no
+core: empty
+a1 and a3 are neighbouring asteroids
+connected teleportgates t1 t2 placed by a2 and a3
+connected teleportgates t3 t4 placed by a2 and a1
+t1 teleportgate not bamboozled
+random events off
+solarwind created with asteroid a1 in the middle
+and a 0 radius
+events caused:
