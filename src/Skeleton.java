@@ -673,7 +673,6 @@ public class Skeleton {
     /**
      * A placeteleport parancshoz tartozó osztály.
      */
-    // TODO teleportot kitalálni
     private static class placeteleportCommand implements Command{
 
         public void execute(String[] args) {
@@ -964,9 +963,37 @@ public class Skeleton {
 
         public void execute(String[] args) {
             if (random) {
+                List<Robot> robots = new ArrayList<Robot>(game.getRobots());
+                List<Settler> settlers = new ArrayList<Settler>(game.getSettlers());
+                List<UFO> UFOs = new ArrayList<UFO>(game.getUFOs());
+                List<Teleport> teleports = new ArrayList<Teleport>(game.getGates());
+                boolean[] b;
+                b = new boolean[teleports.size()];
+                for (int i = 0; i < teleports.size(); i++) {
+                    b[i] = teleports.get(i).getBamboozled();
+                }
                 game.getSun().makeAction();
-                // TODO honnan a rákból tudjuk hogy mi történt?
-                //Imádom ezt a kommentet.
+                for (Settler s : settlers) {
+                    if (!game.getSettlers().contains(s))
+                        output.println(reverseIDs.get(s) + " settler died");
+                }
+                for (Robot r : robots) {
+                    if (!game.getRobots().contains(r))
+                        output.println(reverseIDs.get(r) + " robot died");
+                }
+                for (UFO u : UFOs) {
+                    if (!game.getUFOs().contains(u))
+                        output.println(reverseIDs.get(u) + " ufo died");
+                }
+                for (int i = 0; i < teleports.size(); i++) {
+                    if (!game.getGates().contains(teleports.get(i))) {
+                        output.println(reverseIDs.get(teleports.get(i)) + " teleport perished");
+                    } else {
+                        if (!b[i] && teleports.get(i).getBamboozled()) {
+                            output.println(reverseIDs.get(teleports.get(i)) + " teleportgate gone mad");
+                        }
+                    }
+                }
             } else {
                 Asteroid a = game.getSun().getAsteroids().get(0);
                 if (a == null)
