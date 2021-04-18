@@ -2,10 +2,10 @@
 import java.util.*;
 
 /**
- * A telepesek, robotok és a nap nyilvántartója.
- * A telepesek és a robotok listáját menedzseli. Ha
+ * A telepesek, robotok, UFO-k és a nap nyilvántartója.
+ * A telepesek, robotok és UFO-k listáját menedzseli. Ha
  * új robot jön létre, fel kell vennie a nyilvántartásba.
- * Felelõssége inicializálni a telepeseket, az
+ * Felelõssége inicializálni a telepeseket, UFO-kat, az
  * aszteroidákat. A játék végét ellenõrzõ metódusokért is õ felel.
  */
 public class Game {
@@ -17,28 +17,33 @@ public class Game {
     private boolean gameEnded;
 
     /**
-     * A játékban lévõ telepesek.
+     * A játékban lévõ telepesek listája.
      */
     private List<Settler> settlers = new ArrayList<Settler>();
 
     /**
-     * A játékban lévõ robotok.
+     * A játékban lévõ robotok listája.
      */
     private List<Robot> robots = new ArrayList<Robot>();
 
     /**
-     * A játékban lévõ UFO-k.
+     * A játékban lévõ UFO-k listája.
      */
     private List<UFO> UFOs = new ArrayList<UFO>();
 
-
-    /**
-     * A játékban lévő lehelyezett teleportkapuk. Amik a játékosnál vannak azok is benne vannak.
+    private boolean gameEnd = false;
+   /**
+     * A játékban lévő lehelyezett teleportkapuk. Amik a játékos zsebében vannak, azokat is tárolja.
      */
     private List<Teleport> gates = new ArrayList<Teleport>();
-
+    
     /**
-     * Konstruktor, létrehozza a napot is.
+     * Konstruktor, meghívja a Mineral osztály egy statikus függvényét,
+     * amely azért fontos, mert ez inicializálja, hogy mely nyersanyagok
+     * vesznek részt a játékban. A nyersanyagok típusai fontosak a Game
+     * szempontjából, hogy el tudja dönteni, a játékosok megnyerték-e a játékot,
+     * ezért mindig inicializáltnak kell lennie.
+     * Létrehozza a napot is, amely elengedhetetlen egy játékhoz.
      */
     public Game() {
         Mineral.Init();
@@ -71,8 +76,13 @@ public class Game {
     }
 
     /**
-     * Új játék inicializálását végző segédfüggvény. 
-     * 
+     * Új játék inicializálását végző segédfüggvény. Létrehozza a paraméterben
+     * megkapott számú telepest, UFO-t, aszteroidát. Létrehoz egy új nap objektumot,
+     * melynek odaadja az elkészített aszteroidákat. A telepeseket és az UFO-kat
+     * elhelyezi randomzizált aszteroidákon. Az aszteroidáknak randomizált
+     * nagyságú kérget ad, random nyersanyagot ad nekik (vagy üregest állít be),
+     * és beállítja a szomszédságukat is.
+     * Robotot és teleportkaput nem csinál, hiszen azokat a Telepesek craftolják.
      * @param nSettler	létrehozni kívánt Settlerek száma
      * @param nAsteroid	létrehozni kívánt aszteroidák száma
      * @param nUFO		létrehizni kívánt ufók száma
@@ -153,6 +163,7 @@ public class Game {
         			break;
         		}
         		if(i == allMineralCount-1) {
+                    gameEnd = true;
         			return true;
         		}
         	}
@@ -165,7 +176,15 @@ public class Game {
      * @return
      */
     public boolean checkLose() {
+        gameEnd = true;
         return settlers.size() == 0;
+    }
+
+    public boolean getGameEnd(){
+        return gameEnd;
+    }
+    public void setGameEnd(boolean end){
+        gameEnd = end;
     }
 
     public List<Settler> getSettlers() {

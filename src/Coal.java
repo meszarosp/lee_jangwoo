@@ -2,8 +2,10 @@
 import java.util.*;
 
 /**
- * A szén nyersanyagot reprezentálja, a nyersanyagból származik le. 
- * Használható Robotok építésére,valamint még bővíthető további funkciókkal vagy attribútumokkal (pl.: égéshő).
+ * A szén nyersanyagot reprezentálja, a Mineral származik le. 
+ * Használható Robotok építésére,valamint még bővíthető további funkciókkal vagy attribútumokkal.
+ * Kibányászható aszteroidákból Settlerilletve UFO által, valamint eltárolásra kerülhet egy
+ * Settler hátizsákjában.
  */
 public class Coal extends Mineral {
 
