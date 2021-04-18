@@ -1252,10 +1252,14 @@ public class Skeleton {
                 output.println("losing conditions not met");
         }
     }
-    /**
+     /**
      * A newgame parancshoz tartozó osztály.
+     * Létrehoz a felhasználó által megadott
+     * számú telepest, aszteroidát és UFO-t,
+     * valamint egy napot a game init metódusa
+     * segítségével. Új randomizált pálya készítésére
+     * használható
      */
-    //TODO Julcsi
     private static class newgameCommand implements Command{
 
         public void execute(String[] args) {
@@ -1275,9 +1279,25 @@ public class Skeleton {
             }
             game.init(nSettler, nAsteroid, nUFO);
             resetIDs();
+            
             List<Settler> allSettlers = game.getSettlers();
             List<UFO> allUFOs = game.getUFOs();
             List<Asteroid> allAsteroids = game.getSun().getAsteroids();
+            
+            maxIDs.replace("settler", allSettlers.size());
+            maxIDs.replace("ufo", allUFOs.size());
+            maxIDs.replace("asteroid", allAsteroids.size());
+            
+            for(int i = 0; i < allSettlers.size(); i++) {
+            	addID("s" + i+1, allSettlers.get(i));
+            }
+            for(int i = 0; i < allUFOs.size(); i++) {
+            	addID("u" + i+1, allUFOs.get(i));
+            }
+            for(int i = 0; i < allAsteroids.size(); i++) {
+            	addID("a" + i+1, allAsteroids.get(i));
+            }
+            
             output.println("new game created with " + allSettlers.size() + " settler" + (allSettlers.size() == 1 ? " " : "s ") 
             		+ allAsteroids.size() + " asteroid" + (allAsteroids.size() == 1 ? " " : "s ") + "and " + allUFOs.size() +
             		"UFO" + (allUFOs.size() == 1 ? " " : "s "));
