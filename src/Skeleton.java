@@ -839,10 +839,17 @@ public class Skeleton {
         }
     }
     /**
-     * A placeteleport parancshoz tartozó osztály.
+     * A placeteleport parancshoz tartozó osztály. Az aktív telepessel végrehajt egy teleportlehelyezés műveletet.
+     * Paraméter nélkül kilistázza az aktív telepesnél lévő teleportkapukat.
      */
     private static class placeteleportCommand implements Command{
 
+        /**
+         * Az első paraméter annak a teleportkapunak a sorszáma (1-től számozva), amelyik teleportkaput le akarja
+         * helyezni a felhasználó. Paraméter nélkül kilistázza a telepesnél lévő teleportkapukat.
+         * Ha hiba történik akkor jelzi a felhasználónak, különben kiírja a lehelyezés tényét.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
+         */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 2))
                 return;
@@ -867,10 +874,16 @@ public class Skeleton {
         }
     }
     /**
-     * Az addmineral parancshoz tartozó osztály.
+     * Az addmineral parancshoz tartozó osztály. Az aktív telepesnek ad egy nyersanyagot.
+     * A nyersanyagot paraméterben kell megadni.
      */
     private static class addmineralCommand implements Command{
 
+        /**
+         * Az aktív telepesnek ad egy, az első paraméterben meghatározott nyersanyagot.
+         * Ha nem jól adta meg a felhasználó, akkor hibát jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
+         */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 2))
                 return;
@@ -886,10 +899,16 @@ public class Skeleton {
         }
     }
     /**
-     * A addteleportpair parancshoz tartozó osztály.
+     * A addteleportpair parancshoz tartozó osztály. 2 paramétere van. A megadott 2 aszteroidára lehelyez egy új
+     * teleportkaput pár, amelyek nincsenek megkergülve.
      */
     private static class addteleportpairCommand implements Command{
 
+        /**
+         * Az első és a második paraméterben meghatározott aszteroidára lehelyez egy-egy teleportkaput, amelyek párt alkotnak.
+         * Ha hiba történik, jelez a felhasználónak, különben kiírja a teleportkapuk létrejöttének tényét.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
+         */
         public void execute(String[] args) {
             if (args.length < 3) {
                 output.println("all details must be specified");
@@ -918,10 +937,16 @@ public class Skeleton {
         }
     }
     /**
-     * A nextturn parancshoz tartozó osztály.
+     * A nextturn parancshoz tartozó osztály. A kör végén meghívandó parancs. Végrehajtja a kör végi lépéseket.
      */
     private static class nextturnCommand implements Command{
 
+        /**
+         * A nextturn parancshoz tartozó osztály. A kör végén meghívandó parancs. Végrehajtja a kör végi lépéseket.
+         * Minden megkergült teleportkapu lép, minden robot és ufó lép.
+         * A nap tesz egy lépést.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
+         */
         public void execute(String[] args) {
             for (Teleport t : game.getGates()) {
                 if (t.getBamboozled()) {
@@ -975,11 +1000,24 @@ public class Skeleton {
         }
     }
     /**
-     * A robotaction parancshoz tartozó osztály.
+     * A robotaction parancshoz tartozó osztály. A megadott paraméterben lévő robottal dolgozik.
+     * Ha ezen felül nincs megadva paraméter, akkor egy makeAction műveletet hajt végre a robottal.
+     * Ha a második paraméter "drill" akkor fúrást hajt végre a robottal.
+     * Ha a második paraméter "move" akkor a harmadik paraméterben megadott sorszámú (a robot jelenlegi aszteroidájának
+     * szomszédainak listájában) szomszédra megy.
      */
-
     private static class robotactionCommand implements Command{
 
+        /**
+         * Az első megadott paraméterben lévő robottal dolgozik.
+         * Ha ezen felül nincs megadva paraméter, akkor egy makeAction műveletet hajt végre a robottal.
+         * Ha a második paraméter "drill" akkor fúrást hajt végre a robottal.
+         * Ha a második paraméter "move" akkor a harmadik paraméterben megadott sorszámú (a robot jelenlegi aszteroidájának
+         * szomszédainak listájában) szomszédra megy.
+         * Ha valami hiba történik, akkor jelzi a felhasználó felé.
+         * Az eseményeket részletesen közli a felhasználóval.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
+         */
         public void execute(String[] args) {
             if (random) {
                 if (args.length < 2) {
@@ -1061,10 +1099,24 @@ public class Skeleton {
     }
 
     /**
-     * A ufoaction parancshoz tartozó osztály.
+     * A ufoaction parancshoz tartozó osztály. A megadott paraméterű ufóval dolgozik.
+     * Ha ezen felül nincs megadva paraméter, akkor egy makeAction műveletet hajt végre az ufón.
+     * Ha a második paraméter "mine" akkor bányászást hajt végre az ufóval.
+     * Ha a második paraméter "move" akkor a harmadik paraméterben megadott sorszámú (az ufó jelenlegi aszteroidájának
+     * szomszédainak listájában) szomszédra megy.
      */
     private static class ufoactionCommand implements Command{
 
+        /**
+         * A ufoaction parancshoz tartozó osztály. A megadott paraméterű ufóval dolgozik.
+         * Ha ezen felül nincs megadva paraméter, akkor egy makeAction műveletet hajt végre az ufón.
+         * Ha a második paraméter "mine" akkor bányászást hajt végre az ufóval.
+         * Ha a második paraméter "move" akkor a harmadik paraméterben megadott sorszámú (az ufó jelenlegi aszteroidájának
+         * szomszédainak listájában) szomszédra megy.
+         * Az esetleges hibákat a felhasználóval közli.
+         * A megtörtént eseményeket részletesen közli a felhasználó felé.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
+         */
         public void execute(String[] args) {
             if (args.length < 2 || (args.length == 3 && !"mine".equals(args[2])) || (args.length == 4 && !"move".equals(args[2]))){
                 output.println("all details must be specified");
@@ -1125,10 +1177,17 @@ public class Skeleton {
 
 
     /**
-     * A sunaction parancshoz tartozó osztály.
+     * A sunaction parancshoz tartozó osztály. Ha a véletlenszerűség be van kapcsolva, akkor a nappal végrehajt
+     * makeAction műveletet. Kiírja, hogy milyen események következtek be ennek hatására.
      */
     private static class sunactionCommand implements Command{
 
+        /**
+         * a a véletlenszerűség be van kapcsolva, akkor a nappal végrehajt
+         * makeAction műveletet. Kiírja, hogy milyen események következtek be ennek hatására.
+         * A robotok, telepesek, ufók és a teleportkapuk változásait ellenőrzi és ezeket kiírja.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
+         */
         public void execute(String[] args) {
             if (random) {
                 List<Robot> robots = new ArrayList<Robot>(game.getRobots());
@@ -1173,10 +1232,17 @@ public class Skeleton {
         }
     }
     /**
-     * A solarwind parancshoz tartozó osztály.
+     * A solarwind parancshoz tartozó osztály. Elindít egy napvihart a megadott aszteroidán a megadott mérettel.
+     * Ezután kiírja a történteket.
      */
     private static class solarwindCommand implements Command{
-
+        /**
+         * Ha nincs elég paraméter, akkor hibát jelez. Különben elindít az első paraméterként megadott aszterodán
+         * egy a második paraméterben átadott méretű napvihart.
+         * A robotok, telepesek, ufok és teleportkapuk listájának másolásával ellenőrzi, hogy a napvihar hatására
+         * milyen események történtek.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely szóközökkel lett elválasztva.
+         */
         public void execute(String[] args) {
             if (args.length < 3) {
                 output.println("all details must be specified");
