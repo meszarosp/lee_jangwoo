@@ -520,7 +520,7 @@ public class Skeleton {
             if (activeSettler.move(index)) {
                 output.println("move to " + id + " successful");
             } else {
-                output.println("move to" + ("".equals(id) ? "" : " ") + id + " unsuccessful");
+                output.println("move" + ("".equals(id) ? "" : " to ") + id + " unsuccessful");
             };
 
         }
@@ -540,7 +540,7 @@ public class Skeleton {
                 output.println("shell is now " + shell + " unit(s) thick");
             } else {
                 output.println("drilling unsuccessful");
-                output.println("shell has already been drilled through");
+                output.println("the shell has already been drilled through");
             }
         }
     }
@@ -912,6 +912,8 @@ public class Skeleton {
             Asteroid a = ufo.getAsteroid();
             Mineral core = a.getCore();
             int shell = a.getShell();
+            boolean mine = false;
+            boolean move = false;
             if (args.length == 2){
                 ufo.makeAction();
                 if (a == ufo.getAsteroid() && core == a.getCore()){
@@ -921,15 +923,21 @@ public class Skeleton {
             }
             if (args.length == 3){
                 ufo.mine();
+                mine = true;
             }
             if (args.length == 4){
                 int i = Integer.parseInt(args[3]);
                 ufo.move(i-1);
+                move = true;
             }
-            if (a != ufo.getAsteroid()){
+            if (a != ufo.getAsteroid()) {
                 output.println("UFO " + args[1] + " moved to " + reverseIDs.get(ufo.getAsteroid()));
                 return;
+            }else if (move) {
+                output.println("UFO " + args[1] + " couldn't move");
+                return;
             }
+
             if (shell > 0){
                 output.println("UFO " + args[1] + " couldn't mine");
                 output.println("asteroid still has shell");
@@ -941,7 +949,7 @@ public class Skeleton {
                 return;
             }
             if (core != a.getCore()){
-                output.println("UFO " + args[1] + " mined on " + reverseIDs.get(a)) ;
+                output.println("UFO " + args[1] + " mined on " + reverseIDs.get(a));
                 output.println("it got one unit of " + core.toString());
                 output.println("asteroid is now empty");
             }
@@ -1100,8 +1108,32 @@ public class Skeleton {
                 if (oldCloseToSun == newCloseToSun){
                     output.println(args[1] + " already " + (oldCloseToSun ? "close to " : "far from ") + "sun, no change");
                 }else{
-                    asteroid.setCloseToSun();
                     output.println(args[1] + " set " + (newCloseToSun ? "close to " : "far from ") + "sun");
+                    List<Robot> robots = new ArrayList<Robot>(game.getRobots());
+                    List<Settler> settlers = new ArrayList<Settler>(game.getSettlers());
+                    List<UFO> UFOs = new ArrayList<UFO>(game.getUFOs());
+                    List<Teleport> teleports = new ArrayList<Teleport>(game.getGates());
+                    asteroid.setCloseToSun();
+                    if (newCloseToSun && !game.getSun().getAsteroids().contains(asteroid)) {
+                        output.println("events caused:");
+                        output.println(args[1] + " exploded");
+                        for (Robot r : robots) {
+                            if (!game.getRobots().contains(r))
+                                output.println(reverseIDs.get(r) + " robot died");
+                        }
+                        for (Settler s : settlers) {
+                            if (!game.getSettlers().contains(s))
+                                output.println(reverseIDs.get(s) + " settler died");
+                        }
+                        for (UFO u : UFOs) {
+                            if (!game.getUFOs().contains(u))
+                                output.println(reverseIDs.get(u) + " ufo died");
+                        }
+                        for (Teleport t : teleports) {
+                            if (!game.getGates().contains(t))
+                                output.println(reverseIDs.get(t) + " teleport perished");
+                        }
+                    }
                 }
             }
         }
@@ -1206,6 +1238,12 @@ public class Skeleton {
             return null;
     }
 
+    private static void checkActiveSettlerDied(){
+        if (activeSettler != null && !game.getSettlers().contains(activeSettler)){
+            output.println("active settler died");
+        }
+    }
+
     private static boolean parseCommand(){
         String[] pieces;
         if (input.hasNextLine())
@@ -1222,6 +1260,7 @@ public class Skeleton {
             return true;
         }
         cmd.execute(pieces);
+        checkActiveSettlerDied();
         return true;
     }
 

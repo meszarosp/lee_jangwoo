@@ -1,4 +1,4 @@
 loaded test.txt
 settler s2 is now active
-drilling unsuccesful
+drilling unsuccessful
 the shell has already been drilled through

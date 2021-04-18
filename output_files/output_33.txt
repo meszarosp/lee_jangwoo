@@ -2,4 +2,5 @@ loaded test.txt
 solarwind created with asteroid a4 in the middle
 and a 1 radius
 events caused:
+u1 ufo died
 t2 teleportgate gone mad

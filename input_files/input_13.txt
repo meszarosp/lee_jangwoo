@@ -1,2 +1,4 @@
 load test.txt
-ufoaction u1 move 1
+addasteroid 10 0 iron
+addufo a5
+ufoaction u2 move 1

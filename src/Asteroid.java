@@ -129,6 +129,8 @@ public class Asteroid implements INeighbour {
     public boolean putMineralBack(Mineral m) {
         if (core == null && shell == 0) {
         	core = m;
+        	if (closeToSun)
+        	    core.exposedToSun(this);
         	return true;
         }
         return false;
