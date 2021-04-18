@@ -1052,7 +1052,7 @@ public class Skeleton {
     /**
      * A newgame parancshoz tartozó osztály.
      */
-    //TODO Peti?
+    //TODO Julcsi
     private static class newgameCommand implements Command{
 
         public void execute(String[] args) {

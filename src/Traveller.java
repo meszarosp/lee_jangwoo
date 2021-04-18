@@ -2,9 +2,9 @@
 import java.util.*;
 
 /**
- * Absztrakt osztály. Felel?ssége nyilvántartani a jelenlegi aszteroidáját, 
- * és egy Game objektumot. Biztosítania kell virtuális függvényeket a t?le 
- * örökl? osztályoknak. Mozognia kell tudni aszteroidáról aszteroidára, 
+ * Absztrakt osztály. Felelõssége nyilvántartani a jelenlegi aszteroidáját, 
+ * és egy Game objektumot. Biztosítania kell virtuális függvényeket a tõle 
+ * öröklõ osztályoknak. Mozognia kell tudni aszteroidáról aszteroidára, 
  * akár köztes teleportkapuval, akár anélkül. Tudnia kell aszteroidát fúrni.
  */
 public abstract class Traveller {
@@ -19,7 +19,7 @@ public abstract class Traveller {
     }
 
     /**
-     * A traveller helyét jelképez? aszteroida típusú attribútum.
+     * A traveller helyét jelképezõ aszteroida típusú attribútum.
      */
     protected Asteroid asteroid;
 
