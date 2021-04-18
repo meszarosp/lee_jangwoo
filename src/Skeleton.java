@@ -323,7 +323,7 @@ public class Skeleton {
                 int t = teleports.size();
                 fileOutput.print(t + (t > 0 ? " " : ""));
                 for (int i = 0; i < t - 1; i++)
-                    fileOutput.print(reverseIDs.get(teleports.get(i)));
+                    fileOutput.print(reverseIDs.get(teleports.get(i)) + " ");
                 if (t > 0)
                     fileOutput.print(reverseIDs.get(teleports.get(t - 1)));
                 fileOutput.print("\n");
