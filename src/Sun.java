@@ -19,7 +19,9 @@ public class Sun {
     private List<Asteroid> asteroids;
 
     /**
-     * Ha azt a választ kapja, hogy legyen npvihar, akkor minden aszteroidára meghívja a solarWind metódust. Ez után végigmegyünk az összes aszteroidán, megkérdezzük, hogy az legyen-e napközelben, ha azt a választ kapja, hogy igen, akkor meghívja rajta a setCloseToSun metódust
+     * Ha napvihar a random feltétel igaz, akkor egy random aszteroidára meghívja a solarWind metódust. 
+     * Ez után végigmegyünk az összes aszteroidán, megkérdezzük, hogy az legyen-e napközelben, ha azt a 
+     * választ kapja, hogy igen, akkor meghívja rajta a setCloseToSun metódust
      */
     public void makeAction() {
     	Random rand = new Random();     //napvihar/setclosetosun
@@ -50,16 +52,16 @@ public class Sun {
     }
 
     /**
-     *
-     * @param asteroid
+     * Hozzáad egy aszteroidát az asteroids listájához.
+     * @param asteroid a hozzáadni kívánt aszteroida.
      */
-    // TODO Ezt ledokumentálni
     public void addAsteroid(Asteroid asteroid) {
         this.asteroids.add(asteroid);
     }
 
     /**
-     * Visszaadja az asteroids listát.
+     * Az asteroids változó gettere.
+     * @return visszaadja az asteroids változót
      */
     public List<Asteroid> getAsteroids() {
         return this.asteroids;

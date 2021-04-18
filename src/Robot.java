@@ -11,6 +11,7 @@ public class Robot extends Traveller {
     /**
      * Konstruktor amely a traveller ősre meghívja a konstruktort.
      * @param a az aszteroida ahol az objektum lesz.
+     * @param game a Game objektum, ami tartalmazza a robotot
      */
     public Robot(Asteroid a, Game g) {
         super(a, g);

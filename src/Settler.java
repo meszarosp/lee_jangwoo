@@ -25,17 +25,19 @@ public class Settler extends Traveller {
     /**
      * Konstruktor amely a traveller ősre meghívja a konstruktort
      * @param a az aszteroida ahol az objektum lesz.
+     * @param game a Game objektum, ami tartalmazza a settlert
      */
     public Settler(Asteroid a, Game g) {
         super(a, g);
     }
 
     /**
-     * A telepes listájához hozzááad egy teleportkaput, amennyiben az még nem része a listájának.
+     * A telepes listájához hozzááad egy teleportkaput, amennyiben az még nem része a listájának,
+     * és van még hely a telepesnél teleportkapunak.
      * @param t Az új teleportkapu
      */
     public void addTeleport(Teleport t){
-    	if (!teleportgates.contains(t))
+    	if (!teleportgates.contains(t) && teleportgates.size() < 2)
     		teleportgates.add(t); 
     }
 
@@ -65,6 +67,7 @@ public class Settler extends Traveller {
 
     /**
      * megfúrja az aszteroidát meghívva annak onDrill metódusát.
+     * @return visszaadja, hogy sikeres volt-e a fúrás.
      */
     public boolean drill() {
     	return asteroid.onDrill();
@@ -139,7 +142,8 @@ public class Settler extends Traveller {
     }
 
     /**
-     * A telepes a nála lévõ nyersanyagokból teleportkaput készít
+     * A telepes teleportkaput készít, ha van nála elegendő minőségű, és
+     * megfelelő típusú nyersanyag.
      * @return a teleportkapu készítés sikeressége alapján true vagy false
      */
     public boolean craftTeleport() {
@@ -218,7 +222,7 @@ public class Settler extends Traveller {
     /**
      * A telepes egy nála lévõ nyersanyagot elhelyez
      * az éppen aktuális aszteroida magjában
-     * @param m A visszahelyezendõ nyersanyag
+     * @param i A visszahelyezendõ nyersanyag sorszáma
      * @return bool aszerint, hogy a visszahelyezés sikeres volt-e
      */
     public boolean putMineralBack(int i) {
