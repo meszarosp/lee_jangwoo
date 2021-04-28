@@ -1,70 +1,72 @@
 import java.util.*;
 
 /**
- * Folyamatosan f�r, vagy mozog. Felel�ss�ge meghalni, ha napvihar �ri, 
- * vagy m�sik aszteroid�ra ker�lni, ha radioakt�v robban�s t�rt�nik az 
- * aszteroid�j�n. Ha meghal, el kell t�vol�ttatnia mag�t a Game 
- * list�j�b�l, valamint a saj�t aszteroid�j�r�l.
+ * Folyamatosan fúr, vagy mozog. Felelõssége meghalni, ha napvihar éri, 
+ * vagy másik aszteroidára kerülni, ha radioaktív robbanás történik az 
+ * aszteroidáján. Ha meghal, el kell távolíttatnia magát a Game 
+ * listájából, valamint a saját aszteroidájáról.
  */
 public class Robot extends Traveller {
 
     /**
-     * Default constructor
+     * Konstruktor amely a traveller ősre meghívja a konstruktort.
+     * @param a az aszteroida ahol az objektum lesz.
+     * @param g a Game objektum, ami tartalmazza a robotot
      */
-    public Robot() {
+    public Robot(Asteroid a, Game g) {
+        super(a, g);
     }
 
     /**
-     * 
+     * az aszteroida egy random szomszédjára átmozgatja a robotot. 
+     * amennyiben nincs szomszéd, a robot meghal, mert léte értelmét vesztette.
      */
+    @Override
     public void hitByBlast() {
-    	Skeleton.startMethod(this, "hitByBlast", null);
-        Asteroid currAst = asteroid;
-        /*if(Skeleton.yesnoQuestion("Is there a neighbour I can go to?(yes/no)")) {
-        	int i = Skeleton.intQuestion("Which is the index of the neighbour I can go to?(int)");
-        	asteroid.getNeighbourAt(i).placeTraveller(this);
-        	while(currAst.equals(asteroid)) {		//ha m�g rendesen le nem tett teleportot mondott a felhaszn�l�
-        		i = Skeleton.intQuestion("Tell me a valid index of a good neighbour!(int)");
-        		asteroid.getNeighbourAt(i).placeTraveller(this);
-        	}*/
-        INeighbour neighbour = asteroid.getNeighbourAt(0);
+        Random rand = new Random();
+        int randNeighbour = rand.nextInt(asteroid.getNeighbourCount());
+        INeighbour neighbour = asteroid.getNeighbourAt(randNeighbour);
         if(neighbour != null){
             neighbour.placeTraveller(this);
         } else {
         	die();
         }
-        Skeleton.endMethod(this, null);
-        /*while(currAst.equals(asteroid)) {
-        	INeighbour neighbour = asteroid.getNeighbourAt(i);
-        	if(neighbour==null) {
-        		this.die();
-        		return;
-        	}
-        	neighbour.placeTraveller(this);
-        }*/
     }
 
     /**
-     * robot meghal
+     * A robot meghal. Ekkor eltávolítjuk az aszteroida és a game tárolóiból.
      */
+    @Override
     public void die() {
-    	Skeleton.startMethod(this, "die", null);
     	asteroid.removeTraveller(this);
         game.removeRobot(this);
-        Skeleton.endMethod(this, null);
     }
 
     /**
-     * itt vagy mozog, vagypedig f�r a robot
+     * megfúrja az aszteroidát: meghívja az aszteroidára az onDrill függvényt.
+     * @return visszaadja, hogy sikeres volt-e a fúrás.
      */
-    public void makeAction() {
-    	Skeleton.startMethod(this, "makeAction", null);
-    	if(Skeleton.yesnoQuestion("Should I drill?(yes/no)")) {
-    		drill();
-    	} else if (Skeleton.yesnoQuestion("Should I move?(yes/no)")) {
-    		move(Skeleton.intQuestion("To which neighbour should I move?(int)"));
+    public boolean drill() {
+    	return asteroid.onDrill();
+    }
+
+    /**
+     * makeAction függvény: vagy mozog, vagypedig fúr a robot.
+     * ha a generált random igaz, akkor fúr, egyébként pedig mozog az aszteroidájának egy random szomszédjára.
+     * @return a visszaadott érték azt jelzi, hogy sikeresen fúrt/mozgott, vagy sem.
+     */
+    public boolean makeAction() {
+        Random rand = new Random();
+        boolean randDecision = rand.nextBoolean();
+    	if (randDecision) {
+    	    if (drill()) {
+    	        return true;
+            }
     	}
-    	Skeleton.endMethod(this, null);
+    	if (asteroid.getNeighbourCount() == 0)
+    	    return false;
+        int randNeighbour = rand.nextInt(asteroid.getNeighbourCount());
+        return move(randNeighbour);
     }
 
 }

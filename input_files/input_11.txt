@@ -1,0 +1,2 @@
+load test.txt
+robotaction r1 move 3

@@ -1,0 +1,3 @@
+loaded test.txt
+settler s1 is now active
+new robot r2 successfully crafted

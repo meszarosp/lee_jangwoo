@@ -1,0 +1,9 @@
+asteroid a1 added
+shell: 1
+closetosun: no
+core: empty
+settler s1 added to asteroid: a1
+settler s1 is now active
+settler s1 received one unit of iron
+putting back mineral unsuccessful
+asteroid still has shell

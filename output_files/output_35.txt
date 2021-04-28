@@ -1,0 +1,13 @@
+loaded test.txt
+settler s2 is now active
+settler s2 received one unit of coal
+settler s2 received one unit of coal
+settler s2 received one unit of coal
+settler s2 received one unit of coal
+settler s2 received one unit of coal
+settler s2 received one unit of coal
+settler s2 received one unit of coal
+settler s2 received one unit of coal
+settler s2 received one unit of coal
+mining unsuccessful
+settler inventory too full

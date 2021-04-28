@@ -1,0 +1,10 @@
+asteroid a1 added
+shell: 1
+closetosun: yes
+core: ice
+settler s1 added to asteroid: a1
+settler s1 is now active
+drilling successful
+shell is now 0 unit(s) thick
+mining unsuccessful
+asteroid is already empty

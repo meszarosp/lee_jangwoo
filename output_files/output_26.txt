@@ -1,0 +1,4 @@
+loaded test.txt
+settler s1 is now active
+drilling successful
+shell is now 99 unit(s) thick

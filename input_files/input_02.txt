@@ -1,0 +1,10 @@
+load test.txt
+selectsettler s1
+addmineral iron
+addmineral ice
+craftteleport
+addmineral iron
+addmineral iron
+addmineral ice
+addmineral uranium(0)
+craftteleport

@@ -1,8 +1,8 @@
 import java.util.*;
 
 /**
- * Felelõssége, hogy az aszteroidák napközeliségét szabályozza és a véletlen idõközönként
- * napviharral sújtsa õket.
+ * FelelÃµssÃ©ge, hogy az aszteroidÃ¡k napkÃ¶zelisÃ©gÃ©t szabÃ¡lyozza Ã©s a vÃ©letlen idÃµkÃ¶zÃ¶nkÃ©nt
+ * napviharral sÃºjtsa Ãµket.
  */
 public class Sun {
 
@@ -10,65 +10,60 @@ public class Sun {
      * Default constructor
      */
     public Sun() {
+        asteroids = new ArrayList<Asteroid>();
     }
 
     /**
-     * A játékban szerplõ összes aszteroidát tartalmazó lista.
+     * A jÃ¡tÃ©kban szerplÃµ Ã¶sszes aszteroidÃ¡t tartalmazÃ³ lista.
      */
     private List<Asteroid> asteroids;
 
     /**
-     * Ha azt a választ kapja, hogy legyen npvihar, akkor minden aszteroidára meghívja a solarWind metódust. Ez után végigmegyünk az összes aszteroidán, megkérdezzük, hogy az legyen-e napközelben, ha azt a választ kapja, hogy igen, akkor meghívja rajta a setCloseToSun metódust
+     * Ha napvihar a random feltÃ©tel igaz, akkor egy random aszteroidÃ¡ra meghÃ­vja a solarWind metÃ³dust. 
+     * Ez utÃ¡n vÃ©gigmegyÃ¼nk az Ã¶sszes aszteroidÃ¡n, megkÃ©rdezzÃ¼k, hogy az legyen-e napkÃ¶zelben, ha azt a 
+     * vÃ¡laszt kapja, hogy igen, akkor meghÃ­vja rajta a setCloseToSun metÃ³dust
      */
     public void makeAction() {
-        Skeleton.init = false;
-    	Skeleton.startMethod(this, "makeAction", null);
-        int option = Skeleton.sunQuestion(this);
-        if (option == 1){
-            asteroids.get(0).solarWind();
-        } else if (option == 2 || option == 3) {
-            asteroids.get(0).setCloseToSun();
+    	Random rand = new Random();     //napvihar/setclosetosun
+        if(rand.nextInt() % 5 == 0) {
+        	asteroids.get(rand.nextInt(asteroids.size())).solarWind(rand.nextInt()%5+1);
         }
-    	/*if(Skeleton.yesnoQuestion("Legyen napvihar?")) {
-        	for(Asteroid a : asteroids){
-        		a.solarWind();
-        	}
-        }
-        for(Asteroid a : asteroids){
-        	if(Skeleton.yesnoQuestion("Legyünk napközelben?")) {
+        for(Asteroid a : asteroids) {
+        	if(rand.nextInt() % 2 == 1) {
         		a.setCloseToSun();
         	}
-        }*/
-        Skeleton.endMethod(this,  null);
-        Skeleton.init = true;
+        }
     }
 
     /**
-     * kiveszi a paraméterként kapott aszteroidát az asteroids listából
-     * @param a az eltávolítandó aszteroida
+     * kiveszi a paramÃ©terkÃ©nt kapott aszteroidÃ¡t az asteroids listÃ¡bÃ³l
+     * @param a az eltÃ¡volÃ­tandÃ³ aszteroida
      */
     public void removeAsteroid(Asteroid a) {
-    	Skeleton.startMethod(this, "removeAsteroid", a);
         asteroids.remove(a);
-        Skeleton.endMethod(this, null);
     }
 
     /**
-     * A saját asteroids listáját felülírja a paraméterül kapott asteroids listával
-     * @param asteroids aszteroidákból álló lista, amit beállít a saját asteroids listájának
+     * A sajÃ¡t asteroids listÃ¡jÃ¡t felÃ¼lÃ­rja a paramÃ©terÃ¼l kapott asteroids listÃ¡val
+     * @param asteroids aszteroidÃ¡kbÃ³l Ã¡llÃ³ lista, amit beÃ¡llÃ­t a sajÃ¡t asteroids listÃ¡jÃ¡nak
      */
     public void addAsteroids(List<Asteroid> asteroids) {
-    	Skeleton.startMethod(this, "addAsteroids", asteroids);
     	this.asteroids=asteroids;
-    	Skeleton.endMethod(this,  null);
     }
 
     /**
-     * Visszaadja az asteroids listát.
+     * HozzÃ¡ad egy aszteroidÃ¡t az asteroids listÃ¡jÃ¡hoz.
+     * @param asteroid a hozzÃ¡adni kÃ­vÃ¡nt aszteroida.
+     */
+    public void addAsteroid(Asteroid asteroid) {
+        this.asteroids.add(asteroid);
+    }
+
+    /**
+     * Az asteroids vÃ¡ltozÃ³ gettere.
+     * @return visszaadja az asteroids vÃ¡ltozÃ³t
      */
     public List<Asteroid> getAsteroids() {
-        Skeleton.startMethod(this,  "getAsteroids", null);
-        Skeleton.endMethod(this, this.asteroids);
         return this.asteroids;
     }
 

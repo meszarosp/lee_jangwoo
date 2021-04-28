@@ -1,0 +1,3 @@
+loaded test.txt
+settler s1 is now active
+there's no teleport to place

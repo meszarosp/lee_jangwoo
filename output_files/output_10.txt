@@ -1,0 +1,2 @@
+loaded test.txt
+robot r1 moved to a1

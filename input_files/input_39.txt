@@ -1,0 +1,4 @@
+addasteroid 0 0 uranium(2)
+addsettler a1
+setclosetosun a1 1
+checklose

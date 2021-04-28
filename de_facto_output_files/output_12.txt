@@ -1,0 +1,2 @@
+loaded test.txt
+UFO u1 moved to a1

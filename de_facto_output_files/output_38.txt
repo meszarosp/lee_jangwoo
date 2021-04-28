@@ -1,0 +1,4 @@
+loaded test.txt
+settler s1 is now active
+mining unsuccessful
+asteroid still has shell

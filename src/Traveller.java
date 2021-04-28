@@ -8,76 +8,72 @@ import java.util.*;
  * akár köztes teleportkapuval, akár anélkül. Tudnia kell aszteroidát fúrni.
  */
 public abstract class Traveller {
-
     /**
-     * Default constructor
+     * Traveller konstruktora, ahol paraméterben kapja azt az aszteroidát ahol elhelyezzük.
+     * @param a traveller helye
+     * @param g a játék amelyben a traveller van
      */
-    public Traveller() {
+    public Traveller(Asteroid a, Game g) {
+        a.placeTraveller(this);
+        asteroid = a;
+        setGame(g);
     }
 
     /**
-     * 
+     * A traveller helyét jelképezõ aszteroida típusú attribútum.
      */
     protected Asteroid asteroid;
 
     /**
-     * 
+     * A game objektumot jelképezõ attibútum.
      */
     protected Game game;
 
+    /**
+     * A game settere
+     * @param game az új game objektum
+     */
     public void setGame(Game game){
-    	Skeleton.startMethod(this, "setGame", game);
         this.game = game;
-        Skeleton.endMethod(this, null);
     }
 
     /**
-     * átmegy az aszteroidájáról egy másikra, vagy egy teleportkapuba
+     * Átmegy az aszteroidájáról egy másikra, vagy egy teleportkapuba
      * @param number hányadik szomszédjára megy az utazó az aszteroidának
      */
-    public void move(int number) {
-    	Skeleton.startMethod(this, "move", number);
+    public boolean move(int number) {
         INeighbour b = asteroid.getNeighbourAt(number);
+        if (b == null)
+            return false;
         asteroid.removeTraveller(this);
+        Asteroid previousAsteroid = asteroid;
         b.placeTraveller(this);
-        Skeleton.endMethod(this, null);
+        return previousAsteroid != asteroid;
     }
 
     /**
-     * megfúrja az aszteroidát
-     */
-    public void drill() {
-    	Skeleton.startMethod(this, "drill", null);
-    	asteroid.onDrill();
-    	Skeleton.endMethod(this, null);
-    }
-
-    /**
-     * 
+     * Absztrakt hitByBlast függvény, amely a leszármazottakban lehet felülírva, ott kifejtve.
      */
     public abstract void hitByBlast();
 
     /**
-     * 
+     * Absztrakt die függvény, amely a leszármazottakban lesz felülírva, ott kifejtve.
      */
     public abstract void die();
 
-    /**  beállítja az utazó aszteroidáját
-     * @param a az az aszteroida amin az utazó áll
+    /**  
+     * beállítja az utazó aszteroidáját
+     * @param a az az aszteroida, amin az utazó áll
      */
     public void setAsteroid(Asteroid a) {
-    	Skeleton.startMethod(this, "setAsteroid", a);
     	asteroid = a;
-    	Skeleton.endMethod(this, null);
     }
 
-    /**	 visszaadja az aszteroidát, amin az utazó áll
+    /**	 
+     * visszaadja az aszteroidát, amin az utazó áll
      * @return az az aszteroida amin az utazó áll
      */
     public Asteroid getAsteroid() {
-    	Skeleton.startMethod(this, "getAsteroid", null);
-        Skeleton.endMethod(this, asteroid);
         return asteroid;
     }
-
 }

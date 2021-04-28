@@ -1,0 +1,9 @@
+addasteroid 5 0 empty
+addasteroid 0 0 empty
+addasteroid 1 0 empty
+connectasteroid a1 a3
+addteleportpair a2 a3
+addteleportpair a2 a1
+bamboozleteleport t1 1
+setrandom 0
+nextturn

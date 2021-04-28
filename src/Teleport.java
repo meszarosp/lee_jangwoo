@@ -2,107 +2,201 @@
 import java.util.*;
 
 /**
- * Nyilv·ntartani a teleportkapu p·rj·t, valamint egy INeighbour interfÈszt megvalÛsÌtÛ
- * objektumot. Ez a szomszÈdja, mellyel az utazÛk ·thalad·s·t biztosÌtja a m·sik teleportkapun
- * ·t. Ha a szomszÈd aszteroid·n robban·s tˆrtÈnik, azaz megsz˚nik ez a szomszÈd, akkor a rajta
- * lÈvı kapunak is meg kell sz˚nnie. Ha egy kapu megsz˚nik, a p·rj·nak is meg kell.
- * FelelıssÈge nem ·tengedni utazÛkat, amennyiben a kapup·rja mÈg nincs letÈve.
+ * Nyilv√°ntartani a teleportkapu p√°rj√°t, valamint egy INeighbour interf√©szt megval√≥s√≠t√≥
+ * objektumot. Ez a szomsz√©dja, mellyel az utaz√≥k √°thalad√°s√°t biztos√≠tja a m√°sik teleportkapun
+ * √°t. Ha a szomsz√©d aszteroid√°n robban√°s t√∂rt√©nik, azaz megsz√ªnik ez a szomsz√©d, akkor a rajta
+ * l√©v√µ kapunak is meg kell sz√ªnnie. Ha egy kapu megsz√ªnik, a p√°rj√°nak is meg kell.
+ * Felel√µss√©ge nem √°tengedni utaz√≥kat, amennyiben a kapup√°rja m√©g nincs let√©ve.
  */
 public class Teleport implements INeighbour {
 
     /**
-     * Default constructor
+     * Default constructor. L√©trehozza a teleportkaput a megfelelo kiindul√°si √©rt√©kekkel.
      */
     public Teleport() {
+    	bamboozled = false;
+        pair = null;
+        neighbour = null;
     }
 
     /**
-     * A teleportkapu p·rja.
+     * Egy param√©teres constructor. L√©trehozza a teleportkaput a megfelel≈ë kiindul√°si √©rt√©kekkel.
+     * Megadhat√≥ kiindul√°si bamboozled √©rt√©k
+     * @param bamboozled √©rt√©k√©t √°ll√≠tja be
+     */
+    public Teleport(boolean bamboozled) {
+        this.bamboozled = bamboozled;
+        pair = null;
+        neighbour = null;
+    }
+
+    /**
+     * A teleportkapu p√°rja.
      */
     private Teleport pair;
 
     /**
      * Az aszteroida, amin a teleortkapu van.
      */
-    private INeighbour neighbour;
+    private Asteroid neighbour;
 
     /**
-     * A teleport p·rj·t null-ra ·llÌtja, Ès ha a neighbour nem null (azaz m·r le van rakva a teleportkapu), akkor a neighbour removeNeighbour metÛdus·t meghÌvja
+     * Meg van-e ≈ër√ºlve a teleportkapu (ha igen akkor mozoghat)
+     */
+    private boolean bamboozled;
+
+    /**
+     * be√°ll√≠thatjuk a bamboozled √©rt√©k√©t.
+     * @param bamboozled bamboozled leend≈ë √©rt√©ke
+     */
+    public void setBamboozled(boolean bamboozled) {
+        this.bamboozled = bamboozled;
+    }
+
+    /**
+     * bamboozled v√°ltoz√≥ gettere
+     * @return bamboozled √©rt√©k√©t adja vissza
+     */
+    public boolean getBamboozled() { return bamboozled; }
+
+    /**
+     * visszaadja a szomsz√©dot.
+     * @return a szomsz√©d aszteroida
+     */
+    public Asteroid getNeighbour() { return  neighbour; }
+
+    /**
+     * visszaadja a teleportkapu p√°rj√°t
+     * @return a teleportkapu p√°rja
+     */
+    public Teleport getPair() {
+        return pair;
+    }
+
+    /**
+     * Visszaadja, hogy igaz-e hogy a kapu bamboozled
+     * @return bool aszerint hogy a kapu bamboozled vagy nem
+     */
+    public boolean isBamboozled() {
+        return bamboozled;
+    }
+
+    /**
+     * A teleport p√°rj√°t null-ra √°ll√≠tja, √©s ha a neighbour nem null (
+     * azaz m√°r le van rakva a teleportkapu), akkor a neighbour removeNeighbour met√≥dus√°t megh√≠vja
      */
     public void perish() {
-    	Skeleton.startMethod(this, "perish", null);
         pair = null;
-        if(!Skeleton.yesnoQuestion("Has the pair been blown up (perished)? (yes/no)")) {
+        if(neighbour != null) {
         	neighbour.removeNeighbour(this);
+        	neighbour = null;
         }
-        Skeleton.endMethod(this,  null);
+        return;
     }
 
     /**
-     * Be·llÌtja a kapu p·rj·t a paramÈter¸l kapott teleportkapura.
-     * @param t teleportkapu p·rja
+     * Be√°ll√≠tja a kapu p√°rj√°t a param√©ter√ºl kapott teleportkapura.
+     * @param t teleportkapu p√°rja
      */
     public void setPair(Teleport t) {
-    	Skeleton.startMethod(this,  "setPair", t);
     	pair = t;
-        Skeleton.endMethod(this,  null);
     }
 
     /**
-     * Ha a neighbour nem null, akkor meghÌvja r· a placeTraveller metÛdust Ès true-val tÈr vissza, egyÈbkÈnt false-al tÈr vissza
-     * @param traveller az ·thelyezendı traveller
-     * @return bool a traveller ·thelyezÈsÈnek sikeressÈgÈrıl
+     * Ha a neighbour nem null, akkor megh√≠vja r√° a placeTraveller met√≥dust √©s true-val t√©r vissza, egy√©bk√©nt false-al t√©r vissza
+     * @param traveller az √°thelyezend√µ traveller
+     * @return bool a traveller √°thelyez√©s√©nek sikeress√©g√©r√µl
      */
     public boolean teleportTraveller(Traveller traveller) {
-    	Skeleton.startMethod(this,  "teleportTraveller", traveller);
-      	if(Skeleton.yesnoQuestion("Has the pair been placed? (yes/no)")) {
+         if(neighbour != null) {
     		neighbour.placeTraveller(traveller);
-    		Skeleton.endMethod(this, true);
     		return true;
     	}
-      	Skeleton.endMethod(this, false);
         return false;
     }
 
     /**
-     * MeghÌvja a pair teleportTraveller metÛdus·t. Abban az esetben, ha az hamissal tÈr vissza, meghÌvja a neighbour placeTraveller metÛdus·t.
-     * @param traveller
+     * Megh√≠vja a pair teleportTraveller met√≥dus√°t. Abban az esetben, ha az hamissal t√©r vissza, megh√≠vja a neighbour placeTraveller met√≥dus√°t.
+     * @param traveller a lehelyezend√µ traveller
      */
+    @Override
     public void placeTraveller(Traveller traveller){
-    	Skeleton.startMethod(this,  "placeTraveller", traveller);
-    	boolean b = pair.teleportTraveller(traveller);
-    	if(!b) {
-    		neighbour.placeTraveller(traveller);
+    	if(pair == null) {
+    		return;
     	}
-    	Skeleton.endMethod(this,  null);
+    	if(!pair.teleportTraveller(traveller))
+    		neighbour.placeTraveller(traveller);
     }
 
+
     /**
-     * MeghÌvja a pair-nek a perish metÛdus·t.
+     * Megh√≠vja a pair-nek a perish met√≥dus√°t.
      * @param neighbour
      */
+    @Override
     public void removeNeighbour(INeighbour neighbour){
-    	Skeleton.startMethod(this, "removeNeighbour", neighbour);
     	if (pair != null)
     	    pair.perish();
-    	Skeleton.endMethod(this,  null);
     }
 
     /**
-     *Abban az esetben, ha a pair nem null (azaz m·r le van rakva a kapu p·rja), a paramÈter¸l kapott neighbour-nek meghÌvja az addNeighbour metÛdus·t, aminek saj·t mag·t adja paramÈter¸l.
-     * @param neighbour
+     * Napvihar √©rkezik, ilyenkor a teleportkapu meg√µr√ºl, ha m√°r le van t√©ve.
+     * @param i itt nincs szerepe, az interf√©sz miatt kell
      */
-    public void addNeighbour(INeighbour neighbour){
-    	Skeleton.startMethod(this,  "addNeighbour", neighbour);
-    	if (!Skeleton.init) {
-            if (!Skeleton.yesnoQuestion("Has the pair been blown up (perished)? (yes/no)")) {
-                neighbour.addNeighbour(this);
-                this.neighbour = neighbour;
-            }
-        }else{
-    	    this.neighbour = neighbour;
+    @Override
+    public void solarWind(int i) {
+        if(neighbour != null)
+            bamboozled = true;
+    }
+
+     /**
+     * A teleportkapun teleportkapu nem tud √°tmenni.
+     * @return mindig false, mert nem lehet sikeres
+     */
+    @Override
+    public boolean moveTeleport(Teleport t) {
+        return false;
+    }
+
+    /**
+     *Abban az esetben, ha a pair nem null (azaz m√°r le van rakva a kapu p√°rja), a param√©ter√ºl kapott 
+     * aszteroid√°nak megh√≠vja az addNeighbour met√≥dus√°t, aminek saj√°t mag√°t adja param√©ter√ºl.
+     * @param a az aszteroida, melyet be√°ll√≠t szomsz√©dj√°nak
+     */
+    public void setNeighbour(Asteroid a){
+        neighbour = a;
+        if(pair != null && neighbour != null){
+            neighbour.addNeighbour(this);
         }
-    	Skeleton.endMethod(this,  null);
+    }
+
+    /**
+     * ha le van t√©ve √©s a kapu megkerg√ºlt (bamboozled == true) akkor megh√≠vja a szomsz√©djaira a getNeighbourAt f√ºggv√©nnyel a 
+     * moveTeleport met√≥dust mag√°t adva param√©terk√©nt. Ha ez igazzal t√©r vissza, akkor megh√≠vja a r√©gi aszteroid√°j√°ra
+     * (ezt elt√°rolja) a removeNeighbour f√ºggv√©nyt mag√°t param√©ter√ºl adva, majd visszat√©r. Ha v√©gig√©rt az √∂sszes szomsz√©don,
+     * √©s m√©g nem t√©rt vissza, akkor ebben a k√∂rben nem mozdul.
+     */
+    public void makeAction() {
+        if(neighbour == null){
+            return;
+        }
+    	if(bamboozled) {
+    		Asteroid old = neighbour;
+    		boolean placed = false;
+    		int i = 0;
+    		while(!placed && i < old.getNeighbourCount()) {
+    			INeighbour temp = old.getNeighbourAt(i);
+    			if(temp==null) {
+    				return;
+    			}
+    			if(temp.moveTeleport(this)) {
+    				//neighbour = (Asteroid)temp;
+    				old.removeNeighbour(this);
+    				placed = true;
+    			}
+    			i++;
+    		}
+    	}
     }
 
 }

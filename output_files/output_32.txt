@@ -1,0 +1,8 @@
+loaded test.txt
+solarwind created with asteroid a2 in the middle
+and a 2 radius
+events caused:
+s1 settler died
+s2 settler died
+r1 robot died
+u1 ufo died

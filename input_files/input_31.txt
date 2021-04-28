@@ -1,0 +1,4 @@
+load test.txt
+selectsettler s2
+mine
+solarwind a2 2

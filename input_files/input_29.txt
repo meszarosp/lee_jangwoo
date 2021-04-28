@@ -1,0 +1,2 @@
+addasteroid 0 1 uranium(2)
+setclosetosun a1 1
