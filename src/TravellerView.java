@@ -1,4 +1,5 @@
 
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -30,24 +31,19 @@ public abstract class TravellerView implements View {
     /**
      * @param g
      */
-    public abstract void draw(Graphics g);
+    public void draw(Graphics g) {
+    }
 
     /**
      * 
      */
-    public abstract void Update();
+    public  void Update() {
+    }
 
     /**
      * @param t 
      * @return
      */
-    public abstract boolean identify(Traveller t);
-
-    /**
-     * @param g
-     */
-    public void draw(Graphics g) {
-        // TODO implement here
-    }
+    public boolean identify(Traveller t){}
 
 }

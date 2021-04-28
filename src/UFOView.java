@@ -1,4 +1,5 @@
 
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -16,13 +17,6 @@ public class UFOView extends TravellerView {
      * 
      */
     private UFO ufo;
-
-    /**
-     * @param g
-     */
-    public void draw(Graphics g) {
-        // TODO implement here
-    }
 
     /**
      * 
@@ -43,17 +37,7 @@ public class UFOView extends TravellerView {
     /**
      * @param g
      */
-    public abstract void draw(Graphics g);
+    public void draw(Graphics g){}
 
-    /**
-     * 
-     */
-    public abstract void Update();
-
-    /**
-     * @param t 
-     * @return
-     */
-    public abstract boolean identify(Traveller t);
 
 }

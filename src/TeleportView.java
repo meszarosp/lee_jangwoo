@@ -1,4 +1,5 @@
 
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -97,13 +98,6 @@ public class TeleportView implements View {
     public boolean isPair(Teleport t) {
         // TODO implement here
         return false;
-    }
-
-    /**
-     * @param g
-     */
-    public void draw(Graphics g) {
-        // TODO implement here
     }
 
 }

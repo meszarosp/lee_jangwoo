@@ -1,4 +1,5 @@
 
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -55,12 +56,12 @@ public class LevelView implements View {
     /**
      * 
      */
-    private Set<SettlerView> settlerViews;
+    private ArrayList<SettlerView> settlerViews;
 
     /**
      * 
      */
-    private Set<TravellerView> travellerViews;
+    private ArrayList<TravellerView> travellerViews;
 
     /**
      * 
@@ -70,19 +71,13 @@ public class LevelView implements View {
     /**
      * 
      */
-    private AsteroidView asteroidViews;
+    private HashMap<Asteroid, AsteroidView> asteroidViews;
 
     /**
      * 
      */
-    private TeleportView teleportViews;
+    private HashMap<Teleport, TeleportView> teleportViews;
 
-    /**
-     * @param g
-     */
-    public void draw(Graphics g) {
-        // TODO implement here
-    }
 
     /**
      * 
@@ -170,7 +165,7 @@ public class LevelView implements View {
      * @param int x 
      * @param int y
      */
-    public void click(void int x, void int y) {
+    public void click(int x, nt y) {
         // TODO implement here
     }
 

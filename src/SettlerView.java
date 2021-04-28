@@ -1,4 +1,5 @@
 
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -51,21 +52,5 @@ public class SettlerView extends TravellerView {
         // TODO implement here
         return false;
     }
-
-    /**
-     * @param g
-     */
-    public abstract void draw(Graphics g);
-
-    /**
-     * 
-     */
-    public abstract void Update();
-
-    /**
-     * @param t 
-     * @return
-     */
-    public abstract boolean identify(Traveller t);
 
 }

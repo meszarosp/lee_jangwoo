@@ -1,4 +1,5 @@
 
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -28,17 +29,10 @@ public class AsteroidView implements View {
     private Asteroid asteroid;
 
     /**
-     * @param g
-     */
-    public void draw(Graphics g) {
-        // TODO implement here
-    }
-
-    /**
      * @param t 
      * @return
      */
-    public int getTravellerX(void t) {
+    public int getTravellerX(Teleport t) {
         // TODO implement here
         return 0;
     }
@@ -47,7 +41,7 @@ public class AsteroidView implements View {
      * @param t 
      * @return
      */
-    public int getTravellerY(void t) {
+    public int getTravellerY(Teleport t) {
         // TODO implement here
         return 0;
     }
@@ -90,7 +84,7 @@ public class AsteroidView implements View {
      * @param int y 
      * @return
      */
-    public boolean clicked(void int x, void int y) {
+    public boolean clicked(int x, int y) {
         // TODO implement here
         return false;
     }
