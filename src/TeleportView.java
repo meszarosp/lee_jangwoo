@@ -33,6 +33,9 @@ public class TeleportView implements View {
      */
     private Teleport teleport;
 
+    public TeleportView(Teleport t, Color color, int x, int y) {
+    }
+
     /**
      * @param g
      */
