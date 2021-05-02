@@ -15,4 +15,7 @@ public class GameFrame extends JFrame {
         add(lv, BorderLayout.CENTER);
         add(iv, BorderLayout.SOUTH);
     }
+    public LevelView getLevelView(){
+        return lv;
+    }
 }
