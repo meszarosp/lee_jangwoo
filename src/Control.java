@@ -9,15 +9,16 @@ public class Control implements ActionListener {
      */
     public Control() {}
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public static void actionPerformed(ActionEvent e) { //ez lehet static?
         String[] actionCommand = e.getActionCommand();
-        commands.get(actionCommand[0]).execute(actionCommand);
-        if(actionCommand[0] == "save" || actionCommand[0] == "load" || actionCommand[0] == "input" || actionCommand[0] == "output" || actionCommand[0] == "giveup"){
-        //input output kitöröl
-        } else{
+
+        commands.get(actionCommand[0]).execute(actionCommand);      //move még kérdéses
+        if(actionCommand[0] == "save" || actionCommand[0] == "load" || actionCommand[0] == "giveup"){
+        //itt nem tudom mi van
+        } else {
             activeSettler = valaki más;     ///itt valahogy kiderül hogy ki lesz a kövi settler
             if(újra kezdjük a Settler listát){
-                commands.get("nextturn").execute("nextturn")
+                commands.get("nextturn").execute("nextturn");
             }
             checkActiveSettlerDied();       ///megint keresek új aktív settlert ha meghalt
 
@@ -25,12 +26,19 @@ public class Control implements ActionListener {
             lv.setActiveSettler(activeSettler);
             lv.Update();
             lv.revalidate();
+        }
+    }
+    private static boolean refreshActiveSettler(){
+        if(activeSettler == null){
+            if(!game.getSettlers().isEmpty())
+                activeSettler = game.getSettlers().get(0);
 
         }
+        if(checkActiveSettlerDied()){
 
-
+        }
     }
-
+    private static List<Settler> ControlSettlers;// = ... ArrayList ctor clone
     private static GameFrame gameFrame;
     /**
      * Az input, ahonnan a parancsokat olvassa. Alapesetben a standard bemenet.
