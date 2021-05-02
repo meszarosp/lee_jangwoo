@@ -44,6 +44,8 @@ public abstract class TravellerView implements View {
      * @param t 
      * @return
      */
-    public boolean identify(Traveller t){}
+    public boolean identify(Traveller t){
+        return false;
+    }
 
 }

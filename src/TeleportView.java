@@ -86,7 +86,7 @@ public class TeleportView implements View {
      * @param int y 
      * @return
      */
-    public boolean clicked(void int x, void int y) {
+    public boolean clicked(int x, int y) {
         // TODO implement here
         return false;
     }
