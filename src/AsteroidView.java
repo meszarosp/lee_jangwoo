@@ -32,7 +32,7 @@ public class AsteroidView implements View {
      * @param t 
      * @return
      */
-    public int getTravellerX(Teleport t) {
+    public int getTravellerX(Traveller t) {
         // TODO implement here
         return 0;
     }
@@ -41,7 +41,7 @@ public class AsteroidView implements View {
      * @param t 
      * @return
      */
-    public int getTravellerY(Teleport t) {
+    public int getTravellerY(Traveller t) {
         // TODO implement here
         return 0;
     }

@@ -1,12 +1,11 @@
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 
 /**
  * 
  */
-public class LevelView extends JPanel implements View {
+public class LevelView implements View {
 
     /**
      * Default constructor
@@ -123,14 +122,15 @@ public class LevelView extends JPanel implements View {
      * @return
      */
     public Settler getActiveSettler() {
-        return activeSettler;
+        // TODO implement here
+        return null;
     }
 
     /**
      * @param s
      */
     public void setActiveSettler(Settler s) {
-        activeSettler = s;
+        // TODO implement here
     }
 
     /**
@@ -162,10 +162,10 @@ public class LevelView extends JPanel implements View {
     }
 
     /**
-     * @param x
-     * @param y
+     * @param int x 
+     * @param int y
      */
-    public void click(int x, int y) {
+    public void click(int x, nt y) {
         // TODO implement here
     }
 
