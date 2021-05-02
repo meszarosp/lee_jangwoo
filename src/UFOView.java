@@ -33,8 +33,8 @@ public class UFOView extends TravellerView {
     public void Update() {
         Asteroid a = ufo.getAsteroid();
         AsteroidView av = levelView.getAsteroidView(a);
-        x = av.getTravellerX(this);
-        y = av.getTravellerY(this);
+        x = av.getTravellerX(this.ufo);
+        y = av.getTravellerY(this.ufo);
     }
 
     /**
@@ -52,7 +52,7 @@ public class UFOView extends TravellerView {
      * @param g Graphics típusú objektum a rajzoláshoz.
      */
     public void draw(Graphics g){
-    	g.setColor(1, 255, 55);
+    	g.setColor(new Color(1, 255, 55));
         g.fillRect(x, y, 10, 10);
     }
 

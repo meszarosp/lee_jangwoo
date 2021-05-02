@@ -48,6 +48,8 @@ public abstract class TravellerView implements View {
      * @param t A traveller, akivel majd összehasonlítjuk a leszármazottakban.
      * @return bool az összehasonlítás eredményéről (majd a leszármazottakban).
      */
-    public boolean identify(Traveller t){}
+    public boolean identify(Traveller t){
+        return false;
+    }
 
 }

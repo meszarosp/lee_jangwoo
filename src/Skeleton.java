@@ -1629,6 +1629,10 @@ public class Skeleton {
      * @param args parancssori argumentumok
      */
     public static void main(String[] args){
+        GameFrame f = new GameFrame();
+        f.pack();
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        f.setVisible(true);
         initializeCommands();
         initializeMaxIDs();
         if (args.length >= 2){

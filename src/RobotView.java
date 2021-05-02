@@ -29,7 +29,7 @@ public class RobotView extends TravellerView {
      * @param g Graphics típusú objektum a rajzoláshoz.
      */
     public void draw(Graphics g) {
-    	g.setColor(102, 102, 102);
+    	g.setColor(new Color(102, 102, 102));
         g.fillRect(x, y, 10, 10);
     }
 
@@ -42,8 +42,8 @@ public class RobotView extends TravellerView {
     public void Update() {
         Asteroid a = robot.getAsteroid();
         AsteroidView av = levelView.getAsteroidView(a);
-        x = av.getTravellerX(this);
-        y = av.getTravellerY(this);
+        x = av.getTravellerX(this.robot);
+        y = av.getTravellerY(this.robot);
     }
 
     /**
