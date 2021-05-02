@@ -2,6 +2,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * 
@@ -16,15 +17,23 @@ public class InventoryView extends JPanel implements View {
     private JPanel ButtonPanel;
     private JPanel TeleportPanel;
     private JPanel MineralPanel;
+
+    private TeleportButton[] teleportButtons = new TeleportButton[3];
+    private MineralButton[] mineralButtons = new MineralButton[10];
     /**
      * Default constructor
      */
-    public InventoryView() {
+    public InventoryView(LevelView lv) {
         super();
+        levelView = lv;
         Drill = new JButton("Drill");
+        Drill.setActionCommand("drill");
         Mine = new JButton("Mine");
+        Mine.setActionCommand("mine");
         CraftTeleport = new JButton("Craft Teleport");
+        CraftTeleport.setActionCommand("craft teleport");
         CraftRobot = new JButton("Craft Robot");
+        CraftRobot.setActionCommand("craft robot");
 
         ButtonPanel = new JPanel();
         ButtonPanel.setLayout(new GridLayout(2,2));
@@ -39,9 +48,20 @@ public class InventoryView extends JPanel implements View {
         add(MineralPanel);
 
         ButtonPanel.add(Drill);
-        ButtonPanel.add(Mine);
         ButtonPanel.add(CraftTeleport);
+        ButtonPanel.add(Mine);
         ButtonPanel.add(CraftRobot);
+
+        for (int i = 0; i<3; i++) {
+            teleportButtons[i] = new TeleportButton();
+            TeleportPanel.add(teleportButtons[i]);
+        }
+
+        for (int i = 0; i<10; i++) {
+            mineralButtons[i] = new MineralButton();
+            MineralPanel.add(mineralButtons[i]);
+        }
+
 
     }
 
@@ -54,7 +74,22 @@ public class InventoryView extends JPanel implements View {
      * @param g
      */
     public void draw(Graphics g) {
-        // TODO implement here
+        List<Teleport> teleportList = levelView.getActiveSettler().getTeleportgates();
+        for (int i = 0; i < 3; i++) {
+            if (i<teleportList.size())
+                teleportButtons[i].setTeleport(teleportList.get(i));
+            else
+                teleportButtons[i].setTeleport(null);
+        }
+
+        List<Mineral> mineralList = levelView.getActiveSettler().getMinerals();
+        for (int i = 0; i < 10; i++) {
+            if (i<mineralList.size())
+                mineralButtons[i].setMineral(mineralList.get(i));
+            else
+                mineralButtons[i].setMineral(null);
+        }
+        invalidate();
     }
 
     /**
@@ -62,7 +97,7 @@ public class InventoryView extends JPanel implements View {
      * @param y
      */
     public void click(int x, int y) {
-        // TODO implement here
+        // TODO ide mi kéne egyáltalán?
     }
 
 

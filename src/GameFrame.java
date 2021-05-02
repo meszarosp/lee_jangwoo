@@ -14,7 +14,7 @@ public class GameFrame extends JFrame {
         setMinimumSize(new Dimension(1000, 600));
         setPreferredSize(new Dimension(1000, 600));
         lv = new LevelView();
-        iv = new InventoryView();
+        iv = new InventoryView(lv);
         add(lv, BorderLayout.CENTER);
         add(iv, BorderLayout.SOUTH);
         pack();
