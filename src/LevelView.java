@@ -1,11 +1,12 @@
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 
 /**
  * 
  */
-public class LevelView implements View {
+public class LevelView extends JPanel implements View {
 
     /**
      * Default constructor
@@ -162,10 +163,10 @@ public class LevelView implements View {
     }
 
     /**
-     * @param int x 
-     * @param int y
+     * @param  x
+     * @param  y
      */
-    public void click(int x, nt y) {
+    public void click(int x, int y) {
         // TODO implement here
     }
 
