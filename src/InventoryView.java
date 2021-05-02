@@ -25,6 +25,7 @@ public class InventoryView extends JPanel implements View {
      */
     public InventoryView(LevelView lv) {
         super();
+        setPreferredSize(new Dimension(1000, 100));
         levelView = lv;
         Drill = new JButton("Drill");
         Drill.setActionCommand("drill");
@@ -36,13 +37,21 @@ public class InventoryView extends JPanel implements View {
         CraftRobot.setActionCommand("craft robot");
 
         ButtonPanel = new JPanel();
-        ButtonPanel.setLayout(new GridLayout(2,2));
+        GridLayout forButtons = new GridLayout(2,2);
+        forButtons.setVgap(20);
+        forButtons.setHgap(20);
+        ButtonPanel.setLayout(forButtons);
         TeleportPanel = new JPanel();
-        TeleportPanel.setLayout(new FlowLayout());
+        TeleportPanel.setLayout(new GridLayout(1, 3, 30, 20));
         MineralPanel = new JPanel();
-        MineralPanel.setLayout(new GridLayout(2, 5));
+        GridLayout forMinerals = new GridLayout(2, 5);
+        forMinerals.setHgap(20);
+        forMinerals.setVgap(20);
+        MineralPanel.setLayout(forMinerals);
 
-        setLayout(new FlowLayout());
+        GridLayout grid = new GridLayout(1,3);
+        grid.setHgap(80);
+        setLayout(grid);
         add(ButtonPanel);
         add(TeleportPanel);
         add(MineralPanel);

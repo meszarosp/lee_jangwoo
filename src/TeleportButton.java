@@ -14,7 +14,7 @@ public class TeleportButton extends JButton {
         setPreferredSize(new Dimension(30 , 50));
         setMaximumSize(new Dimension(30 , 50));
         setMinimumSize(new Dimension(30 , 50));
-        setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 12));
         setBackground(new Color(120, 45, 76));
         setOpaque(true);
         setActionCommand("set down");
@@ -29,7 +29,7 @@ public class TeleportButton extends JButton {
         if (teleport == null)
             setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         else
-            setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
+            setBorder(BorderFactory.createLineBorder(Color.BLACK, 12));
         // TODO hogyan tudja meg a színt?
         setBackground(new Color(120, 45, 76));
     }

@@ -21,6 +21,8 @@ public class MineralButton extends JButton {
             setBorder(BorderFactory.createLineBorder(Color.BLACK, 0));
         }
         setOpaque(true);
+        setHorizontalAlignment(CENTER);
+        setVerticalAlignment(CENTER);
         setActionCommand("put back");
     }
 
