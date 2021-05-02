@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
 
@@ -9,34 +11,72 @@ public class Control implements ActionListener {
      */
     public Control() {}
     @Override
-    public static void actionPerformed(ActionEvent e) { //ez lehet static?
-        String[] actionCommand = e.getActionCommand();
+    public void actionPerformed(ActionEvent e) { //ez lehet static?
+        String[] actionCommand = e.getActionCommand().split(" ");
 
         commands.get(actionCommand[0]).execute(actionCommand);      //move még kérdéses
-        if(actionCommand[0] == "save" || actionCommand[0] == "load" || actionCommand[0] == "giveup"){
-        //itt nem tudom mi van
+        if(actionCommand[0].equals("save") || actionCommand[0].equals("load") || actionCommand[0].equals("giveup")){
+            //itt nem tudom mi van
         } else {
-            activeSettler = valaki más;     ///itt valahogy kiderül hogy ki lesz a kövi settler
-            if(újra kezdjük a Settler listát){
-                commands.get("nextturn").execute("nextturn");
+            if(refreshActiveSettler()){
+                commands.get("nextturn").execute(new String[]{"nextturn"});
+                refreshActiveSettler();
             }
-            checkActiveSettlerDied();       ///megint keresek új aktív settlert ha meghalt
-
             LevelView lv = gameFrame.getLevelView();
             lv.setActiveSettler(activeSettler);
             lv.Update();
             lv.revalidate();
         }
     }
-    private static boolean refreshActiveSettler(){
+    private static boolean refreshActiveSettler(){      ///A visszatérési érték az, hogy kell-e nextturn
         if(activeSettler == null){
             if(!game.getSettlers().isEmpty())
                 activeSettler = game.getSettlers().get(0);
-
+            ControlSettlers = new ArrayList<Settler>(game.getSettlers());
+            return false;
         }
-        if(checkActiveSettlerDied()){
-
+        if(game.getSettlers().contains(activeSettler)){
+            ControlSettlers = new ArrayList<Settler>(game.getSettlers());
+            for(int i = 0; i < ControlSettlers.size(); i++){
+                if(ControlSettlers.get(i).equals(activeSettler)){
+                    if(i == ControlSettlers.size()-1){
+                        activeSettler = ControlSettlers.get(0);
+                        return true;
+                    }else {
+                        activeSettler = ControlSettlers.get(i + 1);
+                        return false;
+                    }
+                }
+            }
+        } else{
+            int idxOfActive = 0;
+            for(int i = 0; i < ControlSettlers.size(); i++){
+                if(ControlSettlers.get(i).equals(activeSettler))
+                    idxOfActive = i;
+            }
+            while(idxOfActive != 0){
+                Settler settlerBeforeActive = ControlSettlers.get(idxOfActive-1);
+                if(game.getSettlers().contains(settlerBeforeActive)){
+                    ControlSettlers = new ArrayList<Settler>(game.getSettlers());
+                    for(int i = 0; i < ControlSettlers.size(); i++){
+                        if(ControlSettlers.get(i).equals(settlerBeforeActive)){
+                            if(i == ControlSettlers.size()){
+                                activeSettler = ControlSettlers.get(0);
+                                return true;
+                            } else{
+                                activeSettler = ControlSettlers.get(i+1);
+                                return false;
+                            }
+                        }
+                    }
+                }
+                idxOfActive--;
+            }
+            activeSettler = game.getSettlers().get(0);
+            ControlSettlers = new ArrayList<Settler>(game.getSettlers());
+            return false;
         }
+        return false;
     }
     private static List<Settler> ControlSettlers;// = ... ArrayList ctor clone
     private static GameFrame gameFrame;
@@ -1495,10 +1535,10 @@ public class Control implements ActionListener {
     public static void initializeCommands(){
         commands = new HashMap<>();
         commands.put("load", new loadCommand()); commands.put("save", new saveCommand()); commands.put("input", new inputCommand());
-        commands.put("output", new outputCommand()); commands.put("setrandom", new setrandomCommand());
+        commands.put("output", new outputCommand()); //commands.put("setrandom", new setrandomCommand());
         commands.put("addsettler", new addsettlerCommand()); commands.put("addasteroid", new addasteroidCommand());
         commands.put("addrobot", new addrobotCommand()); commands.put("addufo", new addufoCommand());
-        commands.put("connectasteroid", new connectasteroidCommand()); commands.put("selectsettler", new selectsettlerCommand());
+        commands.put("connectasteroid", new connectasteroidCommand()); //commands.put("selectsettler", new selectsettlerCommand());
         commands.put("move", new moveCommand()); commands.put("drill", new drillCommand()); commands.put("mine", new mineCommand());
         commands.put("putmineralback", new putmineralbackCommand()); commands.put("craftrobot", new craftrobotCommand());
         commands.put("craftteleport", new craftteleportCommand()); commands.put("placeteleport", new placeteleportCommand());
@@ -1509,7 +1549,7 @@ public class Control implements ActionListener {
         commands.put("newgame", new newgameCommand()); commands.put("setclosetosun", new setclosetosunCommand());
         commands.put("giveup", new giveupCommand()); commands.put("ufoaction", new ufoactionCommand());
         commands.put("bamboozleteleport", new bamboozleteleportCommand());
-        commands.put("exit", new exitCommand());
+        //commands.put("exit", new exitCommand());
     }
 
     /**
