@@ -16,12 +16,15 @@ public class LevelView extends JPanel implements View {
     }
 
     public static Color mineralColor(Mineral m) {
+        HashMap<String, Color> colors = new HashMap<>();
+        colors.put("uranium(0)", uranium0Color);
+        colors.put("uranium(1)", uranium1Color);
+        colors.put("uranium(2)", uranium2Color);
+        colors.put("iron", ironColor);
+        colors.put("ice", iceColor);
+        colors.put("coal", coalColor);
         if (m != null) {
-            switch (m.toString()) {
-                // TODO szín switch
-                case "uranium(0)":
-
-            }
+            return colors.getOrDefault(m.toString(), new Color(255, 255, 255));
         }
         return new Color(255,255,255);
     }
@@ -91,6 +94,9 @@ public class LevelView extends JPanel implements View {
      */
     private HashMap<Teleport, TeleportView> teleportViews = new HashMap<>();
 
+    LevelView(Game game){
+        this.game = game;
+    }
 
     /**
      * 
