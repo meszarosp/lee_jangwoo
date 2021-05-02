@@ -14,6 +14,15 @@ public class LevelView extends JPanel implements View {
     public LevelView() {
     }
 
+    public static Color mineralColor(Mineral m) {
+        switch (m.toString()) {
+            // TODO szín switch
+            case "uranium(0)":
+
+        }
+        return new Color(255,255,255) ;
+    }
+
     /**
      * 
      */
