@@ -154,6 +154,14 @@ public class Asteroid implements INeighbour {
         return null;
     }
 
+    /**
+     * Visszaadja az aszteroida szomszédainak listáját
+     * @return a szomszédok listája
+     */
+    public ArrayList<INeighbour> getNeighbours(){
+        return neighbours;
+    }
+
     public int getShell() {
         return shell;
     }

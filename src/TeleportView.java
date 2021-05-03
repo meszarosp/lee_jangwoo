@@ -8,98 +8,117 @@ import java.util.*;
 public class TeleportView implements View {
 
     /**
-     * Default constructor
-     */
-    public TeleportView() {
-    }
-
-    /**
-     * 
+     * A teleportkapu x koordinátája
      */
     private int x;
 
     /**
-     * 
+     *A teleportkapu y koordinátája 
      */
     private int y;
 
     /**
-     * 
+     * A teleportkapu színe
      */
     private Color teleportColor;
 
     /**
-     * 
+     * A teleportkapu párja
      */
     private Teleport teleport;
 
-    public TeleportView(Teleport t, Color color, int x, int y) {
+    /**
+     * Konstruktor
+     * beállítja az x, y, teleportColor és teleport értékét a paraméterül kapott dolgokra
+     */
+    public TeleportView(Teleport t, Color c, int x2, int  y2) {
+        x = x2;
+        y = y2;
+        teleportColor = c;
+        teleport = t;
     }
 
     /**
+     * Kirajzolja a teleportkaput a megfelelõ színnel
      * @param g
      */
     public void draw(Graphics g) {
-        // TODO implement here
+        g.setColor(new Color(0, 0, 0));
+        g.fillRect(x, y, 20, 36);
+        g.setColor(teleportColor);
+        g.fillRect(x, y, 15, 31);
+
     }
 
     /**
+     * Visszaadja a teleport tagváltozót
      * @return
      */
     public Teleport getTeleport() {
-        // TODO implement here
-        return null;
+        return teleport;
     }
 
     /**
+     * Visszaadja ax x tagváltozót
      * @return
      */
     public int getX() {
-        // TODO implement here
-        return 0;
+        return x;
     }
 
     /**
+     * Visszaadja az y tagváltozót
      * @return
      */
     public int getY() {
-        // TODO implement here
-        return 0;
+        return y;
     }
 
     /**
+     * A paraméterként megadott a aszteroidát összeveti a teleport
+     * getNeighbour-el lekért aszteroidájával. Ha megegyeznek true,
+     * ha nem akkor false a visszatérési érték.
      * @param a 
      * @return
      */
     public boolean isThisYourNeighbour(Asteroid a) {
-        // TODO implement here
+        ArrayList<INeighbour> neighbour = teleport.getNeighbour();
+        if(neighbour==a){
+            return true;
+        }
         return false;
     }
 
     /**
+     * Visszaadja a teleportColor tagváltozót
      * @return
      */
     public Color getColor() {
-        // TODO implement here
-        return null;
+        return teleportColor;
     }
 
     /**
-     * @param x
-     * @param y
-     * @return
+     * Ellenõrzi, hogy a paraméterül kapott koordináták által meghatározott pont a teleportkapu területén belül van-e
+     * @param xClicked
+     * @param yClicked
+     * @return igaz, ha belül van, egyébként hamis
      */
-    public boolean clicked(int x, int y) {
-        // TODO implement here
+    public boolean clicked(int xClicked, int yClicked) {
+        if((xClicked<x+10 || xClicked>x-10)&&(yClicked<y+18 || yClicked>y-18)){
+            return true;
+        }
         return false;
     }
 
     /**
+     * Meghívja a teleport getPair metódusát, és a visszakapott teleportkaput összehasonlítja a paraméterül kapottal.
      * @param t 
-     * @return
+     * @return ha egyezik igaz, ha nem akkor hamis
      */
     public boolean isPair(Teleport t) {
-        // TODO implement here
+        if(teleport.getPair() == t){
+            return true;
+        }
         return false;
     }
 
