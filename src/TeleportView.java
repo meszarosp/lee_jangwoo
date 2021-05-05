@@ -82,7 +82,7 @@ public class TeleportView implements View {
      * @return
      */
     public boolean isThisYourNeighbour(Asteroid a) {
-        ArrayList<INeighbour> neighbour = teleport.getNeighbour();
+        INeighbour neighbour = teleport.getNeighbour();
         if(neighbour==a){
             return true;
         }

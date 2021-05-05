@@ -24,35 +24,35 @@ public class LevelView extends JPanel implements View {
         colors.put("ice", iceColor);
         colors.put("coal", coalColor);
         if (m != null) {
-            return colors.getOrDefault(m.toString(), new Color(255, 255, 255));
+            return colors.getOrDefault(m.toString(), new Color(27, 20, 100));
         }
-        return new Color(255,255,255);
+        return new Color(27,20,100);
     }
 
     /**
      * 
      */
-    public static Color uranium0Color;
+    public static Color uranium0Color = new Color(15, 147, 71);
 
     /**
      * 
      */
-    public static Color uranium1Color;
+    public static Color uranium1Color = new Color(16, 105, 55);
 
     /**
      * 
      */
-    public static Color uranium2Color;
+    public static Color uranium2Color = new Color(2, 73, 34);
 
     /**
      * 
      */
-    public static Color iceColor;
+    public static Color iceColor = new Color(195, 255, 255);
 
     /**
      * 
      */
-    public static Color coalColor;
+    public static Color coalColor = new Color(179, 179, 179);
 
     /**
      * 
@@ -262,16 +262,26 @@ public class LevelView extends JPanel implements View {
      * 
      */
     private void updateAsteroidView() {
-        //Sun sun = game.getSun();
-
+        Sun sun = game.getSun();
+        List<Asteroid> asteroids = sun.getAsteroids();
+        HashMap<Asteroid, AsteroidView> remaining = new HashMap<Asteroid, AsteroidView>();
+        for (Asteroid a : asteroids)
+            remaining.put(a, asteroidViews.get(a));
+        asteroidViews = remaining;
     }
 
     /**
      * @param  x
      * @param  y
      */
-    public void click(int x, int y) {
-        // TODO implement here
+    public INeighbour click(int x, int y) {
+        for(TeleportView tv : teleportViews.values())
+            if(tv.clicked(x, y))
+                return tv.getTeleport();
+        for (AsteroidView av : asteroidViews.values())
+            if (av.clicked(x, y))
+                return av.getAsteroid();
+        return null;
     }
 
     /**
