@@ -85,7 +85,7 @@ public class Asteroid implements INeighbour {
      * Ha a shell 0, a nyersanyag, amely van, vagy nincs az aszteroida magjában "kibányászódik".
      * Ha volt nyersanyag, akkor visszaadja visszatérési értékként a core-t, amennyiben nem is volt,
      *  vagy a shell nem 0, akkor null-al tér vissza. Ha volt benne nyersanyag, akkor azt null-ra állítja.
-     * @return
+     * @return a kibányászott nyersanyag, Mineral/null
      */
     public Mineral onMine() {
         if (shell == 0) {
@@ -158,7 +158,7 @@ public class Asteroid implements INeighbour {
      * Visszaadja az aszteroida szomszédainak listáját
      * @return a szomszédok listája
      */
-    public ArrayList<INeighbour> getNeighbours(){
+    public List<INeighbour> getNeighbours(){
         return neighbours;
     }
 
@@ -258,4 +258,5 @@ public class Asteroid implements INeighbour {
     public boolean getCloseToSun(){
     	return closeToSun;
     }
+    public List<Traveller> getTravellers(){return travellers;}
 }

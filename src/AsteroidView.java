@@ -1,17 +1,21 @@
 
+
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 import java.math.*;
+import java.util.List;
+
+import static java.lang.Math.pow;
 
 /**
- * 
+ *
  */
 public class AsteroidView implements View {
 
     /**
      * Konstruktor
-     * beállítja az x, y és a értékét a paraméterül kapott dolgokra
+     * beï¿½llï¿½tja az x, y ï¿½s a ï¿½rtï¿½kï¿½t a paramï¿½terï¿½l kapott dolgokra
      */
     public AsteroidView(Asteroid a, int x2, int y2) {
         asteroid = a;
@@ -20,12 +24,12 @@ public class AsteroidView implements View {
     }
 
     /**
-     * 
+     *
      */
     private int x;
 
     /**
-     * 
+     *
      */
     private int y;
 
@@ -35,25 +39,25 @@ public class AsteroidView implements View {
     private int radius=30;
 
     /**
-     * 
+     *
      */
     private Asteroid asteroid;
 
     /**
-     * Elkéri az asteroid-tól a travellers listáját a getTravellers metódussal. Visszaadja a paraméterként
-     * megadott traveller x koordinátáját a képernyõn, kiszámolva a travellers listában elfoglalt helyébõl,
-     * és az aszteroida középpontjából
-     * @param t 
+     * Elkï¿½ri az asteroid-tï¿½l a travellers listï¿½jï¿½t a getTravellers metï¿½dussal. Visszaadja a paramï¿½terkï¿½nt
+     * megadott traveller x koordinï¿½tï¿½jï¿½t a kï¿½pernyï¿½n, kiszï¿½molva a travellers listï¿½ban elfoglalt helyï¿½bï¿½l,
+     * ï¿½s az aszteroida kï¿½zï¿½ppontjï¿½bï¿½l
+     * @param t
      * @return
      */
     public int getTravellerX(Traveller t) {
-        List<Traveller> travellers
-        for(int i = 0; i< travellers.length(); ++i){
-            if(travellers[i]==t){
+        List<Traveller> travellers = asteroid.getTravellers();
+        for(int i = 0; i< travellers.size(); ++i){
+            if(travellers.get(i).equals(t)){
                 if(i==0){
-                    return ((x-radius+5);
+                    return (x-radius+5);
                 }else{
-                    return ((x-radius+5)+((i+1)*13));        //10 az oldalhosszúsága a traveller-t jelölõ négyzetnek, 3 pixel hely van két négyzet között
+                    return ((x-radius+5)+((i+1)*13));        //10 az oldalhosszï¿½sï¿½ga a traveller-t jelï¿½lï¿½ nï¿½gyzetnek, 3 pixel hely van kï¿½t nï¿½gyzet kï¿½zï¿½tt
                 }
             }
         }
@@ -61,8 +65,8 @@ public class AsteroidView implements View {
     }
 
     /**
-     * A paraméterként megadott traveller y koordinátáját a képernyõn, kiszámolja az aszteroida középpontja alapján
-     * @param t 
+     * A paramï¿½terkï¿½nt megadott traveller y koordinï¿½tï¿½jï¿½t a kï¿½pernyï¿½n, kiszï¿½molja az aszteroida kï¿½zï¿½ppontja alapjï¿½n
+     * @param t
      * @return
      */
     public int getTravellerY(Traveller t) {
@@ -70,7 +74,7 @@ public class AsteroidView implements View {
     }
 
     /**
-     * Visszaadja az asteroid tagváltozót
+     * Visszaadja az asteroid tagvï¿½ltozï¿½t
      * @return
      */
     public Asteroid getAsteroid() {
@@ -78,15 +82,15 @@ public class AsteroidView implements View {
     }
 
     /**
-     * Végignézi az asteroid szomszédait, és ha valamelyik megegyezik a paraméterül
-     * kapott aszteroidával, akkor igazzal, egyébként meg hamissal tér vissza
-     * @param a 
+     * Vï¿½gignï¿½zi az asteroid szomszï¿½dait, ï¿½s ha valamelyik megegyezik a paramï¿½terï¿½l
+     * kapott aszteroidï¿½val, akkor igazzal, egyï¿½bkï¿½nt meg hamissal tï¿½r vissza
+     * @param a
      * @return
      */
     public boolean isThisYourNeighbour(Asteroid a) {
-        ArrayList<INeighbour> neighbours = asteroid.getNeighbours();
-        for(int i=0; i<neighbours.length(); ++i){
-            if(neighbours[i]==a){
+        List<INeighbour> neighbours = asteroid.getNeighbours();
+        for(int i=0; i<neighbours.size(); ++i){
+            if(neighbours.get(i).equals(a)){
                 return true;
             }
         }
@@ -94,7 +98,7 @@ public class AsteroidView implements View {
     }
 
     /**
-     * Visszaadja az x tagváltozót
+     * Visszaadja az x tagvï¿½ltozï¿½t
      * @return
      */
     public int getX() {
@@ -102,7 +106,7 @@ public class AsteroidView implements View {
     }
 
     /**
-     * Visszaadja az y tagváltozót
+     * Visszaadja az y tagvï¿½ltozï¿½t
      * @return
      */
     public int getY() {
@@ -110,39 +114,40 @@ public class AsteroidView implements View {
     }
 
     /**
-     * Ellenõrzi, hogy a paraméterül kapott koordináták által meghatározott pont az aszteroida körén belül van-e
-     * @param int xClicked
-     * @param int yClicked
-     * @return igaz, ha belül van, egyébként hamis
+     * Ellenï¿½rzi, hogy a paramï¿½terï¿½l kapott koordinï¿½tï¿½k ï¿½ltal meghatï¿½rozott pont az aszteroida kï¿½rï¿½n belï¿½l van-e
+     * @param xClicked
+     * @param yClicked
+     * @return igaz, ha belï¿½l van, egyï¿½bkï¿½nt hamis
      */
     public boolean clicked(int xClicked, int yClicked) {
-        if((pow((xClicked-x), 2)*pow((yClicked-y), 2))<pow(radius, 2){
+        if((pow((xClicked-x), 2)*pow((yClicked-y), 2))<pow(radius, 2)){
             return true;
         }
         return false;
     }
 
     /**
-     * kirajzolja az aszteroidát úgy hogy megfeleljen az állapotának
+     * kirajzolja az aszteroidï¿½t ï¿½gy hogy megfeleljen az ï¿½llapotï¿½nak
      * @param g
      */
+
     public void draw(Graphics g) {
         int aShell = asteroid.getShell();
-        bool aCloseToSun = asteroid.getCloseToSun();
+        boolean aCloseToSun = asteroid.getCloseToSun();
         if(aShell!=0){
             if(aCloseToSun){
-                g.setColor(new Color(255, 201, 14));      //sárga
+                g.setColor(new Color(255, 201, 14));      //sï¿½rga
                 g.fillOval(x, y, radius*2, radius*2);
-                g.setColor(new Color(255, 255, 255));       //fehér
+                g.setColor(new Color(255, 255, 255));       //fehï¿½r
                 g.fillOval(x, y, radius*2-4, radius*2-4);
                 g.setColor(new Color(0, 0, 0));     //fekete
-                g.drawString(aShell, x-(fontMetrics.stringWidth(aShell)/2), y-(fontMetrics.getHeight()/2);
+                //g.drawString(aShell, x-(fontMetrics.stringWidth(aShell)/2), y-(fontMetrics.getHeight()/2));
 
             }else{
                 Mineral aCore = asteroid.getCore();
                 g.setColor(new Color(0, 0, 0));       //fekete
                 g.fillOval(x, y, radius*2, radius*2);
-                g.setColor(mineralColor(aCore));
+                //g.setColor(mineralColor(aCore));
                 g.fillOval(x, y, radius*2-4, radius*2-4);
             }
         }
