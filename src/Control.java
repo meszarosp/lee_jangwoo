@@ -1657,6 +1657,13 @@ public class Control implements ActionListener, MouseListener{
         maxIDs.put("ufo", 0);
     }
     /**
+     * Inicializálja a ControlSettlers listát, és az első aktív settlert
+     */
+    public void init(){
+        ControlSettlers = new ArrayList<Settler>(game.getSettlers());
+        activeSettler = ControlSettlers.get(0);
+    }
+    /**
      * Inicializ�lja a parancsokat �s a maxID-ket.
      * Ha van elegend� parancssori argumentum, akkor az els�re �t�r�ny�tja a bemenetet, a m�sodikra a kimenetet.
      * A program bel�p�si pontja, ki�rja a men�pontokat �s bek�ri a felhasz�l�t�l a v�lasztott men�pontot a menu()
@@ -1665,7 +1672,10 @@ public class Control implements ActionListener, MouseListener{
      * @param args parancssori argumentumok
      */
     public static void main(String[] args){
-        gameFrame = new GameFrame();
+        Control control = new Control();
+        game.init(5, 30, 10);
+        control.init();                     //ez nem jóóóó kizárólag a Julcsi tesztje
+        gameFrame = new GameFrame(control, game);
         gameFrame.pack();
         gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         gameFrame.setVisible(true);

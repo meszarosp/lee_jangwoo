@@ -23,15 +23,16 @@ public class GameFrame extends JFrame {
         check.add(new JMenuItem("Check Lose"));
         menuBar.add(check);
     }
-    public GameFrame() {
+    public GameFrame(Control c, Game game) {
         super();
         setTitle("Asteroid Game");
         setJMenuBar(menuBar);
         initMenu();
         setMinimumSize(new Dimension(1000, 600));
         setPreferredSize(new Dimension(1000, 600));
-        lv = new LevelView();
-        iv = new InventoryView(lv);
+        lv = new LevelView(game);
+        iv = new InventoryView(lv, c);
+        lv.addMouseListener(c);
         add(lv, BorderLayout.CENTER);
         add(iv, BorderLayout.SOUTH);
         pack();
