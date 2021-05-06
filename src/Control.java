@@ -1672,15 +1672,16 @@ public class Control implements ActionListener, MouseListener{
      * @param args parancssori argumentumok
      */
     public static void main(String[] args){
-        Control control = new Control();
-        game.init(5, 30, 10);
-        control.init();                     //ez nem jóóóó kizárólag a Julcsi tesztje
+        Control control = new Control();                     //ez nem jóóóó kizárólag a Julcsi tesztje
+        initializeCommands();
+        initializeMaxIDs();
+        commands.get("load").execute(new String[]{"load", "test.txt"});
+        control.init();
         gameFrame = new GameFrame(control, game);
+        gameFrame.getLevelView().setActiveSettler(activeSettler);
         gameFrame.pack();
         gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         gameFrame.setVisible(true);
-        initializeCommands();
-        initializeMaxIDs();
         if (args.length >= 2){
             String[] cmdargs = new String[2];
             cmdargs[1] = args[0];

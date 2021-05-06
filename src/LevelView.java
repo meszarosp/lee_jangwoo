@@ -96,6 +96,40 @@ public class LevelView extends JPanel implements View {
 
     LevelView(Game game){
         this.game = game;
+        init();
+    }
+    public void init(){
+        Random random = new Random();
+        List<Asteroid> asteroids = game.getSun().getAsteroids();
+        for(Asteroid a : asteroids){
+            asteroidViews.put(a, new AsteroidView(a, 20,20));   //próbaértékek, megváltoztatandó
+        }
+        List<Teleport> teleports = game.getGates();
+        if(teleports.size() != 0){
+            for(Teleport t : teleports){
+                Color color = new Color(random.nextFloat(), random.nextFloat(), random.nextFloat());
+                for (TeleportView tv : teleportViews.values())
+                    if (tv.isPair(t)){
+                        color = tv.getColor();
+                        break;
+                    }
+                teleportViews.put(t, new TeleportView(t, color, 20, 20));   //próbaértékek, megváltoztatandó
+            }
+        }
+        List<Settler> settlers= game.getSettlers();
+        List<Robot> robots= game.getRobots();
+        List<UFO> UFOs= game.getUFOs();
+        for(int i = 0; i < settlers.size(); i++){
+            SettlerView sv = new SettlerView(settlers.get(i), this);
+            settlerViews.add(sv);
+            travellerViews.add(sv);
+        }
+        for(int i = 0; i < robots.size(); i++){
+            travellerViews.add(new RobotView(robots.get(i), this));
+        }
+        for(int i = 0; i < robots.size(); i++){
+            travellerViews.add(new UFOView(UFOs.get(i), this));
+        }
     }
 
     /**
@@ -237,7 +271,7 @@ public class LevelView extends JPanel implements View {
         }
         travellerViews = remainingViews;
         for (Robot r : notFoundRobot)
-            travellerViews.add(new RobotView(r));
+            travellerViews.add(new RobotView(r, this));
     }
 
     /**

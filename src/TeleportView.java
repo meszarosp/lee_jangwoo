@@ -83,6 +83,9 @@ public class TeleportView implements View {
      */
     public boolean isThisYourNeighbour(Asteroid a) {
         Asteroid neighbour = teleport.getNeighbour();
+        if(neighbour == null){
+            return false;
+        }
         return neighbour.equals(a);
     }
 

@@ -15,9 +15,9 @@ public class SettlerView extends TravellerView {
      * Meghívja az ős (TravellerView) konstruktorát. (az x y koordináta az Update hívással lesz inicializálva)
      * @param s a mutatott Settler objektum.
      */
-    public SettlerView(Settler s) {
-    	super(); //ez kb tökéletesen fölösleges.--------------------------------------
-    	settler = s;
+    public SettlerView(Settler s, LevelView lv) {
+        super(lv);
+        settler = s;
     }
 
     /**
