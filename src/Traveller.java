@@ -2,16 +2,16 @@
 import java.util.*;
 
 /**
- * Absztrakt osztály. Felelõssége nyilvántartani a jelenlegi aszteroidáját, 
- * és egy Game objektumot. Biztosítania kell virtuális függvényeket a tõle 
- * öröklõ osztályoknak. Mozognia kell tudni aszteroidáról aszteroidára, 
- * akár köztes teleportkapuval, akár anélkül. Tudnia kell aszteroidát fúrni.
+ * Absztrakt osztï¿½ly. Felelï¿½ssï¿½ge nyilvï¿½ntartani a jelenlegi aszteroidï¿½jï¿½t, 
+ * ï¿½s egy Game objektumot. Biztosï¿½tania kell virtuï¿½lis fï¿½ggvï¿½nyeket a tï¿½le 
+ * ï¿½rï¿½klï¿½ osztï¿½lyoknak. Mozognia kell tudni aszteroidï¿½rï¿½l aszteroidï¿½ra, 
+ * akï¿½r kï¿½ztes teleportkapuval, akï¿½r anï¿½lkï¿½l. Tudnia kell aszteroidï¿½t fï¿½rni.
  */
 public abstract class Traveller {
     /**
-     * Traveller konstruktora, ahol paraméterben kapja azt az aszteroidát ahol elhelyezzük.
+     * Traveller konstruktora, ahol paramï¿½terben kapja azt az aszteroidï¿½t ahol elhelyezzï¿½k.
      * @param a traveller helye
-     * @param g a játék amelyben a traveller van
+     * @param g a jï¿½tï¿½k amelyben a traveller van
      */
     public Traveller(Asteroid a, Game g) {
         a.placeTraveller(this);
@@ -20,28 +20,28 @@ public abstract class Traveller {
     }
 
     /**
-     * A traveller helyét jelképezõ aszteroida típusú attribútum.
+     * A traveller helyï¿½t jelkï¿½pezï¿½ aszteroida tï¿½pusï¿½ attribï¿½tum.
      */
     protected Asteroid asteroid;
 
     /**
-     * A game objektumot jelképezõ attibútum.
+     * A game objektumot jelkï¿½pezï¿½ attibï¿½tum.
      */
     protected Game game;
 
     /**
      * A game settere
-     * @param game az új game objektum
+     * @param game az ï¿½j game objektum
      */
     public void setGame(Game game){
         this.game = game;
     }
 
     /**
-     * Átmegy az aszteroidájáról egy másikra, vagy egy teleportkapuba
-     * @param number hányadik szomszédjára megy az utazó az aszteroidának
+     * ï¿½tmegy az aszteroidï¿½jï¿½rï¿½l egy mï¿½sikra, vagy egy teleportkapuba
+     * @param number hï¿½nyadik szomszï¿½djï¿½ra megy az utazï¿½ az aszteroidï¿½nak
      */
-    public boolean move(int number) {
+    public boolean move(int number) {   //0-tÃ³l indexelt
         INeighbour b = asteroid.getNeighbourAt(number);
         if (b == null)
             return false;
@@ -52,26 +52,26 @@ public abstract class Traveller {
     }
 
     /**
-     * Absztrakt hitByBlast függvény, amely a leszármazottakban lehet felülírva, ott kifejtve.
+     * Absztrakt hitByBlast fï¿½ggvï¿½ny, amely a leszï¿½rmazottakban lehet felï¿½lï¿½rva, ott kifejtve.
      */
     public abstract void hitByBlast();
 
     /**
-     * Absztrakt die függvény, amely a leszármazottakban lesz felülírva, ott kifejtve.
+     * Absztrakt die fï¿½ggvï¿½ny, amely a leszï¿½rmazottakban lesz felï¿½lï¿½rva, ott kifejtve.
      */
     public abstract void die();
 
     /**  
-     * beállítja az utazó aszteroidáját
-     * @param a az az aszteroida, amin az utazó áll
+     * beï¿½llï¿½tja az utazï¿½ aszteroidï¿½jï¿½t
+     * @param a az az aszteroida, amin az utazï¿½ ï¿½ll
      */
     public void setAsteroid(Asteroid a) {
     	asteroid = a;
     }
 
     /**	 
-     * visszaadja az aszteroidát, amin az utazó áll
-     * @return az az aszteroida amin az utazó áll
+     * visszaadja az aszteroidï¿½t, amin az utazï¿½ ï¿½ll
+     * @return az az aszteroida amin az utazï¿½ ï¿½ll
      */
     public Asteroid getAsteroid() {
         return asteroid;

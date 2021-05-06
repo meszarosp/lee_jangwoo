@@ -1,10 +1,12 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.*;
 import java.util.*;
 
-public class Control implements ActionListener {
+public class Control implements ActionListener, MouseListener{
 
     /**
      * Default constructor
@@ -28,6 +30,37 @@ public class Control implements ActionListener {
             lv.revalidate();
         }
     }
+    @Override
+    public void mouseClicked(MouseEvent e){
+        LevelView lv = gameFrame.getLevelView();
+        INeighbour neighbour = lv.click(e.getX(), e.getY());
+        if(neighbour != null){
+            List<INeighbour> neighbours = activeSettler.getAsteroid().getNeighbours();
+            if(neighbours.contains(neighbour)){
+                for(int i = 0; i < neighbours.size(); i++){
+                    if(neighbours.get(i).equals(neighbour)){
+                        commands.get("move").execute(new String[]{"move", Integer.toString(i)});
+                        if(refreshActiveSettler()){
+                            commands.get("nextturn").execute(new String[]{"nextturn"});
+                            refreshActiveSettler();
+                        }
+                        lv.setActiveSettler(activeSettler);
+                        lv.Update();
+                        lv.revalidate();
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    @Override
+    public void mousePressed(MouseEvent e){}
+    @Override
+    public void mouseReleased(MouseEvent e){}
+    @Override
+    public void mouseEntered(MouseEvent e){}
+    @Override
+    public void mouseExited(MouseEvent e){}
     private static boolean refreshActiveSettler(){      ///A visszatérési érték az, hogy kell-e nextturn
         if(activeSettler == null){
             if(!game.getSettlers().isEmpty())
@@ -60,7 +93,7 @@ public class Control implements ActionListener {
                     ControlSettlers = new ArrayList<Settler>(game.getSettlers());
                     for(int i = 0; i < ControlSettlers.size(); i++){
                         if(ControlSettlers.get(i).equals(settlerBeforeActive)){
-                            if(i == ControlSettlers.size()){
+                            if(i == ControlSettlers.size()-1){
                                 activeSettler = ControlSettlers.get(0);
                                 return true;
                             } else{
@@ -670,14 +703,14 @@ public class Control implements ActionListener {
                 }
                 return;
             }
-            int index = Integer.parseInt(args[1])-1;
-            INeighbour n = activeSettler.getAsteroid().getNeighbourAt(index);
+            int index = Integer.parseInt(args[1]);
+            INeighbour n = activeSettler.getAsteroid().getNeighbourAt(index);       //átírva 0-tól indexelőre
             String id = reverseIDs.getOrDefault(n, "");
             if (activeSettler.move(index)) {
                 output.println("move to " + id + " successful");
             } else {
                 output.println("move" + ("".equals(id) ? "" : " to ") + id + " unsuccessful");
-            };
+            }
 
         }
     }

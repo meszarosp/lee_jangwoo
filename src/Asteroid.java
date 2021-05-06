@@ -148,7 +148,7 @@ public class Asteroid implements INeighbour {
      * A neighbours listából visszaadja az i-edik szomszédot, ha nincs ilyen elem, akkor null-al tér vissza.
      * @param i a lekérdezni kívánt szomszéd sorszáma a neighbours listában.
      */
-    public INeighbour getNeighbourAt(int i) {
+    public INeighbour getNeighbourAt(int i) {   //0-tól indexelt
         if (i < neighbours.size() && i >= 0)
         	return neighbours.get(i);
         return null;

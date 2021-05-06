@@ -165,7 +165,7 @@ public class LevelView extends JPanel implements View {
                 color = tv.getColor();
                 break;
             }
-        //TODO: mi legyen a koordinátákkal?
+        //TODO: mi legyen a koordinï¿½tï¿½kkal?
         AsteroidView av = getAsteroidView(t.getNeighbour());
         teleportViews.put(t, new TeleportView(t, color, av.getX() +20, av.getY()+ 20));
     }
@@ -270,8 +270,9 @@ public class LevelView extends JPanel implements View {
      * @param  x
      * @param  y
      */
-    public void click(int x, int y) {
+    public INeighbour click(int x, int y) {
         // TODO implement here
+        return null;
     }
 
     /**
@@ -285,12 +286,15 @@ public class LevelView extends JPanel implements View {
             teleportv.draw(g);
         for (TravellerView travellerv : travellerViews)
             travellerv.draw(g);
-        //TODO: kérdéses
+        //TODO: kï¿½rdï¿½ses
         //inventory.draw(g);
     }
 
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
         draw(g);
+    }
+    public InventoryView getInventoryView(){
+        return inventory;
     }
 }
