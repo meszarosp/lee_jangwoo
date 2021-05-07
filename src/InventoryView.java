@@ -23,18 +23,22 @@ public class InventoryView extends JPanel implements View {
     /**
      * Default constructor
      */
-    public InventoryView(LevelView lv) {
+    public InventoryView(LevelView lv, Control c) {
         super();
         setPreferredSize(new Dimension(1000, 100));
         levelView = lv;
         Drill = new JButton("Drill");
+        Drill.addActionListener(c);
         Drill.setActionCommand("drill");
         Mine = new JButton("Mine");
+        Mine.addActionListener(c);
         Mine.setActionCommand("mine");
         CraftTeleport = new JButton("Craft Teleport");
-        CraftTeleport.setActionCommand("craft teleport");
+        CraftTeleport.addActionListener(c);
+        CraftTeleport.setActionCommand("craftteleport");
         CraftRobot = new JButton("Craft Robot");
-        CraftRobot.setActionCommand("craft robot");
+        CraftRobot.addActionListener(c);
+        CraftRobot.setActionCommand("craftrobot");
 
         ButtonPanel = new JPanel();
         GridLayout forButtons = new GridLayout(2,2);
@@ -63,11 +67,15 @@ public class InventoryView extends JPanel implements View {
 
         for (int i = 0; i<3; i++) {
             teleportButtons[i] = new TeleportButton();
+            teleportButtons[i].addActionListener(c);
+            teleportButtons[i].setActionCommand("placeteleport " + Integer.toString(i)); //megnezni hanytol szamlal
             TeleportPanel.add(teleportButtons[i]);
         }
 
         for (int i = 0; i<10; i++) {
             mineralButtons[i] = new MineralButton();
+            mineralButtons[i].addActionListener(c);
+            mineralButtons[i].setActionCommand("putmineralback " + Integer.toString(i)); //megnezni hanytol szamlal
             MineralPanel.add(mineralButtons[i]);
         }
 
@@ -106,7 +114,7 @@ public class InventoryView extends JPanel implements View {
      * @param y
      */
     public void click(int x, int y) {
-        // TODO ide mi kéne egyáltalán?
+        // TODO ide mi kï¿½ne egyï¿½ltalï¿½n?
     }
 
 

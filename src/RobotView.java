@@ -14,9 +14,9 @@ public class RobotView extends TravellerView {
      * Meghívja az ős (TravellerView) konstruktorát. (az x y koordináta az Update hívással lesz inicializálva)
      * @param r a mutatott Robot objektum.
      */
-    public RobotView(Robot r) {
-    	super(); //ez kb tökéletesen fölösleges.--------------------------------------
-    	robot = r;
+    public RobotView(Robot r, LevelView lv) {
+        super(lv);
+        robot = r;
     }
 
     /**

@@ -14,9 +14,9 @@ public class UFOView extends TravellerView {
      * Meghívja az ős (TravellerView) konstruktorát. (az x y koordináta az Update hívással lesz inicializálva)
      * @param u a mutatott Robot objektum.
      */
-    public UFOView(UFO u) {
-    	super(); //ez kb tökéletesen fölösleges.--------------------------------------
-    	ufo = u;
+    public UFOView(UFO u, LevelView lv) {
+        super(lv);
+        ufo = u;
     }
 
     /**

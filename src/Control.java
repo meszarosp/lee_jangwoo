@@ -1,10 +1,12 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.*;
 import java.util.*;
 
-public class Control implements ActionListener {
+public class Control implements ActionListener, MouseListener{
 
     /**
      * Default constructor
@@ -28,6 +30,37 @@ public class Control implements ActionListener {
             lv.revalidate();
         }
     }
+    @Override
+    public void mouseClicked(MouseEvent e){
+        LevelView lv = gameFrame.getLevelView();
+        INeighbour neighbour = lv.click(e.getX(), e.getY());
+        if(neighbour != null){
+            List<INeighbour> neighbours = activeSettler.getAsteroid().getNeighbours();
+            if(neighbours.contains(neighbour)){
+                for(int i = 0; i < neighbours.size(); i++){
+                    if(neighbours.get(i).equals(neighbour)){
+                        commands.get("move").execute(new String[]{"move", Integer.toString(i)});
+                        if(refreshActiveSettler()){
+                            commands.get("nextturn").execute(new String[]{"nextturn"});
+                            refreshActiveSettler();
+                        }
+                        lv.setActiveSettler(activeSettler);
+                        lv.Update();
+                        lv.revalidate();
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    @Override
+    public void mousePressed(MouseEvent e){}
+    @Override
+    public void mouseReleased(MouseEvent e){}
+    @Override
+    public void mouseEntered(MouseEvent e){}
+    @Override
+    public void mouseExited(MouseEvent e){}
     private static boolean refreshActiveSettler(){      ///A visszatérési érték az, hogy kell-e nextturn
         if(activeSettler == null){
             if(!game.getSettlers().isEmpty())
@@ -60,7 +93,7 @@ public class Control implements ActionListener {
                     ControlSettlers = new ArrayList<Settler>(game.getSettlers());
                     for(int i = 0; i < ControlSettlers.size(); i++){
                         if(ControlSettlers.get(i).equals(settlerBeforeActive)){
-                            if(i == ControlSettlers.size()){
+                            if(i == ControlSettlers.size()-1){
                                 activeSettler = ControlSettlers.get(0);
                                 return true;
                             } else{
@@ -670,14 +703,14 @@ public class Control implements ActionListener {
                 }
                 return;
             }
-            int index = Integer.parseInt(args[1])-1;
-            INeighbour n = activeSettler.getAsteroid().getNeighbourAt(index);
+            int index = Integer.parseInt(args[1]);
+            INeighbour n = activeSettler.getAsteroid().getNeighbourAt(index);       //átírva 0-tól indexelőre
             String id = reverseIDs.getOrDefault(n, "");
             if (activeSettler.move(index)) {
                 output.println("move to " + id + " successful");
             } else {
                 output.println("move" + ("".equals(id) ? "" : " to ") + id + " unsuccessful");
-            };
+            }
 
         }
     }
@@ -1624,6 +1657,13 @@ public class Control implements ActionListener {
         maxIDs.put("ufo", 0);
     }
     /**
+     * Inicializálja a ControlSettlers listát, és az első aktív settlert
+     */
+    public void init(){
+        ControlSettlers = new ArrayList<Settler>(game.getSettlers());
+        activeSettler = ControlSettlers.get(0);
+    }
+    /**
      * Inicializ�lja a parancsokat �s a maxID-ket.
      * Ha van elegend� parancssori argumentum, akkor az els�re �t�r�ny�tja a bemenetet, a m�sodikra a kimenetet.
      * A program bel�p�si pontja, ki�rja a men�pontokat �s bek�ri a felhasz�l�t�l a v�lasztott men�pontot a menu()
@@ -1632,12 +1672,16 @@ public class Control implements ActionListener {
      * @param args parancssori argumentumok
      */
     public static void main(String[] args){
-        gameFrame = new GameFrame();
+        Control control = new Control();                     //ez nem jóóóó kizárólag a Julcsi tesztje
+        initializeCommands();
+        initializeMaxIDs();
+        commands.get("load").execute(new String[]{"load", "test.txt"});
+        control.init();
+        gameFrame = new GameFrame(control, game);
+        gameFrame.getLevelView().setActiveSettler(activeSettler);
         gameFrame.pack();
         gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         gameFrame.setVisible(true);
-        initializeCommands();
-        initializeMaxIDs();
         if (args.length >= 2){
             String[] cmdargs = new String[2];
             cmdargs[1] = args[0];

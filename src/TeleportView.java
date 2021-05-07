@@ -8,28 +8,28 @@ import java.util.*;
 public class TeleportView implements View {
 
     /**
-     * A teleportkapu x koordinátája
+     * A teleportkapu x koordinï¿½tï¿½ja
      */
     private int x;
 
     /**
-     *A teleportkapu y koordinátája 
+     *A teleportkapu y koordinï¿½tï¿½ja 
      */
     private int y;
 
     /**
-     * A teleportkapu színe
+     * A teleportkapu szï¿½ne
      */
     private Color teleportColor;
 
     /**
-     * A teleportkapu párja
+     * A teleportkapu pï¿½rja
      */
     private Teleport teleport;
 
     /**
      * Konstruktor
-     * beállítja az x, y, teleportColor és teleport értékét a paraméterül kapott dolgokra
+     * beï¿½llï¿½tja az x, y, teleportColor ï¿½s teleport ï¿½rtï¿½kï¿½t a paramï¿½terï¿½l kapott dolgokra
      */
     public TeleportView(Teleport t, Color c, int x2, int  y2) {
         x = x2;
@@ -39,7 +39,7 @@ public class TeleportView implements View {
     }
 
     /**
-     * Kirajzolja a teleportkaput a megfelelõ színnel
+     * Kirajzolja a teleportkaput a megfelelï¿½ szï¿½nnel
      * @param g
      */
     public void draw(Graphics g) {
@@ -51,7 +51,7 @@ public class TeleportView implements View {
     }
 
     /**
-     * Visszaadja a teleport tagváltozót
+     * Visszaadja a teleport tagvï¿½ltozï¿½t
      * @return
      */
     public Teleport getTeleport() {
@@ -59,7 +59,7 @@ public class TeleportView implements View {
     }
 
     /**
-     * Visszaadja ax x tagváltozót
+     * Visszaadja ax x tagvï¿½ltozï¿½t
      * @return
      */
     public int getX() {
@@ -67,7 +67,7 @@ public class TeleportView implements View {
     }
 
     /**
-     * Visszaadja az y tagváltozót
+     * Visszaadja az y tagvï¿½ltozï¿½t
      * @return
      */
     public int getY() {
@@ -75,22 +75,22 @@ public class TeleportView implements View {
     }
 
     /**
-     * A paraméterként megadott a aszteroidát összeveti a teleport
-     * getNeighbour-el lekért aszteroidájával. Ha megegyeznek true,
-     * ha nem akkor false a visszatérési érték.
+     * A paramï¿½terkï¿½nt megadott a aszteroidï¿½t ï¿½sszeveti a teleport
+     * getNeighbour-el lekï¿½rt aszteroidï¿½jï¿½val. Ha megegyeznek true,
+     * ha nem akkor false a visszatï¿½rï¿½si ï¿½rtï¿½k.
      * @param a 
      * @return
      */
     public boolean isThisYourNeighbour(Asteroid a) {
-        INeighbour neighbour = teleport.getNeighbour();
-        if(neighbour==a){
-            return true;
+        Asteroid neighbour = teleport.getNeighbour();
+        if(neighbour == null){
+            return false;
         }
-        return false;
+        return neighbour.equals(a);
     }
 
     /**
-     * Visszaadja a teleportColor tagváltozót
+     * Visszaadja a teleportColor tagvï¿½ltozï¿½t
      * @return
      */
     public Color getColor() {
@@ -98,10 +98,10 @@ public class TeleportView implements View {
     }
 
     /**
-     * Ellenõrzi, hogy a paraméterül kapott koordináták által meghatározott pont a teleportkapu területén belül van-e
+     * Ellenï¿½rzi, hogy a paramï¿½terï¿½l kapott koordinï¿½tï¿½k ï¿½ltal meghatï¿½rozott pont a teleportkapu terï¿½letï¿½n belï¿½l van-e
      * @param xClicked
      * @param yClicked
-     * @return igaz, ha belül van, egyébként hamis
+     * @return igaz, ha belï¿½l van, egyï¿½bkï¿½nt hamis
      */
     public boolean clicked(int xClicked, int yClicked) {
         if((xClicked<x+10 || xClicked>x-10)&&(yClicked<y+18 || yClicked>y-18)){
@@ -111,7 +111,7 @@ public class TeleportView implements View {
     }
 
     /**
-     * Meghívja a teleport getPair metódusát, és a visszakapott teleportkaput összehasonlítja a paraméterül kapottal.
+     * Meghï¿½vja a teleport getPair metï¿½dusï¿½t, ï¿½s a visszakapott teleportkaput ï¿½sszehasonlï¿½tja a paramï¿½terï¿½l kapottal.
      * @param t 
      * @return ha egyezik igaz, ha nem akkor hamis
      */
