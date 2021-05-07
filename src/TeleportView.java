@@ -44,9 +44,9 @@ public class TeleportView implements View {
      */
     public void draw(Graphics g) {
         g.setColor(new Color(0, 0, 0));
-        g.fillRect(x, y, 20, 36);
+        g.fillRect(x-10, y-18, 20, 36);
         g.setColor(teleportColor);
-        g.fillRect(x, y, 15, 31);
+        g.fillRect(x-7, y-15, 15, 31);
 
     }
 

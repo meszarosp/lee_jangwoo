@@ -96,8 +96,13 @@ public class LevelView extends JPanel implements View {
 
     LevelView(Game game){
         this.game = game;
-        init();
+        //init();
     }
+
+    public void setGame(Game game){
+        this.game = game;
+    }
+
     public void init(){
         Random random = new Random();
         List<Asteroid> asteroids = game.getSun().getAsteroids();
@@ -158,6 +163,10 @@ public class LevelView extends JPanel implements View {
         }
     }
 
+    public void setInventory(InventoryView inventory) {
+        this.inventory = inventory;
+    }
+
     /**
      * @param t 
      * @return
@@ -184,6 +193,11 @@ public class LevelView extends JPanel implements View {
         updateTravellerView();
         for (TravellerView tv : travellerViews)
             tv.Update();
+        inventory.Update();
+    }
+
+    public InventoryView getInventory() {
+        return inventory;
     }
 
     /**
@@ -271,7 +285,7 @@ public class LevelView extends JPanel implements View {
         }
         travellerViews = remainingViews;
         for (Robot r : notFoundRobot)
-            travellerViews.add(new RobotView(r));
+            travellerViews.add(new RobotView(r, this));
     }
 
     /**
@@ -302,6 +316,24 @@ public class LevelView extends JPanel implements View {
         for (Asteroid a : asteroids)
             remaining.put(a, asteroidViews.get(a));
         asteroidViews = remaining;
+    }
+
+    public void addAsteroidView(Asteroid a, int x, int y){
+        asteroidViews.put(a, new AsteroidView(a, x, y));
+    }
+
+    public void addTeleportView(Teleport t, Color c, int x, int y){
+        teleportViews.put(t, new TeleportView(t,c, x, y));
+    }
+
+    public void addSettlerView(Settler s){
+        SettlerView sv = new SettlerView(s, this);
+        settlerViews.add(sv);
+        travellerViews.add(sv);
+    }
+
+    public void addUFOView(UFO ufo){
+        travellerViews.add(new UFOView(ufo, this));
     }
 
     /**

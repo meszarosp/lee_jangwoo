@@ -53,7 +53,7 @@ public class UFOView extends TravellerView {
      */
     public void draw(Graphics g){
     	g.setColor(new Color(1, 255, 55));
-        g.fillRect(x, y, 10, 10);
+        g.fillRect(x, y, 16, 16);
     }
 
 

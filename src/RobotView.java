@@ -30,7 +30,7 @@ public class RobotView extends TravellerView {
      */
     public void draw(Graphics g) {
     	g.setColor(new Color(102, 102, 102));
-        g.fillRect(x, y, 10, 10);
+        g.fillRect(x, y, 16, 16);
     }
 
     /**

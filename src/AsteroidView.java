@@ -5,6 +5,7 @@ import java.util.*;
 import javax.swing.*;
 import java.math.*;
 import java.util.List;
+import java.util.logging.Level;
 
 import static java.lang.Math.pow;
 
@@ -55,9 +56,9 @@ public class AsteroidView implements View {
         for(int i = 0; i< travellers.size(); ++i){
             if(travellers.get(i).equals(t)){
                 if(i==0){
-                    return (x-radius+5);
+                    return (x-radius-5);
                 }else{
-                    return ((x-radius+5)+((i+1)*13));        //10 az oldalhossz�s�ga a traveller-t jel�l� n�gyzetnek, 3 pixel hely van k�t n�gyzet k�z�tt
+                    return ((x-radius-5)+((i+1)*10));        //10 az oldalhossz�s�ga a traveller-t jel�l� n�gyzetnek, 3 pixel hely van k�t n�gyzet k�z�tt
                 }
             }
         }
@@ -70,7 +71,7 @@ public class AsteroidView implements View {
      * @return
      */
     public int getTravellerY(Traveller t) {
-        return x+radius+10;
+        return y-radius - 13;
     }
 
     /**
@@ -134,22 +135,34 @@ public class AsteroidView implements View {
     public void draw(Graphics g) {
         int aShell = asteroid.getShell();
         boolean aCloseToSun = asteroid.getCloseToSun();
-        if(aShell!=0){
-            if(aCloseToSun){
-                g.setColor(new Color(255, 201, 14));      //s�rga
-                g.fillOval(x, y, radius*2, radius*2);
-                g.setColor(new Color(255, 255, 255));       //feh�r
-                g.fillOval(x, y, radius*2-4, radius*2-4);
-                g.setColor(new Color(0, 0, 0));     //fekete
+        Color border = aCloseToSun ? new Color(255, 201, 14) : new Color(0, 0, 0);
+        g.setColor(border);
+        g.fillOval(x-radius, y-radius, radius*2, radius*2);
+        if(aShell<=0){
+
+            Mineral aCore = asteroid.getCore();
+            g.setColor(LevelView.mineralColor(aCore));
+            g.fillOval(x-radius+2, y-radius+2, radius*2-4, radius*2-4);
+            //if(aCloseToSun){
+                //g.setColor(new Color(255, 201, 14));      //s�rga
+
+               // g.setColor(new Color(255, 255, 255));       //feh�r
+
+                //g.setColor(new Color(0, 0, 0));     //fekete
                 //g.drawString(aShell, x-(fontMetrics.stringWidth(aShell)/2), y-(fontMetrics.getHeight()/2));
 
-            }else{
-                Mineral aCore = asteroid.getCore();
-                g.setColor(new Color(0, 0, 0));       //fekete
-                g.fillOval(x, y, radius*2, radius*2);
-                //g.setColor(mineralColor(aCore));
-                g.fillOval(x, y, radius*2-4, radius*2-4);
-            }
+        }else{
+            //Mineral aCore = asteroid.getCore();
+            //g.setColor(new Color(0, 0, 0));       //fekete
+            //g.fillOval(x, y, radius*2, radius*2);
+            //g.setColor(mineralColor(aCore));
+            g.setColor(Color.WHITE);
+            //g.drawString(aShell, x-(fontMetrics.stringWidth(aShell)/2), y-(fontMetrics.getHeight()/2));
+            g.fillOval(x-radius+2, y-radius+2, radius*2-4, radius*2-4);
+            g.setColor(Color.BLACK);
+            g.setFont(Font.getFont("Arial"));
+            g.drawString(Integer.toString(aShell), x-10, y);
+
         }
 
     }

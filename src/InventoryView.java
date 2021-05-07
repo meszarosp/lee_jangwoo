@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 
  */
-public class InventoryView extends JPanel implements View {
+public class InventoryView extends JPanel {
 
     private JButton Drill;
     private JButton Mine;
@@ -27,6 +27,7 @@ public class InventoryView extends JPanel implements View {
         super();
         setPreferredSize(new Dimension(1000, 100));
         levelView = lv;
+        lv.setInventory(this);
         Drill = new JButton("Drill");
         Drill.addActionListener(c);
         Drill.setActionCommand("drill");
@@ -87,10 +88,10 @@ public class InventoryView extends JPanel implements View {
      */
     private LevelView levelView;
 
-    /**
-     * @param g
-     */
-    public void draw(Graphics g) {
+
+    public void Update() {
+        if (levelView.getActiveSettler() == null)
+            return;
         List<Teleport> teleportList = levelView.getActiveSettler().getTeleportgates();
         for (int i = 0; i < 3; i++) {
             if (i<teleportList.size())

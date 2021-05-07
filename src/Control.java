@@ -1,10 +1,12 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 public class Control implements ActionListener, MouseListener{
 
@@ -17,6 +19,15 @@ public class Control implements ActionListener, MouseListener{
         String[] actionCommand = e.getActionCommand().split(" ");
 
         commands.get(actionCommand[0]).execute(actionCommand);      //move még kérdéses
+        if (actionCommand[0].equals("load")){
+            activeSettler = game.getSettlers().get(0);
+            LevelView lv = gameFrame.getLevelView();
+            refreshActiveSettler();
+            lv.setActiveSettler(activeSettler);
+            lv.Update();
+            lv.repaint();
+            lv.getInventory().repaint();
+        }
         if(actionCommand[0].equals("save") || actionCommand[0].equals("load") || actionCommand[0].equals("giveup")){
             //itt nem tudom mi van
         } else {
@@ -27,7 +38,8 @@ public class Control implements ActionListener, MouseListener{
             LevelView lv = gameFrame.getLevelView();
             lv.setActiveSettler(activeSettler);
             lv.Update();
-            lv.revalidate();
+            lv.repaint();
+            lv.getInventory().repaint();
         }
     }
     @Override
@@ -126,7 +138,7 @@ public class Control implements ActionListener, MouseListener{
     /**
      * Jelzi, hogy a v�letlenszer� t�rt�n�sek ki vannak-e kapcsolva.
      */
-    private static boolean random = false;
+    private static boolean random = true;
 
     /**
      * A game objektum, amivel �ppen t�rt�nik a j�t�k.
@@ -202,6 +214,17 @@ public class Control implements ActionListener, MouseListener{
         private Scanner fileInput;
 
         /**
+         * A beolvasott aszteroidák száma.
+         */
+        private int nAsteroids;
+
+
+        /**
+         * A beolvasott teleportkapuk száma.
+         */
+        private int nTeleports;
+
+        /**
          * L�trehoz egy �j j�t�kot, amihez bet�lti a megadott f�jlb�l a p�ly�t.
          * Jelzi a felhaszn�l�nak a parancs sikeress�g�t.
          * Ha nincs el�g argumentum, vagy hiba t�rt�nt olvas�s k�zben, akkor jelzi a felhaszn�l�nak.
@@ -218,6 +241,7 @@ public class Control implements ActionListener, MouseListener{
                 return;
             }
             game = new Game();
+            gameFrame.getLevelView().setGame(game);
             Sun sun = game.getSun();
             activeSettler = null;
             IDs.clear();
@@ -226,11 +250,13 @@ public class Control implements ActionListener, MouseListener{
                 fileInput = new Scanner(file);
                 readAsteroidsTeleports(sun);
                 readTravellers();
+                readCoordinates();
             }catch (Exception e){
                 e.printStackTrace();
                 output.println("load unsuccessful");
                 return;
             }
+            gameFrame.getLevelView().Update();
             output.println("loaded " + args[1]);
         }
 
@@ -268,6 +294,7 @@ public class Control implements ActionListener, MouseListener{
                         throw new Exception();
                     s.addTeleport(teleport);
                 }
+                gameFrame.getLevelView().addSettlerView(s);
             }
             for (int i = 0; i < nRobots; i++){
                 pieces = fileInput.nextLine().split(" ");
@@ -279,6 +306,7 @@ public class Control implements ActionListener, MouseListener{
                 updateMaxID("robot", ID);
                 addID(ID, r);
                 game.addRobot(r);
+
             }
             for (int i = 0; i < nUFOs; i++){
                 pieces = fileInput.nextLine().split(" ");
@@ -290,6 +318,7 @@ public class Control implements ActionListener, MouseListener{
                 updateMaxID("ufo", ID);
                 addID(ID, ufo);
                 game.addUFO(ufo);
+                gameFrame.getLevelView().addUFOView(ufo);
             }
         }
 
@@ -314,8 +343,8 @@ public class Control implements ActionListener, MouseListener{
          */
         private void readAsteroidsTeleports(Sun sun) throws Exception {
             String[] pieces = fileInput.nextLine().split(" ");
-            int nAsteroids=Integer.parseInt(pieces[1]);
-            int nTeleports=Integer.parseInt(pieces[3]);
+            nAsteroids=Integer.parseInt(pieces[1]);
+            nTeleports=Integer.parseInt(pieces[3]);
             ArrayList<String[]> lines = new ArrayList<>();
             List<Asteroid> asteroids = new ArrayList<Asteroid>();
             for (int i = 0; i < nAsteroids; i++){
@@ -368,6 +397,31 @@ public class Control implements ActionListener, MouseListener{
                 }else{
                     t.setPair(null);
                 }
+            }
+        }
+
+        /**
+         * A fájl végéről beolvassa az aszteroidák és teleportkapuk koordinátáit és a teleportkapuk színeit.
+         */
+        private void readCoordinates(){
+            for (int i = 0; i < nAsteroids; i++){
+                String[] pieces = fileInput.nextLine().split(" ");
+                String ID = pieces[0].substring(0, pieces[0].length()-1);
+                Asteroid a = (Asteroid)IDs.get(ID);
+                int x = Integer.parseInt(pieces[1]);
+                int y = Integer.parseInt(pieces[2]);
+                gameFrame.getLevelView().addAsteroidView(a, x, y);
+            }
+            for (int i = 0; i < nTeleports; i++){
+                String[] pieces = fileInput.nextLine().split(" ");
+                String ID = pieces[0].substring(0, pieces[0].length()-1);
+                Teleport t = (Teleport)IDs.get(ID);
+                //if (t.getNeighbour() == null)
+                    //continue;
+                int x = Integer.parseInt(pieces[1]);
+                int y = Integer.parseInt(pieces[2]);
+                Color c = new Color(Integer.parseInt(pieces[3]), Integer.parseInt(pieces[4]), Integer.parseInt(pieces[5]));
+                gameFrame.getLevelView().addTeleportView(t, c, x, y);
             }
         }
     }
@@ -1675,9 +1729,11 @@ public class Control implements ActionListener, MouseListener{
         Control control = new Control();                     //ez nem jóóóó kizárólag a Julcsi tesztje
         initializeCommands();
         initializeMaxIDs();
-        commands.get("load").execute(new String[]{"load", "test.txt"});
-        control.init();
         gameFrame = new GameFrame(control, game);
+        //commands.get("load").execute(new String[]{"load", "test.txt"});
+        //control.init();
+        control.actionPerformed(new ActionEvent(control, 0, "load test.txt"));
+
         gameFrame.getLevelView().setActiveSettler(activeSettler);
         gameFrame.pack();
         gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

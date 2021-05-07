@@ -1628,8 +1628,8 @@ public class Skeleton {
      * Ezt addig ismétli, amíg a felhasználó ki nem lép a programból.
      * @param args parancssori argumentumok
      */
-    public static void main(String[] args){
-        GameFrame f = new GameFrame();
+    /*public static void main(String[] args){
+        GameFrame f = new GameFrame(new Control());
         f.pack();
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setVisible(true);
@@ -1646,5 +1646,5 @@ public class Skeleton {
         while (hasNext){
             hasNext = parseCommand();
         }
-    }
+    }*/
 }

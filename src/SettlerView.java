@@ -39,12 +39,12 @@ public class SettlerView extends TravellerView {
     	//ez eleg fapados igy tudom, atirhatjuk de igy h nem fut a kod meg nem mertem borderrel------------------------------
     	if (active) {
     		g.setColor(new Color(233, 233, 13));
-    		g.fillRect(x, y, 10, 10);
+    		g.fillRect(x, y, 16, 16);
     		g.setColor(new Color(227, 164, 97));
-    		g.fillRect(x + 2, y + 2, 8, 8);
+    		g.fillRect(x+2 , y+2, 12, 12);
     	} else {
     		g.setColor(new Color(227, 164, 97));
-    		g.fillRect(x, y, 10, 10);
+    		g.fillRect(x, y, 16, 16);
     	}
     }
 
