@@ -10,24 +10,41 @@ public class GameFrame extends JFrame {
     private LevelView lv;
     private InventoryView iv;
     private JMenuBar menuBar = new JMenuBar();
+    private ActionListener actionListener;
 
     private void initMenu(){
         JMenu file = new JMenu("File");
-        file.add(new JMenuItem("Load"));
-        file.add(new JMenuItem("Save"));
-        file.add(new JMenuItem("New Game"));
+        JMenuItem temp = new JMenuItem("Load");
+        temp.setActionCommand("load");
+        temp.addActionListener(actionListener);
+        file.add(temp);
+        temp = new JMenuItem("Save");
+        temp.setActionCommand("save");
+        temp.addActionListener(actionListener);
+        file.add(temp);
+        temp = new JMenuItem("New Game");
+        temp.setActionCommand("newgame");
+        temp.addActionListener(actionListener);
+        file.add(temp);
         menuBar.add(file);
 
         JMenu check = new JMenu("Check");
-        check.add(new JMenuItem("Check Win"));
-        check.add(new JMenuItem("Check Lose"));
+        temp = new JMenuItem("Check Win");
+        temp.setActionCommand("checkwin");
+        temp.addActionListener(actionListener);
+        check.add(temp);
+        temp = new JMenuItem("Check Lose");
+        temp.setActionCommand("checklose");
+        temp.addActionListener(actionListener);
+        check.add(temp);
         menuBar.add(check);
     }
     public GameFrame(Control c, Game game) {
         super();
+        actionListener = c;
         setTitle("Asteroid Game");
-        setJMenuBar(menuBar);
         initMenu();
+        setJMenuBar(menuBar);
         setMinimumSize(new Dimension(1000, 600));
         setPreferredSize(new Dimension(1000, 600));
         lv = new LevelView(game);

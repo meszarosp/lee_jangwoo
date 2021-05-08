@@ -1,0 +1,24 @@
+A: 7 T: 2
+a1: 2 a2 a3 100 1 empty
+a2: 1 a1 0 0 coal
+a3: 2 a1 a4 1 0 uranium(1)
+a4: 3 a3 t2 a7 20 0 iron
+a5: 2 a6 a7 2 0 ice
+a6: 2 a5 a7 1 0 empty
+a7: 3 a4 a5 a6 0 0 ice
+t1: 0 t2 0
+t2: a4 t1 0
+S: 2 R: 1 U: 1
+s1: a1 3 uranium(0) coal iron 0
+s2: a2 1 ice 1 t1
+r1: a2
+u1: a3
+a1: 200 100
+a2: 100 100
+a3: 300 100
+a4: 400 150
+a5: 600 150
+a6: 550 200
+a7: 500 150
+t1: 200 200 120 120 120
+t2: 250 250 120 120 120

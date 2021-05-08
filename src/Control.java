@@ -17,6 +17,7 @@ public class Control implements ActionListener, MouseListener{
     @Override
     public void actionPerformed(ActionEvent e) { //ez lehet static?
         String[] actionCommand = e.getActionCommand().split(" ");
+        System.out.println(actionCommand[0]);
 
         commands.get(actionCommand[0]).execute(actionCommand);      //move még kérdéses
         if (actionCommand[0].equals("load")){
@@ -33,12 +34,13 @@ public class Control implements ActionListener, MouseListener{
         } else {
             if(refreshActiveSettler()){
                 commands.get("nextturn").execute(new String[]{"nextturn"});
-                refreshActiveSettler();
+                //refreshActiveSettler();
             }
             LevelView lv = gameFrame.getLevelView();
             lv.setActiveSettler(activeSettler);
             lv.Update();
             lv.repaint();
+            lv.getInventory().Update();
             lv.getInventory().repaint();
         }
     }
@@ -1737,7 +1739,7 @@ public class Control implements ActionListener, MouseListener{
         gameFrame = new GameFrame(control, game);
         //commands.get("load").execute(new String[]{"load", "test.txt"});
         //control.init();
-        control.actionPerformed(new ActionEvent(control, 0, "load test.txt"));
+        control.actionPerformed(new ActionEvent(control, 0, "load game1.txt"));
 
         gameFrame.getLevelView().setActiveSettler(activeSettler);
         gameFrame.pack();
