@@ -971,7 +971,7 @@ public class Control implements ActionListener, MouseListener{
                 for (Teleport gate : gates)
                     output.println(reverseIDs.get(gate));
             }
-            int i = Integer.parseInt(args[1]) - 1;
+            int i = Integer.parseInt(args[1]);      //ez mar nullatol varja a cimzest
             if (i < 0 || i >= gates.size()) {
                 output.println("all details must be specified");
                 return;
