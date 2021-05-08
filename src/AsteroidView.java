@@ -37,7 +37,7 @@ public class AsteroidView implements View {
     /**
      *
      */
-    private int radius=30;
+    private int radius = 30;
 
     /**
      *
@@ -53,9 +53,9 @@ public class AsteroidView implements View {
      */
     public int getTravellerX(Traveller t) {
         List<Traveller> travellers = asteroid.getTravellers();
-        for(int i = 0; i< travellers.size(); ++i){
+        for(int i = 0; i < travellers.size(); ++i){
             if(travellers.get(i).equals(t)){
-                return (x-radius-5)+(2*i)*10+i*3; //20 az oldalhossz�s�ga a traveller-t jel�l� n�gyzetnek, 3 pixel hely van k�t n�gyzet k�z�tt
+                return (x - radius - 5) + (2 * i) * 10 + i * 3; //20 az oldalhossz�s�ga a traveller-t jel�l� n�gyzetnek, 3 pixel hely van k�t n�gyzet k�z�tt
             }
         }
         return 0;
@@ -67,7 +67,7 @@ public class AsteroidView implements View {
      * @return
      */
     public int getTravellerY(Traveller t) {
-        return y-radius - 13;
+        return y - radius - 20;
     }
 
     /**
@@ -86,7 +86,7 @@ public class AsteroidView implements View {
      */
     public boolean isThisYourNeighbour(Asteroid a) {
         List<INeighbour> neighbours = asteroid.getNeighbours();
-        for(int i=0; i<neighbours.size(); ++i){
+        for(int i = 0; i < neighbours.size(); ++i){
             if(neighbours.get(i).equals(a)){
                 return true;
             }
@@ -117,7 +117,7 @@ public class AsteroidView implements View {
      * @return igaz, ha bel�l van, egy�bk�nt hamis
      */
     public boolean clicked(int xClicked, int yClicked) {
-        if((pow((xClicked-x), 2)+pow((yClicked-y), 2))<pow(radius, 2)){
+        if((pow((xClicked - x), 2)+pow((yClicked - y), 2))<pow(radius, 2)){
             return true;
         }
         return false;
@@ -133,12 +133,12 @@ public class AsteroidView implements View {
         boolean aCloseToSun = asteroid.getCloseToSun();
         Color border = aCloseToSun ? new Color(255, 201, 14) : new Color(0, 0, 0);
         g.setColor(border);
-        g.fillOval(x-radius, y-radius, radius*2, radius*2);
-        if(aShell<=0){
+        g.fillOval(x - radius, y - radius, radius * 2, radius * 2);
+        if(aShell <= 0){
 
             Mineral aCore = asteroid.getCore();
             g.setColor(LevelView.mineralColor(aCore));
-            g.fillOval(x-radius+2, y-radius+2, radius*2-4, radius*2-4);
+            g.fillOval(x - radius + 2, y - radius + 2, radius * 2 - 4, radius * 2 - 4);
             //if(aCloseToSun){
                 //g.setColor(new Color(255, 201, 14));      //s�rga
 
@@ -154,10 +154,10 @@ public class AsteroidView implements View {
             //g.setColor(mineralColor(aCore));
             g.setColor(Color.WHITE);
             //g.drawString(aShell, x-(fontMetrics.stringWidth(aShell)/2), y-(fontMetrics.getHeight()/2));
-            g.fillOval(x-radius+2, y-radius+2, radius*2-4, radius*2-4);
+            g.fillOval(x - radius + 2, y - radius + 2, radius * 2 - 4, radius * 2 - 4);
             g.setColor(Color.BLACK);
             g.setFont(Font.getFont("Arial"));
-            g.drawString(Integer.toString(aShell), x-10, y);
+            g.drawString(Integer.toString(aShell), x - 10, y);
 
         }
 
