@@ -30,6 +30,11 @@ public class LevelView extends JPanel implements View {
     }
 
     /**
+    * A háttéren elhelyezett nap betöltése
+    */
+    ImageIcon img = new ImageIcon("sun.png"); //nap betoltese
+    
+    /**
      * 
      */
     public static Color uranium0Color = new Color(15, 147, 71);
@@ -360,6 +365,7 @@ public class LevelView extends JPanel implements View {
     public void draw(Graphics g) {
         g.setColor(new Color(27, 20, 100)); //hatterszin beallitasa
     	g.fillRect(0, 0, getWidth(), getHeight()); // hatterszin beallitasa
+    	img.paintIcon(this, g, getWidth() - img.getIconWidth(), 0); //nap berajzolasa
         drawNeighbourLines(g);
         for (AsteroidView av : asteroidViews.values())
             av.draw(g);
