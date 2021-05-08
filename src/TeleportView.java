@@ -43,6 +43,8 @@ public class TeleportView implements View {
      * @param g
      */
     public void draw(Graphics g) {
+        if(x == -1 && y == -1)          //ha a nyomi settler zsebében van, ne rajzoljuk ki
+            return;
         g.setColor(new Color(0, 0, 0));
         g.fillRect(x-10, y-18, 20, 36);
         g.setColor(teleportColor);

@@ -54,11 +54,13 @@ public class Control implements ActionListener, MouseListener{
                         commands.get("move").execute(new String[]{"move", Integer.toString(i)});
                         if(refreshActiveSettler()){
                             commands.get("nextturn").execute(new String[]{"nextturn"});
-                            refreshActiveSettler();
+                            if(checkActiveSettlerDied())
+                                refreshActiveSettler();
                         }
                         lv.setActiveSettler(activeSettler);
                         lv.Update();
-                        lv.revalidate();
+                        lv.repaint();
+                        lv.getInventory().repaint();
                         return;
                     }
                 }
@@ -1666,10 +1668,12 @@ public class Control implements ActionListener, MouseListener{
     /**
      * Ellen�rzi, hogy meghalt-e az akt�v telepes. Ha igen, akkor jelzi a felhaszn�l�nak.
      */
-    private static void checkActiveSettlerDied(){
+    private static boolean checkActiveSettlerDied(){
         if (activeSettler != null && !game.getSettlers().contains(activeSettler)){
             output.println("active settler died");
+            return true;
         }
+        return false;
     }
 
     /**

@@ -214,6 +214,10 @@ public class LevelView extends JPanel implements View {
                 break;
             }
         //TODO: mi legyen a koordin�t�kkal?
+        if(t.getNeighbour() == null){
+            teleportViews.put(t, new TeleportView(t, color, -1, -1));
+            return;
+        }
         AsteroidView av = getAsteroidView(t.getNeighbour());
         teleportViews.put(t, new TeleportView(t, color, av.getX() +20, av.getY()+ 20));
     }
