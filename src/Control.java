@@ -119,7 +119,8 @@ public class Control implements ActionListener, MouseListener{
                 }
                 idxOfActive--;
             }
-            activeSettler = game.getSettlers().get(0);
+            if(!game.getSettlers().isEmpty())
+                activeSettler = game.getSettlers().get(0);
             ControlSettlers = new ArrayList<Settler>(game.getSettlers());
             return false;
         }

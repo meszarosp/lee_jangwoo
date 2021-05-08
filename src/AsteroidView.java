@@ -121,7 +121,7 @@ public class AsteroidView implements View {
      * @return igaz, ha bel�l van, egy�bk�nt hamis
      */
     public boolean clicked(int xClicked, int yClicked) {
-        if((pow((xClicked-x), 2)*pow((yClicked-y), 2))<pow(radius, 2)){
+        if((pow((xClicked-x), 2)+pow((yClicked-y), 2))<pow(radius, 2)){
             return true;
         }
         return false;
