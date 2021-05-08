@@ -55,11 +55,7 @@ public class AsteroidView implements View {
         List<Traveller> travellers = asteroid.getTravellers();
         for(int i = 0; i< travellers.size(); ++i){
             if(travellers.get(i).equals(t)){
-                if(i==0){
-                    return (x-radius-5);
-                }else{
-                    return ((x-radius-5)+((i+1)*10));        //10 az oldalhossz�s�ga a traveller-t jel�l� n�gyzetnek, 3 pixel hely van k�t n�gyzet k�z�tt
-                }
+                return (x-radius-5)+(2*i)*10+i*3; //20 az oldalhossz�s�ga a traveller-t jel�l� n�gyzetnek, 3 pixel hely van k�t n�gyzet k�z�tt
             }
         }
         return 0;
