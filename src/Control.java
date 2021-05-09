@@ -39,14 +39,19 @@ public class Control implements ActionListener, MouseListener{
             lv.getInventory().repaint();
         }*/
         /*if(actionCommand[0].equals("save") || actionCommand[0].equals("load") || actionCommand[0].equals("giveup")){
-            //itt nem tudom mi van
+
         } else {*/
-            if(refreshActiveSettler()){
+        if (actionCommand[0].equals("save") || actionCommand[0].equals("giveup") ||
+                actionCommand[0].equals("checkwin") || actionCommand[0].equals("checklose")) {
+            ;
+        }else{
+            if (refreshActiveSettler()) {
                 commands.get("nextturn").execute(new String[]{"nextturn"});
-                if(checkActiveSettlerDied())
+                if (checkActiveSettlerDied())
                     refreshActiveSettler();
                 JOptionPane.showMessageDialog(null, "Turn ended, next turn starts.");
             }
+        }
             LevelView lv = gameFrame.getLevelView();
             lv.setActiveSettler(activeSettler);
             lv.Update();
@@ -279,7 +284,10 @@ public class Control implements ActionListener, MouseListener{
          */
         private int nTeleports;
 
-
+        /**
+         * Egy JFileChooser dialógusablak segítségével lekéri a felhasználótól az útvonalat.
+         * @return A megnyitni kívánt file.
+         */
         public File showDialog(){
             JFileChooser fileChooser = new JFileChooser();
             int returnval = fileChooser.showDialog(null, "Open");
@@ -504,30 +512,50 @@ public class Control implements ActionListener, MouseListener{
         private PrintWriter fileOutput;
 
         /**
+         * Egy JFileChooser dialógusablak segítségével lekéri a felhasználótól az útvonalat.
+         * @return A megnyitni kívánt file.
+         */
+        public File showDialog(){
+            JFileChooser fileChooser = new JFileChooser();
+            int returnval = fileChooser.showDialog(null, "Save");
+            if (returnval == fileChooser.APPROVE_OPTION)
+                return fileChooser.getSelectedFile();
+            else
+                return null;
+        }
+
+
+        /**
          * A param?terk?nt megadott f?jlba kimenti a p?lya aktu?lis ?ll?s?t.
          * Jelzi a felhaszn?l?nak, hogy sikeres volt-e a parancs.
          * Ha hiba t?rt?nik a f?jlba ?r?s k?zben, akkor jelzi a felhaszn?l?nak.
          * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
+            File file;
             if (args.length < 2) {
-                output.println("save unsuccessful");
-                return;
+                file = showDialog();
+                //output.println("save unsuccessful");
+                //return;
+            }else{
+                file = new File(args[1]);
             }
-            File file = new File(args[1]);
+
+            //File file = new File(args[1]);
             try {
                 fileOutput = new PrintWriter(file);
                 saveAsteroidTeleport();
                 fileOutput.println("S: " + game.getSettlers().size() + " R: " + game.getRobots().size() + " U: " + game.getUFOs().size());
                 saveSettlers();
                 saverobotsUFOs();
+                saveCoordinates();
             }catch (Exception e){
                 e.printStackTrace();
                 output.println("save unsuccessful");
                 return;
             }
             fileOutput.close();
-            output.println("saved to " + args[1]);
+           // output.println("saved to " + args[1]);
         }
 
         /**
@@ -581,6 +609,33 @@ public class Control implements ActionListener, MouseListener{
             for (Teleport t : gates)
                 fileOutput.println(reverseIDs.get(t) + ": " + reverseIDs.getOrDefault(t.getNeighbour(), "0")
                         + " " + reverseIDs.getOrDefault(t.getPair(), "0") + (t.getBamboozled() ? " 1" : " 0"));
+        }
+
+        /**
+         * Elmenti a teleportkapuk nézeteinek koordinátáit és a színeit.
+         * Elmenti az aszteroidák nézeteinek koordinátáit.
+         */
+        private void saveCoordinates(){
+            LevelView lv = gameFrame.getLevelView();
+            HashMap<Asteroid, AsteroidView> asteroidviews = lv.getAsteroidViews();
+            HashMap<Teleport, TeleportView> teleportviews = lv.getTeleportViews();
+            for (Asteroid a : asteroidviews.keySet()){
+                if (a != null){
+                    String ID = reverseIDs.get(a);
+                    AsteroidView av = asteroidviews.get(a);
+                    if (av == null) continue;
+                    fileOutput.println(ID + ": " + av.getX() + " " + av.getY());
+                }
+            }
+            for (Teleport t : teleportviews.keySet()){
+                if (t != null){
+                    String ID = reverseIDs.get(t);
+                    TeleportView tv = teleportviews.get(t);
+                    if (tv == null) continue;
+                    Color c = tv.getColor();
+                    fileOutput.println(ID + ": " + tv.getX() + " " + tv.getY() + " " + c.getRed() + " " + c.getGreen() + " " + c.getBlue());
+                }
+            }
         }
     }
     /**
@@ -1472,10 +1527,13 @@ public class Control implements ActionListener, MouseListener{
          * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
-            if (game.checkWin())
+            if (game.checkWin()) {
                 output.println("game won");
-            else
+                JOptionPane.showMessageDialog(null, "Game won!");
+            } else {
                 output.println("win conditions not met");
+                JOptionPane.showMessageDialog(null, "Win conditions not met!");
+            }
         }
     }
     /**
@@ -1487,10 +1545,13 @@ public class Control implements ActionListener, MouseListener{
          * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
-            if (game.checkLose())
+            if (game.checkLose()) {
                 output.println("game lost");
-            else
+                JOptionPane.showMessageDialog(null, "Game lost!");
+            }else {
                 output.println("losing conditions not met");
+                JOptionPane.showMessageDialog(null, "Losing conditions not met!");
+            }
         }
     }
     /**

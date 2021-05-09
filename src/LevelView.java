@@ -278,7 +278,7 @@ public class LevelView extends JPanel implements View {
         else if(t.getPair() != null && teleportcolors.containsKey(t.getPair()))
             color = teleportcolors.get(t.getPair());
         AsteroidView av = getAsteroidView(t.getNeighbour());
-        TeleportView tv = new TeleportView(t, color, av.getX() +30, av.getY()+30);
+        TeleportView tv = new TeleportView(t, color, av.getX() +30, av.getY()+50);
         teleportViews.put(t, tv);
         teleportcolors.put(t, color);
         if (t.getPair() != null)
@@ -339,15 +339,17 @@ public class LevelView extends JPanel implements View {
         List<Teleport> gates = game.getGates();
         HashMap<Teleport, TeleportView> remainingViews = new HashMap<Teleport, TeleportView>();
         ArrayList<Teleport> noView = new ArrayList<Teleport>();
-        for (Teleport t : gates)
+        for (Teleport t : gates) {
             if (!teleportViews.containsKey(t) && t.getNeighbour() != null)
                 noView.add(t);
-            else
+            else if (teleportViews.containsKey(t))
                 remainingViews.put(t, teleportViews.get(t));
+        }
         teleportViews = remainingViews;
-        for (Teleport t : noView)
+        for (Teleport t : noView) {
             if (t != null)
                 addTeleportView(t);
+        }
     }
 
     /**
@@ -485,10 +487,11 @@ public class LevelView extends JPanel implements View {
      */
     public INeighbour click(int x, int y) {
         for(TeleportView tv : teleportViews.values())
-            if(tv.clicked(x, y))
-                return tv.getTeleport();
+            if(tv != null && tv.clicked(x, y))
+
+                    return tv.getTeleport();
         for (AsteroidView av : asteroidViews.values())
-            if (av.clicked(x, y))
+            if (av != null && av.clicked(x, y))
                 return av.getAsteroid();
         return null;
     }
@@ -519,5 +522,21 @@ public class LevelView extends JPanel implements View {
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
         draw(g);
+    }
+
+    /**
+     * Getter az aszteroidák és nézeteinek összerendeléseihez.
+     * @return Az aszteroidák és a nézetek hashmap-je.
+     */
+    public HashMap<Asteroid, AsteroidView> getAsteroidViews() {
+        return asteroidViews;
+    }
+
+    /**
+     * Getter az teleportkapuk és nézeteinek összerendeléseihez.
+     * @return A teleportkapuk és a nézetek hashmap-je.
+     */
+    public HashMap<Teleport, TeleportView> getTeleportViews() {
+        return teleportViews;
     }
 }
