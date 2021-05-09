@@ -2,12 +2,18 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- *
+ * Egy nyersanyaghoz tartozó gomb. A nyersanyagnak megfelelõ színû.
  */
 public class MineralButton extends JButton {
 
+    /**
+     * A nyersanyag, amit ismer.
+     */
     private Mineral mineral;
 
+    /**
+     * Inicializálja a gomb méreteit.
+     */
     public MineralButton() {
         super();
         setSize(20, 20);
@@ -26,10 +32,18 @@ public class MineralButton extends JButton {
         setActionCommand("put back");
     }
 
+    /**
+     * Visszaadja az ismert nyersanyagot.
+     * @return A nyersanyag.
+     */
     public Mineral getMineral() {
         return mineral;
     }
 
+    /**
+     * Beállítja az ismert nyersanyagot és frissíti a gomb színét.
+     * @param m Az új nyersanyag.
+     */
     public void setMineral(Mineral m) {
         this.mineral = m;
         setBackground(LevelView.mineralColor(mineral));

@@ -5,23 +5,61 @@ import java.util.*;
 import java.util.List;
 
 /**
- * 
+ * Az osztály felelőssége hogy az éppen aktív telepesnél található nyersanyagok grafikus
+ * megjelenítését és ezzel kapcsolatos feladatokat végezze/menedzselje.
  */
 public class InventoryView extends JPanel {
 
+    /**
+     * A fúráshoz tartozó gomb.
+     */
     private JButton Drill;
+
+    /**
+     * A bányászáshoz tartozó gomb.
+     */
     private JButton Mine;
+
+    /**
+     * A teleportkapu építéshez tartozó gomb.
+     */
     private JButton CraftTeleport;
+
+    /**
+     * A robot építéshez tartozó gomb.
+     */
     private JButton CraftRobot;
 
+    /**
+     * A gombokat tartalmazó panel.
+     */
     private JPanel ButtonPanel;
+
+    /**
+     * A teleportgombokat tartalmazó panel.
+     */
     private JPanel TeleportPanel;
+
+    /**
+     * A nyersanyaggombokat tartalmazó panel.
+     */
     private JPanel MineralPanel;
 
+    /**
+     * A telepesnél lévő teleportkapukhoz tartozó gombok.
+     */
     private TeleportButton[] teleportButtons = new TeleportButton[3];
+
+    /**
+     * A telepesnél lévő nyersanyagokhoz tartozó gombok.
+     */
     private MineralButton[] mineralButtons = new MineralButton[10];
     /**
-     * Default constructor
+     * Kontruktor.
+     * Létrehozza a gombokat és a paneleket. Beállítja az actionCommand-okat
+     * és az eseménykezelőt.
+     * @param lv A levelview objektum
+     * @param c A kontroller, aki kezeli az eseményeket
      */
     public InventoryView(LevelView lv, Control c) {
         super();
@@ -84,11 +122,15 @@ public class InventoryView extends JPanel {
     }
 
     /**
-     * 
+     * A levelview objektum, akit ismer.
      */
     private LevelView levelView;
 
-
+    /**
+     * Frissíti a paneleket és a gombokat.
+     * Az aktív telepest lekéri a levelview-tól és az ő állapotának megfelelően
+     * frissíti a gombokat.
+     */
     public void Update() {
         if (levelView.getActiveSettler() == null)
             return;
@@ -108,14 +150,6 @@ public class InventoryView extends JPanel {
                 mineralButtons[i].setMineral(null);
         }
         invalidate();
-    }
-
-    /**
-     * @param x
-     * @param y
-     */
-    public void click(int x, int y) {
-        // TODO ide mi k�ne egy�ltal�n?
     }
 
 

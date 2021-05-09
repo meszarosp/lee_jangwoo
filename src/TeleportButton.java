@@ -2,12 +2,18 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- *
+ * Egy teleportkapuhoz tartozó gomb. A teleportkapu-pároknak megfelelõ színû.
  */
 public class TeleportButton extends JButton {
 
+    /**
+     * A teleportkapu, akit ismer.
+     */
     private Teleport teleport;
 
+    /**
+     * Inicializálja a gomb méreteit.
+     */
     public TeleportButton() {
         super();
         setSize(30, 50);
@@ -20,10 +26,18 @@ public class TeleportButton extends JButton {
         setActionCommand("set down");
     }
 
+    /**
+     * Visszaadja az ismert teleportkaput
+     * @return A teleportkapu
+     */
     public Teleport getTeleport() {
         return teleport;
     }
 
+    /**
+     * Beállítja az ismert teleportkaput.
+     * @param t Az új teleportkapu.
+     */
     public void setTeleport(Teleport t) {
         this.teleport = t;
         if (teleport == null)

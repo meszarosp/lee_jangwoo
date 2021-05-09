@@ -14,13 +14,19 @@ public class Control implements ActionListener, MouseListener{
      * Default constructor
      */
     public Control() {}
+
+
+    /**
+     * Eseménykezelő. A levelview és az inventoryview eseményeit kezeli le.
+     * @param e Az esemény leírója
+     */
     @Override
     public void actionPerformed(ActionEvent e) { //ez lehet static?
         String[] actionCommand = e.getActionCommand().split(" ");
         System.out.println(actionCommand[0]);
 
         commands.get(actionCommand[0]).execute(actionCommand);      //move még kérdéses
-        if (actionCommand[0].equals("load")){
+        /*if (actionCommand[0].equals("load")){
             activeSettler = game.getSettlers().get(0);
             LevelView lv = gameFrame.getLevelView();
             refreshActiveSettler();
@@ -28,13 +34,14 @@ public class Control implements ActionListener, MouseListener{
             lv.Update();
             lv.repaint();
             lv.getInventory().repaint();
-        }
+        }*/
         if(actionCommand[0].equals("save") || actionCommand[0].equals("load") || actionCommand[0].equals("giveup")){
             //itt nem tudom mi van
         } else {
             if(refreshActiveSettler()){
                 commands.get("nextturn").execute(new String[]{"nextturn"});
-                //refreshActiveSettler();
+                if(checkActiveSettlerDied())
+                    refreshActiveSettler();
             }
             LevelView lv = gameFrame.getLevelView();
             lv.setActiveSettler(activeSettler);
@@ -44,6 +51,11 @@ public class Control implements ActionListener, MouseListener{
             lv.getInventory().repaint();
         }
     }
+
+    /**
+     * Egér esemény kezelő. A levelview-n történt kattintást kezeli le.
+     * @param e Az egéresemény leírója.
+     */
     @Override
     public void mouseClicked(MouseEvent e){
         LevelView lv = gameFrame.getLevelView();
@@ -69,15 +81,40 @@ public class Control implements ActionListener, MouseListener{
             }
         }
     }
+
+    /**
+     * Egér lenyomás eseménykezelő. Nincs használatban.
+     * @param e Az esemény leírója.
+     */
     @Override
     public void mousePressed(MouseEvent e){}
+
+    /**
+     * Egér felengedés eseménykezelő. Nincs használatban.
+     * @param e Az esemény leírója.
+     */
     @Override
     public void mouseReleased(MouseEvent e){}
+
+    /**
+     * Egér eseménykezelő. Nincs használatban.
+     * @param e Az esemény leírója.
+     */
     @Override
     public void mouseEntered(MouseEvent e){}
+
+    /**
+     * Egér eseménykezelő. Nincs használatban.
+     * @param e Az esemény leírója.
+     */
     @Override
     public void mouseExited(MouseEvent e){}
-    private static boolean refreshActiveSettler(){      ///A visszatérési érték az, hogy kell-e nextturn
+
+    /**
+     * Frissíti az aktív telepest.
+     * @return IGAZ, ha véget ért a kört és kell nextturn parancs, HAMIS, ha nem.
+     */
+    private static boolean refreshActiveSettler(){
         if(activeSettler == null){
             if(!game.getSettlers().isEmpty())
                 activeSettler = game.getSettlers().get(0);
@@ -128,7 +165,15 @@ public class Control implements ActionListener, MouseListener{
         }
         return false;
     }
+
+    /**
+     * Tárolja, hogy mi a legutóbbi tudomása a kontrollernek a játékban lévő telepesekről.
+     */
     private static List<Settler> ControlSettlers;// = ... ArrayList ctor clone
+
+    /**
+     * GameFrame, ami tárolja a paneleket.
+     */
     private static GameFrame gameFrame;
     /**
      * Az input, ahonnan a parancsokat olvassa. Alapesetben a standard bemenet.
@@ -136,46 +181,46 @@ public class Control implements ActionListener, MouseListener{
     private static Scanner input = new Scanner(System.in);
 
     /**
-     * Az output, ahov� a parancsok kimenet�t �rja. Alapesetben a standard kimenet.
+     * Az output, ahov? a parancsok kimenet?t ?rja. Alapesetben a standard kimenet.
      */
     private static PrintStream output = System.out;
 
     /**
-     * Jelzi, hogy a v�letlenszer� t�rt�n�sek ki vannak-e kapcsolva.
+     * Jelzi, hogy a v?letlenszer? t?rt?n?sek ki vannak-e kapcsolva.
      */
     private static boolean random = true;
 
     /**
-     * A game objektum, amivel �ppen t�rt�nik a j�t�k.
+     * A game objektum, amivel ?ppen t?rt?nik a j?t?k.
      */
     private static Game game = new Game();
 
     /**
-     * Az a settler, amelyikkel �ppen j�tszik a felhaszn�l�. Ez a settler kapja majd a settlereknek f�z�tt kommentek.
+     * Az a settler, amelyikkel ?ppen j?tszik a felhaszn?l?. Ez a settler kapja majd a settlereknek f?z?tt kommentek.
      */
     private static Settler activeSettler = null;
 
     /**
-     * T�rolja, hogy a j�t�kban azonos�t�val ell�tott objektumok k�z�l,
-     * mi a legnagyobb m�r kiosztott azonos�t�nak a sz�ma.
-     * Azonos�t� a felhaszn�l� fel� kommunik�lt azonos�t�t jelenti.
-     * T�rolt adatok pl.: settler, asteroid, ufo, robot.
+     * T?rolja, hogy a j?t?kban azonos?t?val ell?tott objektumok k?z?l,
+     * mi a legnagyobb m?r kiosztott azonos?t?nak a sz?ma.
+     * Azonos?t? a felhaszn?l? fel? kommunik?lt azonos?t?t jelenti.
+     * T?rolt adatok pl.: settler, asteroid, ufo, robot.
      */
     private static HashMap<String, Integer> maxIDs = new HashMap<String, Integer>();
 
     /**
-     * A j�t�kban l�v� objektumok �s a felhaszn�l� fel� k�z�lt azonos�t�k �sszerendel�se. A kulcs az azonos�t�.
+     * A j?t?kban l?v? objektumok ?s a felhaszn?l? fel? k?z?lt azonos?t?k ?sszerendel?se. A kulcs az azonos?t?.
      */
     public static HashMap<String, Object> IDs = new HashMap<String, Object>();
 
     /**
-     * A j�t�kban l�v� objektumok �s a felhaszn�l� fel� k�z�lt azonos�t�k �sszerendel�se. A kulcs az objektum.
+     * A j?t?kban l?v? objektumok ?s a felhaszn?l? fel? k?z?lt azonos?t?k ?sszerendel?se. A kulcs az objektum.
      */
     public static HashMap<Object, String> reverseIDs = new HashMap<Object, String>();
 
     /**
-     * Hozz�ad egy �j azonos�t�t az azonos�t� t�rol�khoz.
-     * @param s A sz�veges azonos�t�
+     * Hozz?ad egy ?j azonos?t?t az azonos?t? t?rol?khoz.
+     * @param s A sz?veges azonos?t?
      * @param o Az objektum
      */
     private static void addID(String s, Object o){
@@ -184,8 +229,8 @@ public class Control implements ActionListener, MouseListener{
     }
 
     /**
-     * Kit�r�l egy azonos�t�-objektum �sszerendel�st az ezt t�rol�kb�l.
-     * @param s A sz�veges azonos�t�
+     * Kit?r?l egy azonos?t?-objektum ?sszerendel?st az ezt t?rol?kb?l.
+     * @param s A sz?veges azonos?t?
      * @param o Az objektum
      */
     private static void removeID(String s, Object o){
@@ -194,7 +239,7 @@ public class Control implements ActionListener, MouseListener{
     }
 
     /**
-     * T�rli az azonos�t�-objektum �sszerendel�seket.
+     * T?rli az azonos?t?-objektum ?sszerendel?seket.
      */
     private static void resetIDs(){
         IDs.clear();
@@ -202,19 +247,19 @@ public class Control implements ActionListener, MouseListener{
     }
 
     /**
-     * Interf�sz, amely a parancsok sz�m�ra k�sz�lt. A parancsok ezt implement�lj�k.
+     * Interfész, amely a parancsok számára készült. A parancsok ezt implementálják.
      */
     private interface Command{
         /**
-         * A parancsot v�grehajt� f�ggv�ny.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A parancsot v?grehajt? f?ggv?ny.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args);
     }
     private static class loadCommand implements Command{
 
         /**
-         * Annak a megnyitott f�jlnak scannere, amib�l olvassa a bet�lteni k�v�nt p�ly�t.
+         * Annak a megnyitott f?jlnak scannere, amib?l olvassa a bet?lteni k?v?nt p?ly?t.
          */
         private Scanner fileInput;
 
@@ -229,11 +274,13 @@ public class Control implements ActionListener, MouseListener{
          */
         private int nTeleports;
 
+
+
         /**
-         * L�trehoz egy �j j�t�kot, amihez bet�lti a megadott f�jlb�l a p�ly�t.
-         * Jelzi a felhaszn�l�nak a parancs sikeress�g�t.
-         * Ha nincs el�g argumentum, vagy hiba t�rt�nt olvas�s k�zben, akkor jelzi a felhaszn�l�nak.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * L?trehoz egy ?j j?t?kot, amihez bet?lti a megadott f?jlb?l a p?ly?t.
+         * Jelzi a felhaszn?l?nak a parancs sikeress?g?t.
+         * Ha nincs el?g argumentum, vagy hiba t?rt?nt olvas?s k?zben, akkor jelzi a felhaszn?l?nak.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -266,11 +313,11 @@ public class Control implements ActionListener, MouseListener{
         }
 
         /**
-         * Beolvassa a f�jlb�l a settlereket, robotokat �s az uf�kat.
-         * Beolvassa az el�tt�k l�v� sort is, ami jelzi, hogy melyikb�l h�ny darab van.
+         * Beolvassa a f?jlb?l a settlereket, robotokat ?s az uf?kat.
+         * Beolvassa az el?tt?k l?v? sort is, ami jelzi, hogy melyikb?l h?ny darab van.
          * Ha hiba van, akkor exceptiont dob.
-         * @throws Exception Ha b�rmilyen hiba t�rt�nik olvas�s k�zben, akkor exceptiont dob.
-         * Hiba lehet, ha nem megfelel� a form�tum vagy a f�jl olvas�sa k�zben hiba t�rt�nik.
+         * @throws Exception Ha b?rmilyen hiba t?rt?nik olvas?s k?zben, akkor exceptiont dob.
+         * Hiba lehet, ha nem megfelel? a form?tum vagy a f?jl olvas?sa k?zben hiba t?rt?nik.
          */
         private void readTravellers() throws Exception{
             String[] pieces = fileInput.nextLine().split(" ");
@@ -328,10 +375,10 @@ public class Control implements ActionListener, MouseListener{
         }
 
         /**
-         * A megadott t�pushoz tartoz� ID-t friss�ti a maxID �sszerendel�sben.
-         * Csak akkor friss�t ha az ID-hez tartoz� sz�m, nagyobb, mint az eddigi legnagyobb.
-         * @param type Az t�pus (pl.: settler)
-         * @param ID Az ID, amit ellen�rizni kell, hogy a sz�ma, nagyobb-e, mint az eddigi legnagyobb.
+         * A megadott t?pushoz tartoz? ID-t friss?ti a maxID ?sszerendel?sben.
+         * Csak akkor friss?t ha az ID-hez tartoz? sz?m, nagyobb, mint az eddigi legnagyobb.
+         * @param type Az t?pus (pl.: settler)
+         * @param ID Az ID, amit ellen?rizni kell, hogy a sz?ma, nagyobb-e, mint az eddigi legnagyobb.
          */
         private void updateMaxID(String type, String ID){
             int number = Integer.parseInt(ID.substring(1));
@@ -340,11 +387,11 @@ public class Control implements ActionListener, MouseListener{
         }
 
         /**
-         * Beolvassa a f�jlb�l az aszteroid�kat �s a teleportkapukat.
-         * Beolvassa a le�r�sok el�tti sort is, ami azt t�rolja, hogy melyikb�l h�ny darab van.
-         * @param sun A j�t�kban l�v� nap.
-         * @throws Exception Ha b�rmilyen hiba t�rt�nik olvas�s k�zben, akkor exceptiont dob.
-         * Hiba lehet, ha nem megfelel� a form�tum vagy a f�jl olvas�sa k�zben hiba t�rt�nik.
+         * Beolvassa a f?jlb?l az aszteroid?kat ?s a teleportkapukat.
+         * Beolvassa a le?r?sok el?tti sort is, ami azt t?rolja, hogy melyikb?l h?ny darab van.
+         * @param sun A j?t?kban l?v? nap.
+         * @throws Exception Ha b?rmilyen hiba t?rt?nik olvas?s k?zben, akkor exceptiont dob.
+         * Hiba lehet, ha nem megfelel? a form?tum vagy a f?jl olvas?sa k?zben hiba t?rt?nik.
          */
         private void readAsteroidsTeleports(Sun sun) throws Exception {
             String[] pieces = fileInput.nextLine().split(" ");
@@ -431,19 +478,19 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A save parancshoz tartoz� oszt�ly. A param�terk�nt megadott f�jlba ki�rja a j�t�kban l�v� p�lya aktu�lis �ll�s�t.
+     * A save parancshoz tartoz? oszt?ly. A param?terk?nt megadott f?jlba ki?rja a j?t?kban l?v? p?lya aktu?lis ?ll?s?t.
      */
     private static class saveCommand implements Command{
         /**
-         * A PrintWriter, ami a megnyitott f�jlba �r, ahova a p�ly�t ki kell menteni.
+         * A PrintWriter, ami a megnyitott f?jlba ?r, ahova a p?ly?t ki kell menteni.
          */
         private PrintWriter fileOutput;
 
         /**
-         * A param�terk�nt megadott f�jlba kimenti a p�lya aktu�lis �ll�s�t.
-         * Jelzi a felhaszn�l�nak, hogy sikeres volt-e a parancs.
-         * Ha hiba t�rt�nik a f�jlba �r�s k�zben, akkor jelzi a felhaszn�l�nak.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A param?terk?nt megadott f?jlba kimenti a p?lya aktu?lis ?ll?s?t.
+         * Jelzi a felhaszn?l?nak, hogy sikeres volt-e a parancs.
+         * Ha hiba t?rt?nik a f?jlba ?r?s k?zben, akkor jelzi a felhaszn?l?nak.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -467,7 +514,7 @@ public class Control implements ActionListener, MouseListener{
         }
 
         /**
-         * Kimenti a megadott f�jlba a settlereket.
+         * Kimenti a megadott f?jlba a settlereket.
          */
         private void saveSettlers() {
             List<Settler> settlers = game.getSettlers();
@@ -489,7 +536,7 @@ public class Control implements ActionListener, MouseListener{
         }
 
         /**
-         * Kimenti a f�jlba a robotokat �s az uf�kat.
+         * Kimenti a f?jlba a robotokat ?s az uf?kat.
          */
         private void saverobotsUFOs(){
             for (Robot r : game.getRobots())
@@ -499,7 +546,7 @@ public class Control implements ActionListener, MouseListener{
         }
 
         /**
-         * Kimenti a f�jlba az aszteorid�kat �s a robotokat.
+         * Kimenti a f?jlba az aszteorid?kat ?s a robotokat.
          */
         private void saveAsteroidTeleport(){
             List<Asteroid> asteroids = game.getSun().getAsteroids();
@@ -520,13 +567,13 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A input parancshoz tartoz� oszt�ly. �tir�ny�tja a bemenetet a param�terk�nt megadott f�jlra.
+     * A input parancshoz tartoz? oszt?ly. ?tir?ny?tja a bemenetet a param?terk?nt megadott f?jlra.
      */
     private static class inputCommand implements Command{
         /**
-         * A param�terk�nt megadott f�jlra �ll�tja a bemenetet.
-         * Ha nincs el�g argumentum, akkor hib�t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A param?terk?nt megadott f?jlra ?ll?tja a bemenetet.
+         * Ha nincs el?g argumentum, akkor hib?t jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -547,13 +594,13 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A output parancshoz tartoz� oszt�ly. �tir�ny�tja a kimenetet a param�terk�nt megadott f�jlba.
+     * A output parancshoz tartoz? oszt?ly. ?tir?ny?tja a kimenetet a param?terk?nt megadott f?jlba.
      */
     private static class outputCommand implements Command{
         /**
-         * A param�terk�nt megadott f�jlra ir�ny�tja a kimenetet.
-         * Ha nincs el�g argumentum, akkor hib�t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A param?terk?nt megadott f?jlra ir?ny?tja a kimenetet.
+         * Ha nincs el?g argumentum, akkor hib?t jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -574,16 +621,16 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A addsettler parancshoz tartoz� oszt�ly. �j settlert ad a p�ly�ra.
+     * A addsettler parancshoz tartoz? oszt?ly. ?j settlert ad a p?ly?ra.
      */
     private static class addsettlerCommand implements Command{
 
         /**
-         * A param�terk�nt megadott aszteroid�ra teszt egy �j telepest.
-         * Ha nincs el�g argumentum, akkor hib�val jelez a felhaszn�l�nak.
-         * A hiba fajt�j�t is ki�rja a felhaszn�l�nak.
-         * Ha l�trej�tt a telepes, akkor ezt is jelzi a felhaszn�l�nak.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A param?terk?nt megadott aszteroid?ra teszt egy ?j telepest.
+         * Ha nincs el?g argumentum, akkor hib?val jelez a felhaszn?l?nak.
+         * A hiba fajt?j?t is ki?rja a felhaszn?l?nak.
+         * Ha l?trej?tt a telepes, akkor ezt is jelzi a felhaszn?l?nak.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -608,15 +655,15 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A addasteroid parancshoz tartoz� oszt�ly. Hozz�ad egy aszteroid�t a megadott param�terekkel a p�ly�hoz.
+     * A addasteroid parancshoz tartoz? oszt?ly. Hozz?ad egy aszteroid?t a megadott param?terekkel a p?ly?hoz.
      */
     private static class addasteroidCommand implements Command{
 
         /**
-         * A megadott a param�terekkel hozz�ad egy �j aszteroid�t a p�ly�hoz.
-         * Ha b�rmilyen hiba van, akkor jelzi a felhaszn�l�nak a hiba fajt�j�t.
-         * Ha rendben volt minden, akkor ki�rja a felhaszn�l�nak az �j aszteroida param�tereit.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A megadott a param?terekkel hozz?ad egy ?j aszteroid?t a p?ly?hoz.
+         * Ha b?rmilyen hiba van, akkor jelzi a felhaszn?l?nak a hiba fajt?j?t.
+         * Ha rendben volt minden, akkor ki?rja a felhaszn?l?nak az ?j aszteroida param?tereit.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 4) {
@@ -640,14 +687,14 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A addrobot parancshoz tartoz� oszt�ly. Hozz�ad egy �j robotot a megadott aszteroid�ra.
+     * A addrobot parancshoz tartoz? oszt?ly. Hozz?ad egy ?j robotot a megadott aszteroid?ra.
      */
     private static class addrobotCommand implements Command{
 
         /**
-         * A param�terk�nt megadott aszteroid�ra hozz�ad egy �j robotot.
-         * Ha nincs el�g param�ter, akkor hib�t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A param?terk?nt megadott aszteroid?ra hozz?ad egy ?j robotot.
+         * Ha nincs el?g param?ter, akkor hib?t jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -672,14 +719,14 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A addufo parancshoz tartoz� oszt�ly. Hozz�ad egy �j uf�t a param�terk�nt megadott aszteroid�ra.
+     * A addufo parancshoz tartoz? oszt?ly. Hozz?ad egy ?j uf?t a param?terk?nt megadott aszteroid?ra.
      */
     private static class addufoCommand implements Command{
 
         /**
-         * A param�terk�nt megadott aszteroid�ra elhelyez egy �j uf�t.
-         * Ha nincs el�g param�ter, akkor hib�t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A param?terk?nt megadott aszteroid?ra elhelyez egy ?j uf?t.
+         * Ha nincs el?g param?ter, akkor hib?t jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2) {
@@ -704,14 +751,14 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A connectasteroid parancshoz tartoz� oszt�ly. A param�terk�nt megadott 2 aszteroid�t szomsz�dossa teszi egym�ssal.
+     * A connectasteroid parancshoz tartoz? oszt?ly. A param?terk?nt megadott 2 aszteroid?t szomsz?dossa teszi egym?ssal.
      */
     private static class connectasteroidCommand implements Command{
 
         /**
-         * A param�terk�nt megadott 2 aszteroid�t szomsz�dossa teszi egym�ssal.
-         * Ha nincs el�g param�ter, vagy nem l�teznek az aszteroid�k, akkor hib�t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A param?terk?nt megadott 2 aszteroid?t szomsz?dossa teszi egym?ssal.
+         * Ha nincs el?g param?ter, vagy nem l?teznek az aszteroid?k, akkor hib?t jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 3) {
@@ -731,19 +778,19 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A move parancshoz tartoz� oszt�ly.
-     * Ha param�ter n�lk�l h�vj�k meg, akkor ki�rja az akt�v telepes sz�m�ra el�rhet� szomsz�dokat.
-     * Ha param�terrel h�vj�k meg, akkor meg kell adni a szomsz�dok list�j�ban l�v� sorsz�mot (1-t�l sz�mozva),
-     * amelyre az akt�v telepest mozgatni akarja a felhaszn�l�.
+     * A move parancshoz tartoz? oszt?ly.
+     * Ha param?ter n?lk?l h?vj?k meg, akkor ki?rja az akt?v telepes sz?m?ra el?rhet? szomsz?dokat.
+     * Ha param?terrel h?vj?k meg, akkor meg kell adni a szomsz?dok list?j?ban l?v? sorsz?mot (1-t?l sz?mozva),
+     * amelyre az akt?v telepest mozgatni akarja a felhaszn?l?.
      */
     private static class moveCommand implements Command{
 
         /**
-         * Ha param�ter n�lk�l h�vj�k meg, akkor ki�rja az akt�v telepes sz�m�ra el�rhet� szomsz�dokat.
-         * a param�terrel h�vj�k meg, akkor meg kell adni a szomsz�dok list�j�ban l�v� sorsz�mot (1-t�l sz�mozva),
-         * amelyre az akt�v telepest mozgatni akarja a felhaszn�l�.
-         * Ha a megadott param�terek valami�rt hib�sak, akkor ezt jelzi a felhaszn�l�nak.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * Ha param?ter n?lk?l h?vj?k meg, akkor ki?rja az akt?v telepes sz?m?ra el?rhet? szomsz?dokat.
+         * a param?terrel h?vj?k meg, akkor meg kell adni a szomsz?dok list?j?ban l?v? sorsz?mot (1-t?l sz?mozva),
+         * amelyre az akt?v telepest mozgatni akarja a felhaszn?l?.
+         * Ha a megadott param?terek valami?rt hib?sak, akkor ezt jelzi a felhaszn?l?nak.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1)) {
@@ -774,13 +821,13 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A drill parancshoz tartoz� oszt�ly. Az akt�v telepessel v�grehajt egy f�r�s m�veletet.
+     * A drill parancshoz tartoz? oszt?ly. Az akt?v telepessel v?grehajt egy f?r?s m?veletet.
      */
     private static class drillCommand implements Command{
         /**
-         * Az akt�v telepessel v�grehajt egy f�r�s m�veletet.
-         * Ha valami t�rt�nt az akt�v telepessel, akkor jelzi a felhaszn�l�nak.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * Az akt?v telepessel v?grehajt egy f?r?s m?veletet.
+         * Ha valami t?rt?nt az akt?v telepessel, akkor jelzi a felhaszn?l?nak.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
@@ -797,13 +844,13 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A mine parancshoz tartoz� oszt�ly. Az akt�v telepessel v�grehajt egy b�ny�sz�s m�veletet.
+     * A mine parancshoz tartoz? oszt?ly. Az akt?v telepessel v?grehajt egy b?ny?sz?s m?veletet.
      */
     private static class mineCommand implements Command{
         /**
-         * Az akt�v telepessel v�grehajt egy b�ny�sz�s m�veletet.
-         * Jelzi a felhaszn�l�nak a m�velet eredm�ny�t.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * Az akt?v telepessel v?grehajt egy b?ny?sz?s m?veletet.
+         * Jelzi a felhaszn?l?nak a m?velet eredm?ny?t.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
@@ -831,22 +878,22 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A putmineralback parancshoz tartoz� oszt�ly.
-     * Ha param�ter n�lk�l h�vj�k meg, akkor ki�rja az akt�v telepesn�l l�v� nyersanyagokat.
-     * Ha param�terrel h�vj�k meg, akkor a megadott param�ternek megfelel� sorsz�m� (1-t�l sz�mozva)
-     * a telepesn�l l�v� nyersanyagot a telepes nyersanyagai k�z�l kiv�lasztja �s ezt a nyersanyagvisszatev�s
-     * m�veletnek �tadja.
+     * A putmineralback parancshoz tartoz? oszt?ly.
+     * Ha param?ter n?lk?l h?vj?k meg, akkor ki?rja az akt?v telepesn?l l?v? nyersanyagokat.
+     * Ha param?terrel h?vj?k meg, akkor a megadott param?ternek megfelel? sorsz?m? (1-t?l sz?mozva)
+     * a telepesn?l l?v? nyersanyagot a telepes nyersanyagai k?z?l kiv?lasztja ?s ezt a nyersanyagvisszatev?s
+     * m?veletnek ?tadja.
      */
     private static class putmineralbackCommand implements Command{
         /**
-         * Ha param�ter n�lk�l h�vj�k meg, akkor ki�rja az akt�v telepesn�l l�v� nyersanyagokat.
-         * Ha param�terrel h�vj�k meg, akkor a megadott param�ternek megfelel� sorsz�m� (1-t�l sz�mozva)
-         * a telepesn�l l�v� nyersanyagot a telepes nyersanyagai k�z�l kiv�lasztja �s ezt a nyersanyagvisszatev�s
-         * m�veletnek �tadja.
-         * A felhaszn�l�nak jelzi a m�velet eredm�ny�t.
-         * Ha ez robban�st okozott, akkor jelzi a felhaszn�l�nak, hogy a robban�s k�vetkezt�ben mi t�rt�nt.
-         * (Megvizsg�lja, hogy mely telepesek, robotok, teleportkapuk haltak meg a robban�s miatt.)
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * Ha param?ter n?lk?l h?vj?k meg, akkor ki?rja az akt?v telepesn?l l?v? nyersanyagokat.
+         * Ha param?terrel h?vj?k meg, akkor a megadott param?ternek megfelel? sorsz?m? (1-t?l sz?mozva)
+         * a telepesn?l l?v? nyersanyagot a telepes nyersanyagai k?z?l kiv?lasztja ?s ezt a nyersanyagvisszatev?s
+         * m?veletnek ?tadja.
+         * A felhaszn?l?nak jelzi a m?velet eredm?ny?t.
+         * Ha ez robban?st okozott, akkor jelzi a felhaszn?l?nak, hogy a robban?s k?vetkezt?ben mi t?rt?nt.
+         * (Megvizsg?lja, hogy mely telepesek, robotok, teleportkapuk haltak meg a robban?s miatt.)
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
@@ -897,14 +944,14 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A craftrobot parancshoz tartoz� oszt�ly. Az akt�v telepessel v�grehajt egy robot�sz�t�s m�veletet.
+     * A craftrobot parancshoz tartoz? oszt?ly. Az akt?v telepessel v?grehajt egy robot?sz?t?s m?veletet.
      */
     private static class craftrobotCommand implements Command{
         /**
-         * Az akt�v telepessel v�grehajt egy robot�sz�t�s m�veletet.
-         * Jelzi a felhaszn�l�nak a m�velet eredm�ny�t. Jelzi az elk�sz�tett robot azonos�t�j�t.
-         * Ha hiba t�rt�nik, azt is jelzi.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * Az akt?v telepessel v?grehajt egy robot?sz?t?s m?veletet.
+         * Jelzi a felhaszn?l?nak a m?velet eredm?ny?t. Jelzi az elk?sz?tett robot azonos?t?j?t.
+         * Ha hiba t?rt?nik, azt is jelzi.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
@@ -921,14 +968,14 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A craftteleport parancshoz tartoz� oszt�ly. Az akt�v telepessel v�grehajt egy teleportk�sz�t�s m�veletet.
+     * A craftteleport parancshoz tartoz? oszt?ly. Az akt?v telepessel v?grehajt egy teleportk?sz?t?s m?veletet.
      */
     private static class craftteleportCommand implements Command{
         /**
-         * Az akt�v telepessel v�grehajt egy teleportk�sz�t�s m�veletet.
-         * Jelzi a felhaszn�l�nak a m�velet eredm�ny�t. Jelzi az elk�sz�tett teleportkapuk azonos�t�j�t.
-         * Ha hiba t�rt�nik, azt is jelzi.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * Az akt?v telepessel v?grehajt egy teleportk?sz?t?s m?veletet.
+         * Jelzi a felhaszn?l?nak a m?velet eredm?ny?t. Jelzi az elk?sz?tett teleportkapuk azonos?t?j?t.
+         * Ha hiba t?rt?nik, azt is jelzi.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 1))
@@ -950,16 +997,16 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A placeteleport parancshoz tartoz� oszt�ly. Az akt�v telepessel v�grehajt egy teleportlehelyez�s m�veletet.
-     * Param�ter n�lk�l kilist�zza az akt�v telepesn�l l�v� teleportkapukat.
+     * A placeteleport parancshoz tartoz? oszt?ly. Az akt?v telepessel v?grehajt egy teleportlehelyez?s m?veletet.
+     * Param?ter n?lk?l kilist?zza az akt?v telepesn?l l?v? teleportkapukat.
      */
     private static class placeteleportCommand implements Command{
 
         /**
-         * Az els� param�ter annak a teleportkapunak a sorsz�ma (1-t�l sz�mozva), amelyik teleportkaput le akarja
-         * helyezni a felhaszn�l�. Param�ter n�lk�l kilist�zza a telepesn�l l�v� teleportkapukat.
-         * Ha hiba t�rt�nik akkor jelzi a felhaszn�l�nak, k�l�nben ki�rja a lehelyez�s t�ny�t.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * Az els? param?ter annak a teleportkapunak a sorsz?ma (1-t?l sz?mozva), amelyik teleportkaput le akarja
+         * helyezni a felhaszn?l?. Param?ter n?lk?l kilist?zza a telepesn?l l?v? teleportkapukat.
+         * Ha hiba t?rt?nik akkor jelzi a felhaszn?l?nak, k?l?nben ki?rja a lehelyez?s t?ny?t.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 2))
@@ -985,15 +1032,15 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * Az addmineral parancshoz tartoz� oszt�ly. Az akt�v telepesnek ad egy nyersanyagot.
-     * A nyersanyagot param�terben kell megadni.
+     * Az addmineral parancshoz tartoz? oszt?ly. Az akt?v telepesnek ad egy nyersanyagot.
+     * A nyersanyagot param?terben kell megadni.
      */
     private static class addmineralCommand implements Command{
 
         /**
-         * Az akt�v telepesnek ad egy, az els� param�terben meghat�rozott nyersanyagot.
-         * Ha nem j�l adta meg a felhaszn�l�, akkor hib�t jelez.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * Az akt?v telepesnek ad egy, az els? param?terben meghat?rozott nyersanyagot.
+         * Ha nem j?l adta meg a felhaszn?l?, akkor hib?t jelez.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (!settlerCommandCheck(args, 2))
@@ -1010,15 +1057,15 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A addteleportpair parancshoz tartoz� oszt�ly. 2 param�tere van. A megadott 2 aszteroid�ra lehelyez egy �j
-     * teleportkaput p�r, amelyek nincsenek megkerg�lve.
+     * A addteleportpair parancshoz tartoz? oszt?ly. 2 param?tere van. A megadott 2 aszteroid?ra lehelyez egy ?j
+     * teleportkaput p?r, amelyek nincsenek megkerg?lve.
      */
     private static class addteleportpairCommand implements Command{
 
         /**
-         * Az els� �s a m�sodik param�terben meghat�rozott aszteroid�ra lehelyez egy-egy teleportkaput, amelyek p�rt alkotnak.
-         * Ha hiba t�rt�nik, jelez a felhaszn�l�nak, k�l�nben ki�rja a teleportkapuk l�trej�tt�nek t�ny�t.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * Az els? ?s a m?sodik param?terben meghat?rozott aszteroid?ra lehelyez egy-egy teleportkaput, amelyek p?rt alkotnak.
+         * Ha hiba t?rt?nik, jelez a felhaszn?l?nak, k?l?nben ki?rja a teleportkapuk l?trej?tt?nek t?ny?t.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 3) {
@@ -1048,15 +1095,15 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A nextturn parancshoz tartoz� oszt�ly. A k�r v�g�n megh�vand� parancs. V�grehajtja a k�r v�gi l�p�seket.
+     * A nextturn parancshoz tartoz? oszt?ly. A k?r v?g?n megh?vand? parancs. V?grehajtja a k?r v?gi l?p?seket.
      */
     private static class nextturnCommand implements Command{
 
         /**
-         * A nextturn parancshoz tartoz� oszt�ly. A k�r v�g�n megh�vand� parancs. V�grehajtja a k�r v�gi l�p�seket.
-         * Minden megkerg�lt teleportkapu l�p, minden robot �s uf� l�p.
-         * A nap tesz egy l�p�st.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A nextturn parancshoz tartoz? oszt?ly. A k?r v?g?n megh?vand? parancs. V?grehajtja a k?r v?gi l?p?seket.
+         * Minden megkerg?lt teleportkapu l?p, minden robot ?s uf? l?p.
+         * A nap tesz egy l?p?st.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             for (Teleport t : game.getGates()) {
@@ -1111,23 +1158,23 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A robotaction parancshoz tartoz� oszt�ly. A megadott param�terben l�v� robottal dolgozik.
-     * Ha ezen fel�l nincs megadva param�ter, akkor egy makeAction m�veletet hajt v�gre a robottal.
-     * Ha a m�sodik param�ter "drill" akkor f�r�st hajt v�gre a robottal.
-     * Ha a m�sodik param�ter "move" akkor a harmadik param�terben megadott sorsz�m� (a robot jelenlegi aszteroid�j�nak
-     * szomsz�dainak list�j�ban) szomsz�dra megy.
+     * A robotaction parancshoz tartoz? oszt?ly. A megadott param?terben l?v? robottal dolgozik.
+     * Ha ezen fel?l nincs megadva param?ter, akkor egy makeAction m?veletet hajt v?gre a robottal.
+     * Ha a m?sodik param?ter "drill" akkor f?r?st hajt v?gre a robottal.
+     * Ha a m?sodik param?ter "move" akkor a harmadik param?terben megadott sorsz?m? (a robot jelenlegi aszteroid?j?nak
+     * szomsz?dainak list?j?ban) szomsz?dra megy.
      */
     private static class robotactionCommand implements Command{
 
         /**
-         * Az els� megadott param�terben l�v� robottal dolgozik.
-         * Ha ezen fel�l nincs megadva param�ter, akkor egy makeAction m�veletet hajt v�gre a robottal.
-         * Ha a m�sodik param�ter "drill" akkor f�r�st hajt v�gre a robottal.
-         * Ha a m�sodik param�ter "move" akkor a harmadik param�terben megadott sorsz�m� (a robot jelenlegi aszteroid�j�nak
-         * szomsz�dainak list�j�ban) szomsz�dra megy.
-         * Ha valami hiba t�rt�nik, akkor jelzi a felhaszn�l� fel�.
-         * Az esem�nyeket r�szletesen k�zli a felhaszn�l�val.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * Az els? megadott param?terben l?v? robottal dolgozik.
+         * Ha ezen fel?l nincs megadva param?ter, akkor egy makeAction m?veletet hajt v?gre a robottal.
+         * Ha a m?sodik param?ter "drill" akkor f?r?st hajt v?gre a robottal.
+         * Ha a m?sodik param?ter "move" akkor a harmadik param?terben megadott sorsz?m? (a robot jelenlegi aszteroid?j?nak
+         * szomsz?dainak list?j?ban) szomsz?dra megy.
+         * Ha valami hiba t?rt?nik, akkor jelzi a felhaszn?l? fel?.
+         * Az esem?nyeket r?szletesen k?zli a felhaszn?l?val.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (random) {
@@ -1210,23 +1257,23 @@ public class Control implements ActionListener, MouseListener{
     }
 
     /**
-     * A ufoaction parancshoz tartoz� oszt�ly. A megadott param�ter� uf�val dolgozik.
-     * Ha ezen fel�l nincs megadva param�ter, akkor egy makeAction m�veletet hajt v�gre az uf�n.
-     * Ha a m�sodik param�ter "mine" akkor b�ny�sz�st hajt v�gre az uf�val.
-     * Ha a m�sodik param�ter "move" akkor a harmadik param�terben megadott sorsz�m� (az uf� jelenlegi aszteroid�j�nak
-     * szomsz�dainak list�j�ban) szomsz�dra megy.
+     * A ufoaction parancshoz tartoz? oszt?ly. A megadott param?ter? uf?val dolgozik.
+     * Ha ezen fel?l nincs megadva param?ter, akkor egy makeAction m?veletet hajt v?gre az uf?n.
+     * Ha a m?sodik param?ter "mine" akkor b?ny?sz?st hajt v?gre az uf?val.
+     * Ha a m?sodik param?ter "move" akkor a harmadik param?terben megadott sorsz?m? (az uf? jelenlegi aszteroid?j?nak
+     * szomsz?dainak list?j?ban) szomsz?dra megy.
      */
     private static class ufoactionCommand implements Command{
 
         /**
-         * A ufoaction parancshoz tartoz� oszt�ly. A megadott param�ter� uf�val dolgozik.
-         * Ha ezen fel�l nincs megadva param�ter, akkor egy makeAction m�veletet hajt v�gre az uf�n.
-         * Ha a m�sodik param�ter "mine" akkor b�ny�sz�st hajt v�gre az uf�val.
-         * Ha a m�sodik param�ter "move" akkor a harmadik param�terben megadott sorsz�m� (az uf� jelenlegi aszteroid�j�nak
-         * szomsz�dainak list�j�ban) szomsz�dra megy.
-         * Az esetleges hib�kat a felhaszn�l�val k�zli.
-         * A megt�rt�nt esem�nyeket r�szletesen k�zli a felhaszn�l� fel�.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A ufoaction parancshoz tartoz? oszt?ly. A megadott param?ter? uf?val dolgozik.
+         * Ha ezen fel?l nincs megadva param?ter, akkor egy makeAction m?veletet hajt v?gre az uf?n.
+         * Ha a m?sodik param?ter "mine" akkor b?ny?sz?st hajt v?gre az uf?val.
+         * Ha a m?sodik param?ter "move" akkor a harmadik param?terben megadott sorsz?m? (az uf? jelenlegi aszteroid?j?nak
+         * szomsz?dainak list?j?ban) szomsz?dra megy.
+         * Az esetleges hib?kat a felhaszn?l?val k?zli.
+         * A megt?rt?nt esem?nyeket r?szletesen k?zli a felhaszn?l? fel?.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 2 || (args.length == 3 && !"mine".equals(args[2])) || (args.length == 4 && !"move".equals(args[2]))){
@@ -1288,16 +1335,16 @@ public class Control implements ActionListener, MouseListener{
 
 
     /**
-     * A sunaction parancshoz tartoz� oszt�ly. Ha a v�letlenszer�s�g be van kapcsolva, akkor a nappal v�grehajt
-     * makeAction m�veletet. Ki�rja, hogy milyen esem�nyek k�vetkeztek be ennek hat�s�ra.
+     * A sunaction parancshoz tartoz? oszt?ly. Ha a v?letlenszer?s?g be van kapcsolva, akkor a nappal v?grehajt
+     * makeAction m?veletet. Ki?rja, hogy milyen esem?nyek k?vetkeztek be ennek hat?s?ra.
      */
     private static class sunactionCommand implements Command{
 
         /**
-         * a a v�letlenszer�s�g be van kapcsolva, akkor a nappal v�grehajt
-         * makeAction m�veletet. Ki�rja, hogy milyen esem�nyek k�vetkeztek be ennek hat�s�ra.
-         * A robotok, telepesek, uf�k �s a teleportkapuk v�ltoz�sait ellen�rzi �s ezeket ki�rja.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * a a v?letlenszer?s?g be van kapcsolva, akkor a nappal v?grehajt
+         * makeAction m?veletet. Ki?rja, hogy milyen esem?nyek k?vetkeztek be ennek hat?s?ra.
+         * A robotok, telepesek, uf?k ?s a teleportkapuk v?ltoz?sait ellen?rzi ?s ezeket ki?rja.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (random) {
@@ -1343,16 +1390,16 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A solarwind parancshoz tartoz� oszt�ly. Elind�t egy napvihart a megadott aszteroid�n a megadott m�rettel.
-     * Ezut�n ki�rja a t�rt�nteket.
+     * A solarwind parancshoz tartoz? oszt?ly. Elind?t egy napvihart a megadott aszteroid?n a megadott m?rettel.
+     * Ezut?n ki?rja a t?rt?nteket.
      */
     private static class solarwindCommand implements Command{
         /**
-         * Ha nincs el�g param�ter, akkor hib�t jelez. K�l�nben elind�t az els� param�terk�nt megadott aszterod�n
-         * egy a m�sodik param�terben �tadott m�ret� napvihart.
-         * A robotok, telepesek, ufok �s teleportkapuk list�j�nak m�sol�s�val ellen�rzi, hogy a napvihar hat�s�ra
-         * milyen esem�nyek t�rt�ntek.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * Ha nincs el?g param?ter, akkor hib?t jelez. K?l?nben elind?t az els? param?terk?nt megadott aszterod?n
+         * egy a m?sodik param?terben ?tadott m?ret? napvihart.
+         * A robotok, telepesek, ufok ?s teleportkapuk list?j?nak m?sol?s?val ellen?rzi, hogy a napvihar hat?s?ra
+         * milyen esem?nyek t?rt?ntek.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 3) {
@@ -1400,12 +1447,12 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A checkwin parancshoz tartoz� oszt�ly. Ellen�rizteti a game-mel, hogy a j�t�kot megnyert�k-e m�r.
+     * A checkwin parancshoz tartoz? oszt?ly. Ellen?rizteti a game-mel, hogy a j?t?kot megnyert?k-e m?r.
      */
     private static class checkwinCommand implements Command{
         /**
-         * �rtes�ti a felhaszn�l�t arr�l, hogy megnyerte-e a j�t�kot.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * ?rtes?ti a felhaszn?l?t arr?l, hogy megnyerte-e a j?t?kot.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (game.checkWin())
@@ -1415,12 +1462,12 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A checklose parancshoz tartoz� oszt�ly. Ellen�rizteti a game-mel, hogy a j�t�kot elvesztett�k-e m�r.
+     * A checklose parancshoz tartoz? oszt?ly. Ellen?rizteti a game-mel, hogy a j?t?kot elvesztett?k-e m?r.
      */
     private static class checkloseCommand implements Command{
         /**
-         * �rtes�ti a felhaszn�l�t arr�l, hogy elvesztette-e a j�t�kot.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * ?rtes?ti a felhaszn?l?t arr?l, hogy elvesztette-e a j?t?kot.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (game.checkLose())
@@ -1430,24 +1477,24 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A newgame parancshoz tartoz� oszt�ly.
-     * L�trehoz a felhaszn�l� �ltal megadott
-     * sz�m� telepest, aszteroid�t �s UFO-t,
-     * valamint egy napot a game init met�dusa
-     * seg�ts�g�vel. �j randomiz�lt p�lya k�sz�t�s�re
-     * haszn�lhat�
+     * A newgame parancshoz tartoz? oszt?ly.
+     * L?trehoz a felhaszn?l? ?ltal megadott
+     * sz?m? telepest, aszteroid?t ?s UFO-t,
+     * valamint egy napot a game init met?dusa
+     * seg?ts?g?vel. ?j randomiz?lt p?lya k?sz?t?s?re
+     * haszn?lhat?
      */
     private static class newgameCommand implements Command{
 
         /**
-         * A newgame parancshoz tartoz� oszt�ly.
-         * L�trehoz a felhaszn�l� �ltal megadott
-         * sz�m� telepest, aszteroid�t �s UFO-t,
-         * valamint egy napot a game init met�dusa
-         * seg�ts�g�vel. �j randomiz�lt p�lya k�sz�t�s�re
-         * haszn�lhat�
-         * A param�terekben a telepesek �s az aszteroid�k sz�m�t is meg kell adni.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A newgame parancshoz tartoz? oszt?ly.
+         * L?trehoz a felhaszn?l? ?ltal megadott
+         * sz?m? telepest, aszteroid?t ?s UFO-t,
+         * valamint egy napot a game init met?dusa
+         * seg?ts?g?vel. ?j randomiz?lt p?lya k?sz?t?s?re
+         * haszn?lhat?
+         * A param?terekben a telepesek ?s az aszteroid?k sz?m?t is meg kell adni.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 4) {
@@ -1492,15 +1539,15 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A setclosetosun parancshoz tartoz� oszt�ly.
-     * A param�terk�nt megkapott aszteroid�nak a closeToSun v�ltoz�j�t �ll�tja be a m�sodik param�terben megadott �rt�kre.
+     * A setclosetosun parancshoz tartoz? oszt?ly.
+     * A param?terk?nt megkapott aszteroid?nak a closeToSun v?ltoz?j?t ?ll?tja be a m?sodik param?terben megadott ?rt?kre.
      */
     private static class setclosetosunCommand implements Command{
         /**
-         * A param�terk�nt megkapott aszteroid�nak a closeToSun v�ltoz�j�t �ll�tja be a megadott �rt�kre.
-         * Ha nincs el�g argumentum, vagy nem l�tezik ilyen aszteroida, akkor hib�t jelez.
-         * Az �j closeToSun �rt�ket �gy kell megadni, hogy "0" ha hamis, "1", ha igaz legyen.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A param?terk?nt megkapott aszteroid?nak a closeToSun v?ltoz?j?t ?ll?tja be a megadott ?rt?kre.
+         * Ha nincs el?g argumentum, vagy nem l?tezik ilyen aszteroida, akkor hib?t jelez.
+         * Az ?j closeToSun ?rt?ket ?gy kell megadni, hogy "0" ha hamis, "1", ha igaz legyen.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 3 || (!"0".equals(args[2]) && !"1".equals(args[2]))) {
@@ -1550,12 +1597,12 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * A giveup parancshoz tartoz� oszt�ly.
+     * A giveup parancshoz tartoz? oszt?ly.
      */
     private static class giveupCommand implements Command{
         /**
-         * Feladja �s befejezi a j�t�kot.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * Feladja ?s befejezi a j?t?kot.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             game.setGameEnd(true);
@@ -1565,17 +1612,17 @@ public class Control implements ActionListener, MouseListener{
 
 
     /**
-     * A bammboozleteleport parancshoz tartoz� oszt�ly. A param�terk�nt kapott teleportkapu bamboozled mez�j�t a
-     * m�sodik param�ternek megadott �rt�kre be�ll�tja.
+     * A bammboozleteleport parancshoz tartoz? oszt?ly. A param?terk?nt kapott teleportkapu bamboozled mez?j?t a
+     * m?sodik param?ternek megadott ?rt?kre be?ll?tja.
      */
     private static class bamboozleteleportCommand implements Command{
 
         /**
-         * A bammboozleteleport parancshoz tartoz� oszt�ly. A param�terk�nt kapott teleportkapu bamboozled mez�j�t a
-         * m�sodik param�ternek megadott �rt�kre be�ll�tja.
-         * Ha nincs el�g param�ter vagy nem j� az azonos�t�, akkor jelzi a felhaszn�l�nak.
-         * Az �j bamboozled �rt�ket �gy kell megadni, hogy "0" ha hamis, "1", ha igaz legyen.
-         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
+         * A bammboozleteleport parancshoz tartoz? oszt?ly. A param?terk?nt kapott teleportkapu bamboozled mez?j?t a
+         * m?sodik param?ternek megadott ?rt?kre be?ll?tja.
+         * Ha nincs el?g param?ter vagy nem j? az azonos?t?, akkor jelzi a felhaszn?l?nak.
+         * Az ?j bamboozled ?rt?ket ?gy kell megadni, hogy "0" ha hamis, "1", ha igaz legyen.
+         * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
             if (args.length < 3 || (!"0".equals(args[2]) && !"1".equals(args[2]))) {
@@ -1594,10 +1641,10 @@ public class Control implements ActionListener, MouseListener{
         }
     }
     /**
-     * Az akt�v telepessel kapcsolatos parancsok param�tereinek helyess�g�t ellen�rzi.
-     * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz�k�z�kkel lett elv�lasztva.
-     * @param argscnt H�ny parancssori argumentumot v�r a parancs.
-     * @return Igaz, ha megfelel� sz�m� argumentum van �s az akt�v telepes m�g nem halt meg. K�l�nben hamis.
+     * Az akt?v telepessel kapcsolatos parancsok param?tereinek helyess?g?t ellen?rzi.
+     * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
+     * @param argscnt H?ny parancssori argumentumot v?r a parancs.
+     * @return Igaz, ha megfelel? sz?m? argumentum van ?s az akt?v telepes m?g nem halt meg. K?l?nben hamis.
      */
     private static boolean settlerCommandCheck(String[] args, int argscnt){
         if (args.length < argscnt){
@@ -1617,12 +1664,12 @@ public class Control implements ActionListener, MouseListener{
     }
 
     /**
-     * A parancsok nev�nek �s az ahhoz tartoz� parancsobjektumoknak az �sszerendel�se.
+     * A parancsok nev?nek ?s az ahhoz tartoz? parancsobjektumoknak az ?sszerendel?se.
      */
     private static HashMap<String, Command> commands;
 
     /**
-     * Inicializ�lja a parancsokat. Hozz�adja az �sszes el�rhet� parancsot a parancs n�v- parancsobjektum �sszerendel�shez.
+     * Inicializ?lja a parancsokat. Hozz?adja az ?sszes el?rhet? parancsot a parancs n?v- parancsobjektum ?sszerendel?shez.
      */
     public static void initializeCommands(){
         commands = new HashMap<>();
@@ -1645,9 +1692,9 @@ public class Control implements ActionListener, MouseListener{
     }
 
     /**
-     * A param�terk�nt megadott sztringb�l egy nyersanyagot pr�b�l meg beolvasni.
-     * @param arg A sztring, amely egy nyersanyagot �r le.
-     * @return A beolvasott nyersanyagnak megfelel� nyersanyag objektum,
+     * A param?terk?nt megadott sztringb?l egy nyersanyagot pr?b?l meg beolvasni.
+     * @param arg A sztring, amely egy nyersanyagot ?r le.
+     * @return A beolvasott nyersanyagnak megfelel? nyersanyag objektum,
      * ha nem tudott nyersanyagot beolvasni, akkor null.
      */
     private static Mineral parseMineral(String arg){
@@ -1669,7 +1716,7 @@ public class Control implements ActionListener, MouseListener{
     }
 
     /**
-     * Ellen�rzi, hogy meghalt-e az akt�v telepes. Ha igen, akkor jelzi a felhaszn�l�nak.
+     * Ellen?rzi, hogy meghalt-e az akt?v telepes. Ha igen, akkor jelzi a felhaszn?l?nak.
      */
     private static boolean checkActiveSettlerDied(){
         if (activeSettler != null && !game.getSettlers().contains(activeSettler)){
@@ -1680,8 +1727,8 @@ public class Control implements ActionListener, MouseListener{
     }
 
     /**
-     * Megpr�b�l egy parancsot kiolvasni a bemenet k�vetkez� sor�b�l.
-     * @return Hamis, ha a bemenet legutols� sor�t b�r beolvast�k. Igaz, ha m�g nem pr�b�ltak a legutols� sor ut�n olvasni.
+     * Megpr?b?l egy parancsot kiolvasni a bemenet k?vetkez? sor?b?l.
+     * @return Hamis, ha a bemenet legutols? sor?t b?r beolvast?k. Igaz, ha m?g nem pr?b?ltak a legutols? sor ut?n olvasni.
      */
     private static boolean parseCommand(){
         String[] pieces;
@@ -1708,7 +1755,7 @@ public class Control implements ActionListener, MouseListener{
     }
 
     /**
-     * Inicializ�lja 0-val a maxID �sszerendel�seket.
+     * Inicializ?lja 0-val a maxID ?sszerendel?seket.
      */
     private static void initializeMaxIDs(){
         maxIDs.put("asteroid", 0);
@@ -1725,11 +1772,11 @@ public class Control implements ActionListener, MouseListener{
         activeSettler = ControlSettlers.get(0);
     }
     /**
-     * Inicializ�lja a parancsokat �s a maxID-ket.
-     * Ha van elegend� parancssori argumentum, akkor az els�re �t�r�ny�tja a bemenetet, a m�sodikra a kimenetet.
-     * A program bel�p�si pontja, ki�rja a men�pontokat �s bek�ri a felhasz�l�t�l a v�lasztott men�pontot a menu()
-     * f�ggv�nnyel, amihez megh�vja a megfelel� inicializ�l� f�ggv�nyt.
-     * Ezt addig ism�tli, am�g a felhaszn�l� ki nem l�p a programb�l.
+     * Inicializ?lja a parancsokat ?s a maxID-ket.
+     * Ha van elegend? parancssori argumentum, akkor az els?re ?t?r?ny?tja a bemenetet, a m?sodikra a kimenetet.
+     * A program bel?p?si pontja, ki?rja a men?pontokat ?s bek?ri a felhasz?l?t?l a v?lasztott men?pontot a menu()
+     * f?ggv?nnyel, amihez megh?vja a megfelel? inicializ?l? f?ggv?nyt.
+     * Ezt addig ism?tli, am?g a felhaszn?l? ki nem l?p a programb?l.
      * @param args parancssori argumentumok
      */
     public static void main(String[] args){

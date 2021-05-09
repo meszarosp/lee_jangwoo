@@ -10,13 +10,15 @@ import java.util.logging.Level;
 import static java.lang.Math.pow;
 
 /**
- *
+ * Az osztály felelőssége, hogy az általa mutatott aszteroida objektumhoz tartozó képernyő
+ * koordinátákat eltárolja, és az általa mutatott aszteroida grafikus megjelenítésével kapcsolatos
+ * feladatokat végezze/menedzselje.
  */
 public class AsteroidView implements View {
 
     /**
      * Konstruktor
-     * be�ll�tja az x, y �s a �rt�k�t a param�ter�l kapott dolgokra
+     * beállítja az x, y és a értékét a paraméterül kapott dolgokra
      */
     public AsteroidView(Asteroid a, int x2, int y2) {
         asteroid = a;
@@ -25,31 +27,32 @@ public class AsteroidView implements View {
     }
 
     /**
-     *
+     * A kör középpontjának x koordinátája
      */
     private int x;
 
     /**
-     *
+     * A kör középpontjának y koordinátája
      */
     private int y;
 
     /**
-     *
+     * A kör sugara
      */
     private int radius = 30;
 
     /**
-     *
+     * A mutatott aszteroida objektum, akinek a rajzolásáért felel
      */
     private Asteroid asteroid;
 
     /**
-     * Elk�ri az asteroid-t�l a travellers list�j�t a getTravellers met�dussal. Visszaadja a param�terk�nt
-     * megadott traveller x koordin�t�j�t a k�perny�n, kisz�molva a travellers list�ban elfoglalt hely�b�l,
-     * �s az aszteroida k�z�ppontj�b�l
-     * @param t
-     * @return
+     * Elkéri az asteroid-tól a travellers listáját a
+     * getTravellers metódussal. Visszaadja a paraméterként megadott traveller x
+     * koordinátáját a képernyőn, kiszámolva a travellers listában elfoglalt helyéből, és az
+     * aszteroida középpontjából.
+     * @param t Az utazó, akinek az x koordinátája kell
+     * @return Az x koordináta
      */
     public int getTravellerX(Traveller t) {
         List<Traveller> travellers = asteroid.getTravellers();
@@ -61,17 +64,21 @@ public class AsteroidView implements View {
         return 0;
     }
 
+
     /**
-     * A param�terk�nt megadott traveller y koordin�t�j�t a k�perny�n, kisz�molja az aszteroida k�z�ppontja alapj�n
-     * @param t
-     * @return
+     * Elkéri az asteroid-tól a travellers listáját a
+     * getTravellers metódussal. Visszaadja a paraméterként megadott traveller y
+     * koordinátáját a képernyőn, kiszámolva a travellers listában elfoglalt helyéből, és az
+     * aszteroida középpontjából.
+     * @param t Az utazó, akinek az x koordinátája kell
+     * @return Az y koordináta
      */
     public int getTravellerY(Traveller t) {
         return y - radius - 20;
     }
 
     /**
-     * Visszaadja az asteroid tagv�ltoz�t
+     * Visszaadja az asteroid tagváltozót
      * @return
      */
     public Asteroid getAsteroid() {
@@ -79,10 +86,12 @@ public class AsteroidView implements View {
     }
 
     /**
-     * V�gign�zi az asteroid szomsz�dait, �s ha valamelyik megegyezik a param�ter�l
-     * kapott aszteroid�val, akkor igazzal, egy�bk�nt meg hamissal t�r vissza
-     * @param a
-     * @return
+     * Elkéri az asteroid-tól a szomszédait a
+     * getNeighbours metódussal. Ezen az INeighbour listán végigiterál, és ha ez
+     * megegyezik a paraméterül kapott a aszteroidával, akkor igazzal tér vissza, egyébként
+     * hamissal.
+     * @param a A kérdezett aszteroida.
+     * @return IGAZ, ha szomszédos az aszteroida a paraméterként átadott aszteroidával, hamis, ha nem.
      */
     public boolean isThisYourNeighbour(Asteroid a) {
         List<INeighbour> neighbours = asteroid.getNeighbours();
@@ -95,7 +104,7 @@ public class AsteroidView implements View {
     }
 
     /**
-     * Visszaadja az x tagv�ltoz�t
+     * Visszaadja az x tagváltozót
      * @return
      */
     public int getX() {
@@ -103,7 +112,7 @@ public class AsteroidView implements View {
     }
 
     /**
-     * Visszaadja az y tagv�ltoz�t
+     * Visszaadja az y tagváltozót
      * @return
      */
     public int getY() {
@@ -111,10 +120,12 @@ public class AsteroidView implements View {
     }
 
     /**
-     * Ellen�rzi, hogy a param�ter�l kapott koordin�t�k �ltal meghat�rozott pont az aszteroida k�r�n bel�l van-e
-     * @param xClicked
-     * @param yClicked
-     * @return igaz, ha bel�l van, egy�bk�nt hamis
+     * A koordináta attribútumaiból (x és y) kiszámolja, hogy
+     * a paraméterül kapott x y koordináták az aszteroida sugarán belül vannak-e, és ezt a
+     * boolean értéket adja vissza.
+     * @param xClicked A kattintás x koordinátája.
+     * @param yClicked A kattintás y koordinátája.
+     * @return IGAZ, ha a körön belül van a kattintás, HAMIS, ha nem.
      */
     public boolean clicked(int xClicked, int yClicked) {
         if((pow((xClicked - x), 2)+pow((yClicked - y), 2))<pow(radius, 2)){
@@ -124,8 +135,8 @@ public class AsteroidView implements View {
     }
 
     /**
-     * kirajzolja az aszteroid�t �gy hogy megfeleljen az �llapot�nak
-     * @param g
+     * kirajzolja az aszteroidát úgy hogy megfeleljen az aszteroida állapotának
+     * @param g A Graphics objektum, ahova a rajzolás történik.
      */
 
     public void draw(Graphics g) {

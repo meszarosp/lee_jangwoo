@@ -4,14 +4,33 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- *
+ * A levelview és az inventoryview paneleket tartalmazza. A menüt is tartalmazza.
  */
 public class GameFrame extends JFrame {
+    /**
+     * A levelview objektum, ami használatban van.
+     */
     private LevelView lv;
+
+    /**
+     * Az inventoryview objektum, ami használatban van.
+     */
     private InventoryView iv;
+
+    /**
+     * A menü.
+     */
     private JMenuBar menuBar = new JMenuBar();
+
+    /**
+     * Az eseménykezelõ, akit ismer.
+     */
     private ActionListener actionListener;
 
+    /**
+     * Inicializálja a menüt a megfelelõmenüpontokkal.
+     * Beállítja a hozzájuk tartozó actionCommand-ot.
+     */
     private void initMenu(){
         JMenu file = new JMenu("File");
         JMenuItem temp = new JMenuItem("Load");
@@ -24,6 +43,10 @@ public class GameFrame extends JFrame {
         file.add(temp);
         temp = new JMenuItem("New Game");
         temp.setActionCommand("newgame");
+        temp.addActionListener(actionListener);
+        file.add(temp);
+        temp = new JMenuItem("Give up");
+        temp.setActionCommand("giveup");
         temp.addActionListener(actionListener);
         file.add(temp);
         menuBar.add(file);
@@ -39,6 +62,12 @@ public class GameFrame extends JFrame {
         check.add(temp);
         menuBar.add(check);
     }
+
+    /**
+     * Beállítja az ablak méretét, elkészíti a levelview-t és az inventoryviewt.
+     * @param c A kontroller.
+     * @param game A játák.
+     */
     public GameFrame(Control c, Game game) {
         super();
         actionListener = c;
@@ -54,6 +83,11 @@ public class GameFrame extends JFrame {
         add(iv, BorderLayout.SOUTH);
         pack();
     }
+
+    /**
+     * Getter a levelview attríbútumhoz.
+     * @return A levelview.
+     */
     public LevelView getLevelView(){
         return lv;
     }

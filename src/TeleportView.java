@@ -3,7 +3,9 @@ import java.awt.*;
 import java.util.*;
 
 /**
- * 
+ * Az osztály felelőssége, hogy az általa mutatott teleportkapu objektumhoz tartozó képernyő
+ * koordinátákat és színt eltárolja, és az általa mutatott teleportkapu grafikus megjelenítésével
+ * kapcsolatos feladatokat végezze/menedzselje.
  */
 public class TeleportView implements View {
 
