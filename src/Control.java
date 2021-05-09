@@ -1006,12 +1006,16 @@ public class Control implements ActionListener, MouseListener{
 
             } else {
                 output.println("putting back mineral unsuccessful");
-                if (activeSettler.getAsteroid().getShell() > 0)
+                if (activeSettler.getAsteroid().getShell() > 0){
                     output.println("asteroid still has shell");
-                else if (core != null)
+                    JOptionPane.showMessageDialog(null, "The asteroid still has shell");
+                } else if (core != null){
                     output.println("asteroid has other mineral");
-                else
-                    output.println("settler doesn't have the neccessary mineral\n");
+                    JOptionPane.showMessageDialog(null, "The asteroid has other mineral");
+                } else {
+                    output.println("settler doesn't have the necessary mineral\n");
+                    JOptionPane.showMessageDialog(null, "There's no mineral to place");
+                }
             }
         }
     }
@@ -1086,6 +1090,7 @@ public class Control implements ActionListener, MouseListener{
             List<Teleport> gates = activeSettler.getTeleportgates();
             if (gates.size() == 0){
                 output.println("there's no teleport to place");
+                JOptionPane.showMessageDialog(null, "There's no teleport to place");
                 return;
             }
             if (args.length == 1){

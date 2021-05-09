@@ -28,10 +28,10 @@ public class Sun {
         if(rand.nextInt() % 5 == 0) {
         	asteroids.get(rand.nextInt(asteroids.size())).solarWind(rand.nextInt()%5+1);
         }
-        for(Asteroid a : asteroids) {
-        	if(rand.nextInt() % 2 == 1) {
-        		a.setCloseToSun();
-        	}
+        for(int i = 0; i < asteroids.size(); i++) {
+            if(rand.nextInt() % 2 == 1) {
+                asteroids.get(i).setCloseToSun();
+            }
         }
     }
 
