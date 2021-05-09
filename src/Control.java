@@ -21,9 +21,12 @@ public class Control implements ActionListener, MouseListener{
      * @param e Az esemény leírója
      */
     @Override
-    public void actionPerformed(ActionEvent e) { //ez lehet static?
+    public void actionPerformed(ActionEvent e) {
         String[] actionCommand = e.getActionCommand().split(" ");
-        System.out.println(actionCommand[0]);
+        System.out.print(actionCommand[0]);
+        if (actionCommand.length > 1)
+            System.out.print(" " + actionCommand[1]);
+        System.out.println();
 
         commands.get(actionCommand[0]).execute(actionCommand);      //move még kérdéses
         /*if (actionCommand[0].equals("load")){
@@ -35,13 +38,14 @@ public class Control implements ActionListener, MouseListener{
             lv.repaint();
             lv.getInventory().repaint();
         }*/
-        if(actionCommand[0].equals("save") || actionCommand[0].equals("load") || actionCommand[0].equals("giveup")){
+        /*if(actionCommand[0].equals("save") || actionCommand[0].equals("load") || actionCommand[0].equals("giveup")){
             //itt nem tudom mi van
-        } else {
+        } else {*/
             if(refreshActiveSettler()){
                 commands.get("nextturn").execute(new String[]{"nextturn"});
                 if(checkActiveSettlerDied())
                     refreshActiveSettler();
+                JOptionPane.showMessageDialog(null, "Turn ended, next turn starts.");
             }
             LevelView lv = gameFrame.getLevelView();
             lv.setActiveSettler(activeSettler);
@@ -49,7 +53,7 @@ public class Control implements ActionListener, MouseListener{
             lv.repaint();
             lv.getInventory().Update();
             lv.getInventory().repaint();
-        }
+        //}
     }
 
     /**
@@ -70,6 +74,7 @@ public class Control implements ActionListener, MouseListener{
                             commands.get("nextturn").execute(new String[]{"nextturn"});
                             if(checkActiveSettlerDied())
                                 refreshActiveSettler();
+                            JOptionPane.showMessageDialog(null, "Turn ended, next turn starts.");
                         }
                         lv.setActiveSettler(activeSettler);
                         lv.Update();
@@ -275,6 +280,14 @@ public class Control implements ActionListener, MouseListener{
         private int nTeleports;
 
 
+        public File showDialog(){
+            JFileChooser fileChooser = new JFileChooser();
+            int returnval = fileChooser.showDialog(null, "Open");
+            if (returnval == fileChooser.APPROVE_OPTION)
+                return fileChooser.getSelectedFile();
+            else
+                return null;
+        }
 
         /**
          * L?trehoz egy ?j j?t?kot, amihez bet?lti a megadott f?jlb?l a p?ly?t.
@@ -283,11 +296,14 @@ public class Control implements ActionListener, MouseListener{
          * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
+            File file;
             if (args.length < 2) {
-                output.println("load unsuccessful");
-                return;
+                file = showDialog();
+                //output.println("load unsuccessful");
+                //return;
+            }else{
+                file = new File(args[1]);
             }
-            File file = new File(args[1]);
             if (!file.exists()){
                 output.println("load unsuccessful");
                 return;
@@ -309,7 +325,7 @@ public class Control implements ActionListener, MouseListener{
                 return;
             }
             gameFrame.getLevelView().Update();
-            output.println("loaded " + args[1]);
+            //output.println("loaded " + args[1]);
         }
 
         /**
@@ -468,12 +484,13 @@ public class Control implements ActionListener, MouseListener{
                 String[] pieces = fileInput.nextLine().split(" ");
                 String ID = pieces[0].substring(0, pieces[0].length()-1);
                 Teleport t = (Teleport)IDs.get(ID);
-                //if (t.getNeighbour() == null)
-                    //continue;
+                if (t.getNeighbour() == null)
+                    continue;
                 int x = Integer.parseInt(pieces[1]);
                 int y = Integer.parseInt(pieces[2]);
                 Color c = new Color(Integer.parseInt(pieces[3]), Integer.parseInt(pieces[4]), Integer.parseInt(pieces[5]));
-                gameFrame.getLevelView().addTeleportView(t, c, x, y);
+                if (t != null)
+                    gameFrame.getLevelView().addTeleportView(t, c, x, y);
             }
         }
     }
@@ -1786,7 +1803,7 @@ public class Control implements ActionListener, MouseListener{
         gameFrame = new GameFrame(control, game);
         //commands.get("load").execute(new String[]{"load", "test.txt"});
         //control.init();
-        control.actionPerformed(new ActionEvent(control, 0, "load game1.txt"));
+        //control.actionPerformed(new ActionEvent(control, 0, "load game1.txt"));
 
         gameFrame.getLevelView().setActiveSettler(activeSettler);
         gameFrame.pack();

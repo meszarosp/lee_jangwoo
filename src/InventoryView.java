@@ -105,16 +105,16 @@ public class InventoryView extends JPanel {
         ButtonPanel.add(CraftRobot);
 
         for (int i = 0; i<3; i++) {
-            teleportButtons[i] = new TeleportButton();
+            teleportButtons[i] = new TeleportButton(lv);
             teleportButtons[i].addActionListener(c);
-            teleportButtons[i].setActionCommand("placeteleport " + Integer.toString(i)); //megnezni hanytol szamlal
+            teleportButtons[i].setActionCommand("placeteleport " + Integer.toString(i));
             TeleportPanel.add(teleportButtons[i]);
         }
 
         for (int i = 0; i<10; i++) {
             mineralButtons[i] = new MineralButton();
             mineralButtons[i].addActionListener(c);
-            mineralButtons[i].setActionCommand("putmineralback " + Integer.toString(i)); //megnezni hanytol szamlal
+            mineralButtons[i].setActionCommand("putmineralback " + Integer.toString(i+1));
             MineralPanel.add(mineralButtons[i]);
         }
 

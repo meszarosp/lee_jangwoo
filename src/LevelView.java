@@ -105,6 +105,12 @@ public class LevelView extends JPanel implements View {
      */
     private HashMap<Teleport, TeleportView> teleportViews = new HashMap<>();
 
+
+    /**
+     * A teleportkapuk és a hozzájuk tartozó teleportkapu színek összerendelése.
+     */
+    private HashMap<Teleport, Color> teleportcolors = new HashMap<>();
+
     /**
      * Konstruktor, a játékot kell megadni.
      * @param game A játék
@@ -183,7 +189,7 @@ public class LevelView extends JPanel implements View {
                     g2d.drawLine(x1, y1, x2, y2);
                 }
             for (TeleportView tv : teleportViews.values())
-                if (tv.isThisYourNeighbour(a)){
+                if (tv != null && tv.isThisYourNeighbour(a)){
                     int x2 = tv.getX();
                     int y2 = tv.getY();
                     g2d.drawLine(x1, y1, x2, y2);
@@ -258,18 +264,43 @@ public class LevelView extends JPanel implements View {
         Random random = new Random();
         Color color = new Color(random.nextFloat(), random.nextFloat(), random.nextFloat());
         for (TeleportView tv : teleportViews.values())
-            if (tv.isPair(t)){
+            if (tv != null && tv.isPair(t)){
                 found = true;
                 color = tv.getColor();
                 break;
             }
-        //TODO: mi legyen a koordin�t�kkal?
-        if(t.getNeighbour() == null){
-            teleportViews.put(t, new TeleportView(t, color, -1, -1));
+        /*if(t.getNeighbour() == null){
+            teleportViews.put(t, new TeleportView(t, color, av.getX() +30, av.getY()+30));
             return;
-        }
+        }*/
+        if (teleportcolors.containsKey(t))
+            color = teleportcolors.get(t);
+        else if(t.getPair() != null && teleportcolors.containsKey(t.getPair()))
+            color = teleportcolors.get(t.getPair());
         AsteroidView av = getAsteroidView(t.getNeighbour());
-        teleportViews.put(t, new TeleportView(t, color, av.getX() +20, av.getY()+ 20));
+        TeleportView tv = new TeleportView(t, color, av.getX() +30, av.getY()+30);
+        teleportViews.put(t, tv);
+        teleportcolors.put(t, color);
+        if (t.getPair() != null)
+            teleportcolors.put(t.getPair(), color);
+    }
+
+    /**
+     * Megadja, hogy a paraméterként adott teleportkapunak milyen színe van.
+     * @param t A kérdéses teleportkapu
+     * @return A teleportkapu színe
+     */
+    public Color getTeleportColor(Teleport t ){
+        if (teleportcolors.containsKey(t))
+            return teleportcolors.get(t);
+        if (t.getPair() != null && teleportcolors.containsKey(t.getPair()))
+            return teleportcolors.get(t.getPair());
+        Random random = new Random();
+        Color color = new Color(random.nextFloat(), random.nextFloat(), random.nextFloat());
+        teleportcolors.put(t, color);
+        if (t.getPair() != null)
+            teleportcolors.put(t.getPair(), color);
+        return color;
     }
 
     /**
@@ -309,13 +340,14 @@ public class LevelView extends JPanel implements View {
         HashMap<Teleport, TeleportView> remainingViews = new HashMap<Teleport, TeleportView>();
         ArrayList<Teleport> noView = new ArrayList<Teleport>();
         for (Teleport t : gates)
-            if (!teleportViews.containsKey(t))
+            if (!teleportViews.containsKey(t) && t.getNeighbour() != null)
                 noView.add(t);
             else
                 remainingViews.put(t, teleportViews.get(t));
         teleportViews = remainingViews;
         for (Teleport t : noView)
-            addTeleportView(t);
+            if (t != null)
+                addTeleportView(t);
     }
 
     /**
@@ -418,7 +450,11 @@ public class LevelView extends JPanel implements View {
      * @param y Az y koordináta
      */
     public void addTeleportView(Teleport t, Color c, int x, int y){
-        teleportViews.put(t, new TeleportView(t,c, x, y));
+        TeleportView tv = new TeleportView(t,c, x, y);
+        teleportViews.put(t, tv);
+        teleportcolors.put(t, c);
+        if (t.getPair() != null)
+            teleportcolors.put(t.getPair(), c);
     }
 
     /**
@@ -469,7 +505,8 @@ public class LevelView extends JPanel implements View {
         for (AsteroidView av : asteroidViews.values())
             av.draw(g);
         for (TeleportView teleportv : teleportViews.values())
-            teleportv.draw(g);
+            if (teleportv != null)
+                teleportv.draw(g);
         for (TravellerView travellerv : travellerViews)
             travellerv.draw(g);
     }
