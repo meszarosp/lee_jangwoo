@@ -28,7 +28,6 @@ public class TeleportButton extends JButton {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 12));
         setBackground(new Color(120, 45, 76));
         setOpaque(true);
-        setActionCommand("set down");
     }
 
     /**
