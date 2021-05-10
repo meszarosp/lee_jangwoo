@@ -29,7 +29,6 @@ public class MineralButton extends JButton {
         setOpaque(true);
         setHorizontalAlignment(CENTER);
         setVerticalAlignment(CENTER);
-        setActionCommand("put back");
     }
 
     /**
