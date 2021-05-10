@@ -68,8 +68,13 @@ public class Control implements ActionListener, MouseListener{
     public void mouseClicked(MouseEvent e){
         LevelView lv = gameFrame.getLevelView();
         INeighbour neighbour = lv.click(e.getX(), e.getY());
+        //System.out.println(e.getY() + " " + e.getY());
+        System.out.println(neighbour);
         if(neighbour != null){
             List<INeighbour> neighbours = activeSettler.getAsteroid().getNeighbours();
+            for (INeighbour n : neighbours){
+                System.out.println(n);
+            }
             if(neighbours.contains(neighbour)){
                 for(int i = 0; i < neighbours.size(); i++){
                     if(neighbours.get(i).equals(neighbour)){

@@ -96,11 +96,12 @@ public class AsteroidView implements View {
     public boolean isThisYourNeighbour(Asteroid a) {
         List<INeighbour> neighbours = asteroid.getNeighbours();
         for(int i = 0; i < neighbours.size(); ++i){
-            if(neighbours.get(i).equals(a)){
+            if(neighbours.get(i) == a){
                 return true;
             }
         }
         return false;
+        //return neighbours.contains(a);
     }
 
     /**
@@ -128,7 +129,7 @@ public class AsteroidView implements View {
      * @return IGAZ, ha a körön belül van a kattintás, HAMIS, ha nem.
      */
     public boolean clicked(int xClicked, int yClicked) {
-        if((pow((xClicked - x), 2)+pow((yClicked - y), 2))<pow(radius, 2)){
+        if((pow((xClicked - x), 2)+pow((yClicked - y), 2))<=pow(radius, 2)){
             return true;
         }
         return false;
