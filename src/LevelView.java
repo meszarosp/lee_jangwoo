@@ -63,12 +63,12 @@ public class LevelView extends JPanel implements View {
     /**
      * A szén színe.
      */
-    public static Color coalColor = new Color(179, 179, 179);
+    public static Color coalColor = new Color(0, 0, 0);
 
     /**
      * A vas színe.
      */
-    public static Color ironColor;
+    public static Color ironColor = new Color(179, 179, 179);
 
     /**
      * Az aktív telepes, az aki most lép.
@@ -179,6 +179,7 @@ public class LevelView extends JPanel implements View {
         g2d.setStroke(new BasicStroke(3));
         g2d.setColor(Color.GRAY);
         for (AsteroidView av : asteroidViews.values()){
+            if (av == null) continue;
             Asteroid a = av.getAsteroid();
             int x1 = av.getX();
             int y1 = av.getY();

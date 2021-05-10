@@ -289,11 +289,15 @@ public class Control implements ActionListener, MouseListener{
         private int nTeleports;
 
         /**
+         * Egy filechooser dialógusablak, amiből a felhasználó a fájlt választhatja ki.
+         */
+        private JFileChooser fileChooser = new JFileChooser();
+
+        /**
          * Egy JFileChooser dialógusablak segítségével lekéri a felhasználótól az útvonalat.
          * @return A megnyitni kívánt file.
          */
         public File showDialog(){
-            JFileChooser fileChooser = new JFileChooser();
             int returnval = fileChooser.showDialog(null, "Open");
             if (returnval == fileChooser.APPROVE_OPTION)
                 return fileChooser.getSelectedFile();
@@ -516,11 +520,15 @@ public class Control implements ActionListener, MouseListener{
         private PrintWriter fileOutput;
 
         /**
+         * Egy filechooser dialógusablak, amiből a felhasználó a fájlt választhatja ki.
+         */
+        private JFileChooser fileChooser = new JFileChooser();
+
+        /**
          * Egy JFileChooser dialógusablak segítségével lekéri a felhasználótól az útvonalat.
          * @return A megnyitni kívánt file.
          */
         public File showDialog(){
-            JFileChooser fileChooser = new JFileChooser();
             int returnval = fileChooser.showDialog(null, "Save");
             if (returnval == fileChooser.APPROVE_OPTION)
                 return fileChooser.getSelectedFile();
@@ -987,7 +995,8 @@ public class Control implements ActionListener, MouseListener{
             List<UFO> UFOs = new ArrayList<UFO>(game.getUFOs());
             List<Teleport> teleports = new ArrayList<Teleport>(game.getGates());
             if (activeSettler.putMineralBack(i)) {
-                output.println(activeSettler.asteroid.getCore().toString() + " is now in the asteroid");
+
+                output.println(activeSettler.getAsteroid().getCore().toString() + " is now in the asteroid");
                 if (!game.getSun().getAsteroids().contains(activeSettler.getAsteroid())) {
                     output.println("the returned uranium caused an explosion");
                     for (Robot r : robots) {
