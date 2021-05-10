@@ -1645,7 +1645,7 @@ public class Control implements ActionListener, MouseListener{
 
             output.println("new game created with " + allSettlers.size() + " settler" + (allSettlers.size() == 1 ? " " : "s ")
                     + allAsteroids.size() + " asteroid" + (allAsteroids.size() == 1 ? " " : "s ") + "and " + allUFOs.size() +
-                    "UFO" + (allUFOs.size() == 1 ? " " : "s "));
+                    " UFO" + (allUFOs.size() == 1 ? " " : "s "));
         }
     }
     /**
