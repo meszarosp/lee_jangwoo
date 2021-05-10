@@ -111,7 +111,7 @@ public class Game {
         for(int i = 0; i < nSettler; i++) {
         	settlers.add(new Settler(asteroids.get(rand.nextInt(asteroids.size())), this));
         }
-        for(int i = 0; i < nSettler; i++) {
+        for(int i = 0; i < nUFO; i++) {
         	UFOs.add(new UFO(asteroids.get(rand.nextInt(asteroids.size())), this));
         }
         sun.addAsteroids(asteroids);

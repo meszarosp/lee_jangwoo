@@ -1607,7 +1607,7 @@ public class Control implements ActionListener, MouseListener{
                 JOptionPane.showMessageDialog(null, "Invalid amount of UFOs");
                 return;
             }
-            nUFO = 0;
+            //nUFO = 0;
 
             game = new Game();
             gameFrame.getLevelView().setGame(game);
