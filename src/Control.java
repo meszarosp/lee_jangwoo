@@ -995,8 +995,8 @@ public class Control implements ActionListener, MouseListener{
             List<UFO> UFOs = new ArrayList<UFO>(game.getUFOs());
             List<Teleport> teleports = new ArrayList<Teleport>(game.getGates());
             if (activeSettler.putMineralBack(i)) {
-
-                output.println(activeSettler.getAsteroid().getCore().toString() + " is now in the asteroid");
+                if (activeSettler.getAsteroid().getCore() != null);
+                    output.println(activeSettler.getAsteroid().getCore().toString() + " is now in the asteroid");
                 if (!game.getSun().getAsteroids().contains(activeSettler.getAsteroid())) {
                     output.println("the returned uranium caused an explosion");
                     for (Robot r : robots) {
