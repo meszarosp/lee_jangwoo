@@ -27,7 +27,6 @@ public class Control implements ActionListener, MouseListener{
         if (actionCommand.length > 1)
             System.out.print(" " + actionCommand[1]);
         System.out.println();
-
         commands.get(actionCommand[0]).execute(actionCommand);      //move még kérdéses
         /*if (actionCommand[0].equals("load")){
             activeSettler = game.getSettlers().get(0);
@@ -42,8 +41,8 @@ public class Control implements ActionListener, MouseListener{
 
         } else {*/
         if (actionCommand[0].equals("save") || actionCommand[0].equals("giveup") ||
-                actionCommand[0].equals("checkwin") || actionCommand[0].equals("checklose")) {
-            ;
+                actionCommand[0].equals("checkwin") || actionCommand[0].equals("checklose")|| actionCommand[0].equals("newgame")) {
+
         }else{
             if (refreshActiveSettler()) {
                 commands.get("nextturn").execute(new String[]{"nextturn"});
@@ -399,10 +398,10 @@ public class Control implements ActionListener, MouseListener{
         }
 
         /**
-         * A megadott t?pushoz tartoz? ID-t friss?ti a maxID ?sszerendel?sben.
-         * Csak akkor friss?t ha az ID-hez tartoz? sz?m, nagyobb, mint az eddigi legnagyobb.
-         * @param type Az t?pus (pl.: settler)
-         * @param ID Az ID, amit ellen?rizni kell, hogy a sz?ma, nagyobb-e, mint az eddigi legnagyobb.
+         * A megadott típushoz tartozó ID-t frissíti a maxID összerendelésben.
+         * Csak akkor frissít ha az ID-hez tartozó szám, nagyobb, mint az eddigi legnagyobb.
+         * @param type A típus (pl.: settler)
+         * @param ID Az ID, amit ellen?rizni kell, hogy a száma, nagyobb-e, mint az eddigi legnagyobb.
          */
         private void updateMaxID(String type, String ID){
             int number = Integer.parseInt(ID.substring(1));
@@ -1580,41 +1579,69 @@ public class Control implements ActionListener, MouseListener{
          * @param args A parancs parancssori argumentumai, a teljes sort meg kell adni, amely sz?k?z?kkel lett elv?lasztva.
          */
         public void execute(String[] args) {
-            if (args.length < 4) {
-                output.println("all details must be specified");
-                return;
-            }
             int nSettler, nAsteroid, nUFO;
-            try {
-                nSettler = Integer.parseInt(args[1]);
-                nAsteroid = Integer.parseInt(args[2]);
-                nUFO = Integer.parseInt(args[3]);
 
-            }catch (Exception e){
-                output.println("all details must be specified");
+            String s = JOptionPane.showInputDialog("How many settlers?");
+            if(s == null)
+                return;
+            nSettler = Integer.parseInt(s);
+            if(nSettler <= 0){
+                JOptionPane.showMessageDialog(null, "Invalid amount of settlers to start the game");
                 return;
             }
+
+            s = JOptionPane.showInputDialog("How many asteroids?");
+            if(s == null)
+                return;
+            nAsteroid = Integer.parseInt(s);
+            if(nAsteroid <= 0){
+                JOptionPane.showMessageDialog(null, "Invalid amount of asteroids to start the game");
+                return;
+            }
+
+            s = JOptionPane.showInputDialog("How many UFOs?");
+            if(s == null)
+                return;
+            nUFO = Integer.parseInt(s);
+            if(nUFO < 0){
+                JOptionPane.showMessageDialog(null, "Invalid amount of UFOs");
+                return;
+            }
+            nUFO = 0;
+
             game = new Game();
+            gameFrame.getLevelView().setGame(game);
+            activeSettler = null;
             game.init(nSettler, nAsteroid, nUFO);
-            resetIDs();
+
+            resetIDs();         //ez nem tudom hogy jo-e
 
             List<Settler> allSettlers = game.getSettlers();
             List<UFO> allUFOs = game.getUFOs();
             List<Asteroid> allAsteroids = game.getSun().getAsteroids();
+            LevelView lv = gameFrame.getLevelView();
+            refreshActiveSettler();
 
             maxIDs.replace("settler", allSettlers.size());
             maxIDs.replace("ufo", allUFOs.size());
             maxIDs.replace("asteroid", allAsteroids.size());
 
             for(int i = 0; i < allSettlers.size(); i++) {
-                addID("s" + i+1, allSettlers.get(i));
+                addID("s" + (i+1), allSettlers.get(i));
+                lv.addSettlerView(allSettlers.get(i));
             }
             for(int i = 0; i < allUFOs.size(); i++) {
-                addID("u" + i+1, allUFOs.get(i));
+                addID("u" + (i+1), allUFOs.get(i));
+                lv.addUFOView(allUFOs.get(i));
             }
+            int scale = 1 + (int)Math.sqrt(nAsteroid);
+            int xborder = (int)(gameFrame.getSize().width*0.1);
+            int yborder = (int)(gameFrame.getSize().height*0.1);
             for(int i = 0; i < allAsteroids.size(); i++) {
-                addID("a" + i+1, allAsteroids.get(i));
+                addID("a" + (i+1), allAsteroids.get(i));
+                lv.addAsteroidView(allAsteroids.get(i), i%scale*(gameFrame.getSize().width - 2*xborder)/scale+xborder, i/scale*(gameFrame.getSize().height-2*yborder)/scale+yborder);
             }
+            lv.Update();
 
             output.println("new game created with " + allSettlers.size() + " settler" + (allSettlers.size() == 1 ? " " : "s ")
                     + allAsteroids.size() + " asteroid" + (allAsteroids.size() == 1 ? " " : "s ") + "and " + allUFOs.size() +
